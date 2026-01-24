@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Activity } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../components/UI/Button';
 import Card from '../components/UI/Card';

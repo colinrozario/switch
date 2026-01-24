@@ -24,7 +24,14 @@ def create_profile_intake(
     Analyzes raw text input to create a structured profile.
     """
     # 1. AI Analysis
-    structured_data = orchestrator.process_intake(request.input_text)
+    try:
+        print(f"Processing intake for text length: {len(request.input_text)}")
+        structured_data = orchestrator.process_intake(request.input_text)
+    except Exception as e:
+        print(f"CRITICAL ERROR in process_intake: {e}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"AI Processing Failed: {str(e)}")
     
     # 2. Save to DB
     # Create dummy user if not exists for prototype
