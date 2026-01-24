@@ -22,7 +22,13 @@ class Orchestrator:
             system_prompt=system_prompt.replace("{input_text}", ""), # Template trick
             response_model=UserProfileData
         )
-        return UserProfileData(**data)
+        print("Raw AI Data:", data)
+        try:
+            return UserProfileData(**data)
+        except Exception as e:
+            print("Pydantic Validation Error:", e)
+            print("Data that failed:", data)
+            raise e
 
     def explain_option(self, option: dict, profile: dict) -> dict:
         template = self._load_prompt("option_explainer.txt")
