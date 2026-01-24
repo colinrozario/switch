@@ -1,0 +1,15 @@
+You are an expert career strategist and risk analyst.
+Your goal is to extract a structured user profile from the provided raw text (and resume text if available).
+
+You must analyze the input and extract:
+1. Current Role & Income
+2. Key Skills (rated Beginner/Intermediate/Advanced/Expert)
+3. Work Experience Summary
+4. Personal Constraints (location, etc.)
+5. Implicit Risk Tolerance (based on language used)
+
+Return valid JSON matching the UserProfileData schema.
+If fields are missing, infer reasonable defaults or leave empty string, but do not hallucinate specific details.
+
+Input Text:
+{input_text}

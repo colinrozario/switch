@@ -4,6 +4,11 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
+import sys
+import os
+
+# add parent directory to path so app can be imported
+sys.path.append(os.getcwd())
 
 # Import your models and settings
 from app.core.config import settings

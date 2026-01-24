@@ -1,0 +1,55 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.0, pytest-9.0.2, pluggy-1.6.0 -- C:\Users\colin\OneDrive\Desktop\switch\backend\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\colin\OneDrive\Desktop\switch\backend
+plugins: anyio-4.12.1
+collecting ... collected 5 items
+
+app/tests/test_finance_engine.py::test_salary_bridge_healthy FAILED      [ 20%]
+app/tests/test_finance_engine.py::test_salary_bridge_failure PASSED      [ 40%]
+app/tests/test_risk_engine.py::test_risk_analysis_high FAILED            [ 60%]
+app/tests/test_risk_engine.py::test_risk_analysis_low PASSED             [ 80%]
+app/tests/test_timeline_engine.py::test_timeline_estimation PASSED       [100%]
+
+================================== FAILURES ===================================
+_________________________ test_salary_bridge_healthy __________________________
+
+    def test_salary_bridge_healthy():
+        """Test a scenario where savings are sufficient."""
+        result = simulate_salary_bridge(
+            current_income=0, # Quit job
+            monthly_expenses=3000,
+            savings=20000,
+            timeline_months=4,
+            side_income_schedule={},
+            target_income_p25=5000,
+            uncertainty_buffer=0.1 # 3300/mo effective
+        )
+    
+        # Needs: 4 months * 3300 = 13200. Savings 20000. Balance should be positive.
+        assert result["lowest_balance"] > 0
+        assert result["failure_month"] is None
+>       assert len(result["warnings"]) == 0
+E       AssertionError: assert 1 == 0
+E        +  where 1 = len(['Ending balance is low (< 3 months expenses). High financial risk.'])
+
+app\tests\test_finance_engine.py:19: AssertionError
+___________________________ test_risk_analysis_high ___________________________
+
+    def test_risk_analysis_high():
+        finance = {"failure_month": 3, "warnings": ["Runway depleted"]}
+        timeline = {"total_high": 12}
+    
+        result = analyze_risk(finance, timeline)
+    
+        assert result["components"]["financial"] == 100
+>       assert result["recommendation"].startswith("High Risk")
+E       AssertionError: assert False
+E        +  where False = <built-in method startswith of str object at 0x000001E415D722E0>('High Risk')
+E        +    where <built-in method startswith of str object at 0x000001E415D722E0> = 'Moderate Risk - Proceed with caution.'.startswith
+
+app\tests\test_risk_engine.py:10: AssertionError
+=========================== short test summary info ===========================
+FAILED app/tests/test_finance_engine.py::test_salary_bridge_healthy - Asserti...
+FAILED app/tests/test_risk_engine.py::test_risk_analysis_high - AssertionErro...
+========================= 2 failed, 3 passed in 0.07s =========================
