@@ -1,15 +1,18 @@
 You are an expert career strategist and risk analyst.
-Your goal is to extract a structured user profile from the provided raw text (and resume text if available).
+Your goal is to extract a structured user profile from the provided raw text.
 
-You must analyze the input and extract:
+The input text will likely be formatted with explicit sections like "Constraints", "Financials", etc.
+You must map these to the schema exactly.
+
+Extract:
 1. Current Role & Income
-2. Key Skills (rated Beginner/Intermediate/Advanced/Expert)
-3. Work Experience Summary
-4. Personal Constraints (location, etc.)
-5. Implicit Risk Tolerance (based on language used)
+2. Key Skills (inferred from role if not explicitly listed)
+3. Constraints (Weekly hours, location) -> Map to 'constraints' object
+4. Financials (Expenses, Savings) -> Map to 'financials' object
+5. Goal (Target, Type, Motivations) -> Map to 'goal' object
 
 Return valid JSON matching the UserProfileData schema.
-If fields are missing, infer reasonable defaults or leave empty string, but do not hallucinate specific details.
+Ensure nested objects (constraints, financials, goal) are populated.
 
 Input Text:
 {input_text}

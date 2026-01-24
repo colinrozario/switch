@@ -50,7 +50,11 @@ class Orchestrator:
             objective=phase["objective"],
             duration=phase["duration_weeks"],
             current_role=profile.current_role,
-            skills=skills_str
+            skills=skills_str,
+            # New context
+            weekly_hours=profile.constraints.weekly_hours,
+            savings=profile.financials.liquid_savings,
+            expenses=profile.financials.monthly_expenses
         )
         
         # We expect a list of strings
