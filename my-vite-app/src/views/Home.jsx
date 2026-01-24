@@ -34,17 +34,12 @@ const BentoCard = ({ title, subtitle, icon: Icon, children, className, style }) 
 
 const TabletScroll = () => {
     const containerRef = useRef(null);
-    // Adjusted offset to make sure the scroll starts exactly when the container enters
-    // and ends after enough scroll distance.
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start end", "end start"]
     });
 
-    // 3D Transforms (Adjusted timings)
-    // 0-0.3: Enter and Tilt Up
-    // 0.3-0.7: Locked in place, Internal Content Scrolls
-    // 0.7-1.0: Exit
+    // 3D Transforms
     const rotateX = useTransform(scrollYProgress, [0.1, 0.3], [30, 0]);
     const scale = useTransform(scrollYProgress, [0.1, 0.3, 0.8, 1], [0.8, 1, 1, 0.8]);
     const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
@@ -68,7 +63,6 @@ const TabletScroll = () => {
                         rotateX,
                         scale,
                         opacity,
-                        y,
                         overflow: 'hidden'
                     }}
                 >
@@ -103,8 +97,8 @@ const TabletScroll = () => {
                                         <div style={{ width: '94%', height: '100%', background: '#d7fe03' }} />
                                     </div>
                                     <div style={{ marginTop: '30px', display: 'flex', gap: '10px', fontSize: '12px', color: '#888' }}>
-                                        <CheckCircle size={14} color="#d7fe03" /> Runway verified
-                                        <CheckCircle size={14} color="#d7fe03" /> Skills matched
+                                        <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}><CheckCircle size={14} color="#d7fe03" /> Runway verified</div>
+                                        <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}><CheckCircle size={14} color="#d7fe03" /> Skills matched</div>
                                     </div>
                                 </div>
                             </div>
@@ -178,7 +172,6 @@ const Home = () => {
                     </Button>
 
                     <div style={{ width: '100%', maxWidth: '1000px', marginBottom: '80px', margin: '0 auto 80px auto' }}>
-                        {/* Centered Ticker Container */}
                         <p style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.4)', marginBottom: '24px' }}>
                             Trusted by professionals from
                         </p>
