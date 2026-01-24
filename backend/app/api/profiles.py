@@ -1,0 +1,45 @@
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
+from sqlalchemy.orm import Session
+from app.db.session import get_db
+from app.db.models import Profile, User
+from app.schemas.profile import ProfileCreate, ProfileResponse, UserProfileData
+from app.ai.orchestrator import Orchestrator
+import uuid
+
+router = APIRouter()
+orchestrator = Orchestrator()
+
+@router.post("/intake", response_model=ProfileResponse)
+def create_profile_intake(
+    input_text: str,
+    db: Session = Depends(get_db),
+    # user_id: uuid.UUID = Depends(get_current_user) # Skip auth for now
+):
+    """
+    Analyzes raw text input to create a structured profile.
+    """
+    # 1. AI Analysis
+    structured_data = orchestrator.process_intake(input_text)
+    
+    # 2. Save to DB
+    # Create dummy user if not exists for prototype
+    user = db.query(User).first()
+    if not user:
+        user = User(email="demo@example.com", hashed_password="pw")
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        
+    profile = Profile(
+        user_id=user.id,
+        structured_data=structured_data.model_dump()
+    )
+    db.add(profile)
+    db.commit()
+    db.refresh(profile)
+    
+    return ProfileResponse(
+        id=profile.id,
+        user_id=profile.user_id,
+        structured_data=structured_data
+    )

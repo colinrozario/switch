@@ -1,0 +1,44 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.0, pytest-9.0.2, pluggy-1.6.0 -- C:\Users\colin\OneDrive\Desktop\switch\backend\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\colin\OneDrive\Desktop\switch\backend
+plugins: anyio-4.12.1
+collecting ... collected 0 items / 3 errors
+
+=================================== ERRORS ====================================
+______________ ERROR collecting app/tests/test_finance_engine.py ______________
+ImportError while importing test module 'C:\Users\colin\OneDrive\Desktop\switch\backend\app\tests\test_finance_engine.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Program Files\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+app\tests\test_finance_engine.py:2: in <module>
+    from app.engines.finance_engine import simulate_salary_bridge
+E   ModuleNotFoundError: No module named 'app'
+_______________ ERROR collecting app/tests/test_risk_engine.py ________________
+ImportError while importing test module 'C:\Users\colin\OneDrive\Desktop\switch\backend\app\tests\test_risk_engine.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Program Files\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+app\tests\test_risk_engine.py:1: in <module>
+    from app.engines.risk_engine import analyze_risk
+E   ModuleNotFoundError: No module named 'app'
+_____________ ERROR collecting app/tests/test_timeline_engine.py ______________
+ImportError while importing test module 'C:\Users\colin\OneDrive\Desktop\switch\backend\app\tests\test_timeline_engine.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Program Files\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+app\tests\test_timeline_engine.py:1: in <module>
+    from app.engines.timeline_engine import estimate_transition_timeline
+E   ModuleNotFoundError: No module named 'app'
+=========================== short test summary info ===========================
+ERROR app/tests/test_finance_engine.py
+ERROR app/tests/test_risk_engine.py
+ERROR app/tests/test_timeline_engine.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 3 errors during collection !!!!!!!!!!!!!!!!!!!
+============================== 3 errors in 0.13s ==============================

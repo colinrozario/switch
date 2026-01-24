@@ -1,7 +1,7 @@
 fastapi
 uvicorn
 sqlalchemy
-albebic
+alembic
 psycopg2-binary
 pydantic
 pydantic-settings
@@ -9,5 +9,6 @@ python-dotenv
 httpx
 openai
 anthropic
+google-generativeai
 pytest
 

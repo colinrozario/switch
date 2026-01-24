@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     POSTGRES_PORT: str = "5432"
     POSTGRES_DB: str = "switch_db"
     
+    OPENAI_API_KEY: Optional[str] = None
+    GEMINI_API_KEY: Optional[str] = None
+    
     # Constructed database URL
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:

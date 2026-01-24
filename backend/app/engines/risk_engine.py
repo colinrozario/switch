@@ -47,8 +47,12 @@ def analyze_risk(
         (market_risk_score * 0.2)
     )
     
-    recommendation = "Proceed"
-    if weighted_score > 80:
+    # If failure is predicted, override risk to High
+    if financial_risk_score == 100:
+        recommendation = "High Risk - Runway failure predicted."
+        # Ensure score reflects this severity
+        weighted_score = max(weighted_score, 90)
+    elif weighted_score > 80:
         recommendation = "High Risk - Reconsider or strictly save more."
     elif weighted_score > 50:
         recommendation = "Moderate Risk - Proceed with caution."
