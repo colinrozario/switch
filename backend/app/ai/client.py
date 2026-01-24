@@ -8,6 +8,8 @@ from app.core.config import settings
 
 from app.core.config import settings
 import google.generativeai as genai
+import time
+import random
 
 class AIClient:
     def __init__(self):
@@ -18,7 +20,7 @@ class AIClient:
         if settings.GEMINI_API_KEY:
             self.provider = "gemini"
             genai.configure(api_key=settings.GEMINI_API_KEY)
-            self.model = genai.GenerativeModel('gemini-1.5-flash')
+            self.model = genai.GenerativeModel('gemini-2.0-flash')
         elif settings.OPENAI_API_KEY:
             self.provider = "openai"
             self.client = OpenAI(api_key=settings.OPENAI_API_KEY)
@@ -26,22 +28,31 @@ class AIClient:
         else:
             print("WARNING: No API KEY found (OpenAI or Gemini). AI features will fail.")
 
+
+
     def generate_json(self, prompt: str, system_prompt: str, response_model: Type[BaseModel]) -> Dict[str, Any]:
         if self.provider == "gemini":
-            try:
-                # Gemini doesn't have system prompts in the same way for chat, 
-                # strictly speaking, but passing it as first part works or system_instruction in 1.5
-                # We'll prepend it.
-                combined_prompt = f"System: {system_prompt}\n\nUser: {prompt}\n\nReturn valid JSON."
-                
-                response = self.model.generate_content(
-                    combined_prompt,
-                    generation_config={"response_mime_type": "application/json"}
-                )
-                return json.loads(response.text)
-            except Exception as e:
-                print(f"Gemini Error: {e}")
-                raise e
+            combined_prompt = f"System: {system_prompt}\n\nUser: {prompt}\n\nReturn valid JSON."
+            
+            retries = 3
+            for attempt in range(retries):
+                try:
+                    response = self.model.generate_content(
+                        combined_prompt,
+                        generation_config={"response_mime_type": "application/json"}
+                    )
+                    return json.loads(response.text)
+                except Exception as e:
+                    # Check for "429" or "ResourceExhausted" in string representation if we don't import exact type
+                    if "429" in str(e) or "ResourceExhausted" in str(e) or "Quota" in str(e):
+                        if attempt < retries - 1:
+                            wait_time = (2 ** attempt) + random.uniform(0, 1)
+                            print(f"Gemini Rate Limit hit. Retrying in {wait_time:.1f}s...")
+                            time.sleep(wait_time)
+                            continue
+                    
+                    print(f"Gemini Error: {e}")
+                    raise e
         
         # OpenAI Fallback
         if not self.client:
