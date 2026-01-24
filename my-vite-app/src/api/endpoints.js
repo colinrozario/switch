@@ -31,7 +31,7 @@ function uuidv4() {
 
 // Updating endpoints to match backend exact signature
 export const endpoints = {
-    createProfile: (text) => client.post(`/profiles/intake?input_text=${encodeURIComponent(text)}`),
+    createProfile: (text) => client.post('/profiles/intake', { input_text: text }),
 
     getCareerOptions: (profileId) => client.post(`/plans/generate-options?profile_id=${profileId}`),
 

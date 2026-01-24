@@ -9,9 +9,14 @@ import uuid
 router = APIRouter()
 orchestrator = Orchestrator()
 
+from pydantic import BaseModel
+
+class IntakeRequest(BaseModel):
+    input_text: str
+
 @router.post("/intake", response_model=ProfileResponse)
 def create_profile_intake(
-    input_text: str,
+    request: IntakeRequest,
     db: Session = Depends(get_db),
     # user_id: uuid.UUID = Depends(get_current_user) # Skip auth for now
 ):
@@ -19,7 +24,7 @@ def create_profile_intake(
     Analyzes raw text input to create a structured profile.
     """
     # 1. AI Analysis
-    structured_data = orchestrator.process_intake(input_text)
+    structured_data = orchestrator.process_intake(request.input_text)
     
     # 2. Save to DB
     # Create dummy user if not exists for prototype
