@@ -3,11 +3,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainContainer from './components/Layout/MainContainer';
 import Navbar from './components/UI/Navbar';
 
-// Views
+// Pages
 import Home from './views/Home';
-import Intake from './views/Intake';
-import Paths from './views/Paths';
-import Roadmap from './views/Roadmap';
+import IntakePage from './pages/IntakePage';
+import DiagnosisPage from './pages/DiagnosisPage'; // New wizard
+import OptionsPage from './pages/OptionsPage';
+import RoadmapPage from './pages/RoadmapPage';
 
 function App() {
   return (
@@ -19,9 +20,10 @@ function App() {
         <div style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/intake" element={<Intake />} />
-            <Route path="/paths" element={<Paths />} />
-            <Route path="/roadmap" element={<Roadmap />} />
+            <Route path="/diagnosis" element={<DiagnosisPage />} />
+            <Route path="/intake" element={<IntakePage />} /> {/* Legacy/Fallback */}
+            <Route path="/options" element={<OptionsPage />} />
+            <Route path="/roadmap" element={<RoadmapPage />} />
           </Routes>
         </div>
       </MainContainer>

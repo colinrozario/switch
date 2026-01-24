@@ -1,0 +1,27 @@
+# General
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.env
+
+# NodeJS
+node_modules/
+dist/
+build/
+.npm
+.eslintcache
+
+# Project Specific
+backend/test_output.txt
+backend/test_output_2.txt
+backend/test_output_3.txt
