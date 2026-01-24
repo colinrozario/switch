@@ -7,6 +7,7 @@ from app.db.models import Profile, Plan, Scenario
 from app.schemas.plan import PlanResponse, PlanData
 from app.engines import finance_engine, timeline_engine, risk_engine, career_graph_engine, roadmap_engine
 from app.ai.orchestrator import Orchestrator
+from app.schemas.profile import UserProfileData
 import uuid
 
 router = APIRouter()
@@ -74,8 +75,6 @@ def build_plan_implementation(
     option_mock = {"title": target_role_key} # Fetch real details
     plan_data = roadmap_engine.build_roadmap(option_mock, finance_res, risk_res, horizon)
     
-from app.schemas.profile import UserProfileData
-
     # 5. AI Enrichment (Roadmap Writer)
     for phase in plan_data.roadmap:
         # Convert dict back to UserProfileData
