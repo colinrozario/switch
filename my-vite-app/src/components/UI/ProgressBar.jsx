@@ -5,17 +5,17 @@ const ProgressBar = ({ current, total }) => {
     const progress = (current / total) * 100;
 
     return (
-        <div className="w-full flex items-center gap-4 mb-8">
-            <div className="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
+        <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
+            <div style={{ flex: 1, height: '12px', background: 'var(--color-surface)', borderRadius: '99px', overflow: 'hidden' }}>
                 <motion.div
-                    className="h-full bg-black rounded-full"
+                    style={{ height: '100%', background: 'var(--color-primary)', borderRadius: '99px' }}
                     initial={{ width: 0 }}
                     animate={{ width: `${progress}%` }}
                     transition={{ duration: 0.5, ease: "easeInOut" }}
                 />
             </div>
-            <span className="text-sm font-semibold text-gray-500">
-                Step {current} of {total}
+            <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-secondary)', whiteSpace: 'nowrap' }}>
+                Step {current} / {total}
             </span>
         </div>
     );

@@ -2,13 +2,13 @@ import React from 'react';
 
 const Input = ({ label, type = 'text', placeholder, value, onChange, name, icon: Icon, required = false }) => {
     return (
-        <div className="flex flex-col gap-2 w-full">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
             {label && (
-                <label className="text-sm font-semibold text-gray-700">
-                    {label} {required && <span className="text-red-500">*</span>}
+                <label style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-secondary)' }}>
+                    {label} {required && <span style={{ color: '#ff4d4d' }}>*</span>}
                 </label>
             )}
-            <div className="relative">
+            <div style={{ position: 'relative' }}>
                 <input
                     type={type}
                     name={name}
@@ -18,19 +18,35 @@ const Input = ({ label, type = 'text', placeholder, value, onChange, name, icon:
                     required={required}
                     style={{
                         width: '100%',
-                        padding: '12px 16px',
-                        paddingLeft: Icon ? '44px' : '16px',
-                        borderRadius: '12px',
-                        border: '1px solid #E5E7EB',
+                        padding: '16px 20px',
+                        paddingLeft: Icon ? '48px' : '20px',
+                        borderRadius: 'var(--radius-md)',
+                        border: '1px solid var(--color-border)',
                         fontSize: '16px',
                         outline: 'none',
-                        transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-                        backgroundColor: '#FAFAFA',
+                        transition: 'all 0.2s ease',
+                        backgroundColor: 'var(--color-surface)',
+                        color: '#FFF',
+                        caretColor: 'var(--color-primary)'
                     }}
-                    className="focus:border-black focus:ring-1 focus:ring-black placeholder:text-gray-400"
+                    onFocus={(e) => {
+                        e.target.style.borderColor = 'var(--color-primary)';
+                        e.target.style.background = 'var(--color-surface-hover)';
+                    }}
+                    onBlur={(e) => {
+                        e.target.style.borderColor = 'var(--color-border)';
+                        e.target.style.background = 'var(--color-surface)';
+                    }}
                 />
                 {Icon && (
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                    <div style={{
+                        position: 'absolute',
+                        left: '16px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        color: 'var(--color-text-secondary)',
+                        pointerEvents: 'none'
+                    }}>
                         <Icon size={20} />
                     </div>
                 )}

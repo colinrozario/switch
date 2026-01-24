@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import Card from '../components/UI/Card';
 import Button from '../components/UI/Button';
 import { getMockPaths } from '../services/mockData';
-import { ArrowRight, CheckCircle, AlertTriangle } from 'lucide-react';
+import { ArrowRight, CheckCircle } from 'lucide-react';
 
 const Paths = () => {
     const navigate = useNavigate();
@@ -13,7 +13,6 @@ const Paths = () => {
     const [selectedPath, setSelectedPath] = useState(null);
 
     useEffect(() => {
-        // Simulate AI "Processing"
         setTimeout(() => {
             setPaths(getMockPaths());
             setLoading(false);
@@ -22,61 +21,99 @@ const Paths = () => {
 
     if (loading) {
         return (
-            <div className="flex flex-col items-center justify-center h-full">
-                <div className="w-16 h-16 border-4 border-gray-200 border-t-black rounded-full animate-spin mb-4"></div>
-                <h3 className="text-xl font-bold">Analyzing your profile...</h3>
-                <p className="text-gray-500">Calculating transition risks and salary bridges.</p>
+            <div style={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                height: '100%', minHeight: '60vh'
+            }}>
+                <div style={{
+                    width: '64px', height: '64px',
+                    border: '4px solid var(--color-surface)',
+                    borderTop: '4px solid var(--color-primary)',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite',
+                    marginBottom: '16px'
+                }}></div>
+                <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
+                <h3 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '8px' }}>Analyzing your profile...</h3>
+                <p style={{ color: 'var(--color-text-secondary)' }}>Calculating transition risks and salary bridges.</p>
             </div>
         );
     }
 
     return (
-        <div className="w-full max-w-5xl mx-auto py-12 px-6 h-full flex flex-col">
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '48px 24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-8 text-center"
+                style={{ marginBottom: '32px', textAlign: 'center' }}
             >
-                <h2 className="text-3xl font-bold mb-2">Likely Feasible Paths</h2>
-                <p className="text-gray-500">Based on your constraints, these 3 roles maximize safety and income continuity.</p>
+                <h2 style={{ fontSize: '32px', fontWeight: '700', marginBottom: '8px' }}>Likely Feasible Paths</h2>
+                <p style={{ color: 'var(--color-text-secondary)' }}>Based on your constraints, these 3 roles maximize safety and income continuity.</p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 flex-1">
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gap: '24px',
+                marginBottom: '32px',
+                flex: 1
+            }}>
                 {paths.map((path, index) => (
                     <Card
                         key={path.id}
                         onClick={() => setSelectedPath(path)}
-                        className={`relative border-2 ${selectedPath?.id === path.id ? 'border-black' : 'border-transparent'}`}
+                        style={{
+                            border: selectedPath?.id === path.id ? '2px solid var(--color-primary)' : '1px solid var(--color-border)',
+                            position: 'relative',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            minHeight: '320px'
+                        }}
                     >
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className="h-full flex flex-col"
+                            style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
                         >
-                            <div className={`inline-block px-3 py-1 rounded-full text-xs font-bold mb-4 w-fit ${path.color}`}>
+                            <div style={{
+                                display: 'inline-block', padding: '4px 12px', borderRadius: '99px',
+                                fontSize: '12px', fontWeight: 'bold', marginBottom: '16px',
+                                width: 'fit-content',
+                                background: 'rgba(255,255,255,0.1)', // Simplification of risk color
+                                color: '#FFF'
+                            }}>
                                 {path.riskLabel}
                             </div>
-                            <h3 className="text-xl font-bold mb-2">{path.title}</h3>
-                            <div className="flex flex-col gap-1 mb-4 text-sm text-gray-500">
+                            <h3 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '8px' }}>{path.title}</h3>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '16px', fontSize: '14px', color: 'var(--color-text-secondary)' }}>
                                 {path.matchParams.map((param, i) => (
-                                    <span key={i} className="flex items-center gap-1">
+                                    <span key={i} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                                         • {param}
                                     </span>
                                 ))}
                             </div>
-                            <p className="text-sm text-gray-600 mb-6 flex-1">
+                            <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', marginBottom: '24px', flex: 1, lineHeight: '1.5' }}>
                                 {path.description}
                             </p>
 
-                            <div className="bg-gray-50 p-3 rounded-xl mt-auto">
-                                <div className="text-xs text-gray-500 uppercase font-bold mb-1">Estimated Bridge</div>
-                                <div className="font-mono text-sm font-semibold">{path.salaryBridge}</div>
+                            <div style={{
+                                background: 'rgba(255,255,255,0.05)',
+                                padding: '12px',
+                                borderRadius: '12px',
+                                marginTop: 'auto'
+                            }}>
+                                <div style={{ fontSize: '12px', color: 'var(--color-text-secondary)', textTransform: 'uppercase', fontWeight: 'bold', marginBottom: '4px' }}>Estimated Bridge</div>
+                                <div style={{ fontFamily: 'monospace', fontSize: '14px', fontWeight: '600' }}>{path.salaryBridge}</div>
                             </div>
                         </motion.div>
 
                         {selectedPath?.id === path.id && (
-                            <div className="absolute top-[-10px] right-[-10px] bg-black text-white rounded-full p-1">
+                            <div style={{
+                                position: 'absolute', top: '-10px', right: '-10px',
+                                background: 'var(--color-primary)', color: '#000',
+                                borderRadius: '50%', padding: '4px'
+                            }}>
                                 <CheckCircle size={20} />
                             </div>
                         )}
@@ -84,12 +121,12 @@ const Paths = () => {
                 ))}
             </div>
 
-            <div className="flex justify-end pt-4 border-t border-gray-100">
+            <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '16px', borderTop: '1px solid var(--color-border)' }}>
                 <Button
                     disabled={!selectedPath}
                     onClick={() => navigate('/roadmap')}
                 >
-                    Generate Roadmap for {selectedPath ? selectedPath.title : '...'} <ArrowRight size={16} />
+                    Generate Roadmap for {selectedPath ? selectedPath.title : '...'}
                 </Button>
             </div>
         </div>

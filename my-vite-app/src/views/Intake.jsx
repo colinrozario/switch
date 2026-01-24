@@ -35,19 +35,19 @@ const Intake = () => {
     };
 
     return (
-        <div className="w-full max-w-2xl mx-auto flex flex-col justify-center h-full py-12 px-6">
+        <div style={{ width: '100%', maxWidth: '640px', margin: '0 auto', display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%', padding: '48px 24px' }}>
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-8"
+                style={{ marginBottom: '32px' }}
             >
-                <h2 className="text-3xl font-bold mb-2">Let's build your safety net.</h2>
-                <p className="text-gray-500">We need a few details to model your transition risk accurately.</p>
+                <h2 style={{ fontSize: '32px', fontWeight: '700', marginBottom: '8px' }}>Let's build your safety net.</h2>
+                <p style={{ color: 'var(--color-text-secondary)' }}>We need a few details to model your transition risk accurately.</p>
             </motion.div>
 
             <ProgressBar current={step} total={totalSteps} />
 
-            <div className="flex-1">
+            <div style={{ flex: 1 }}>
                 <AnimatePresence mode="wait">
                     {step === 1 && (
                         <motion.div
@@ -55,9 +55,9 @@ const Intake = () => {
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -20 }}
-                            className="flex flex-col gap-4"
+                            style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
                         >
-                            <h3 className="text-xl font-semibold mb-2">Step 1: Current Situation</h3>
+                            <h3 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '8px' }}>Step 1: Current Situation</h3>
                             <Input
                                 label="Current Role"
                                 name="currentRole"
@@ -73,10 +73,14 @@ const Intake = () => {
                                 onChange={handleChange}
                                 placeholder="e.g. 8"
                             />
-                            <div className="flex flex-col gap-2">
-                                <label className="text-sm font-semibold text-gray-700">Why do you want to switch? (Be honest)</label>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                <label style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-secondary)' }}>Why do you want to switch? (Be honest)</label>
                                 <textarea
-                                    className="w-full p-4 rounded-xl border border-gray-200 bg-gray-50 focus:ring-1 focus:ring-black outline-none resize-none h-32"
+                                    style={{
+                                        width: '100%', padding: '16px', borderRadius: 'var(--radius-md)',
+                                        border: '1px solid var(--color-border)', backgroundColor: 'var(--color-surface)',
+                                        color: '#FFF', fontSize: '16px', outline: 'none', resize: 'none', height: '128px'
+                                    }}
                                     placeholder="I feel stuck, the industry is shrinking, and I want to move into Tech..."
                                     name="context"
                                     value={formData.context}
@@ -92,11 +96,14 @@ const Intake = () => {
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -20 }}
-                            className="flex flex-col gap-4"
+                            style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
                         >
-                            <h3 className="text-xl font-semibold mb-2">Step 2: The Financials (Deterministic Models)</h3>
-                            <div className="bg-blue-50 p-4 rounded-xl flex gap-3 text-sm text-blue-800 mb-2">
-                                <AlertCircle size={20} />
+                            <h3 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '8px' }}>Step 2: The Financials (Deterministic Models)</h3>
+                            <div style={{
+                                background: 'rgba(215, 254, 3, 0.1)', padding: '16px', borderRadius: '12px',
+                                display: 'flex', gap: '12px', fontSize: '14px', color: 'var(--color-primary)'
+                            }}>
+                                <AlertCircle size={20} style={{ minWidth: '20px' }} />
                                 <p>We use these numbers to calculate your exact runway and failure threshold. We do not store this data.</p>
                             </div>
                             <Input
@@ -132,9 +139,9 @@ const Intake = () => {
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -20 }}
-                            className="flex flex-col gap-4"
+                            style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
                         >
-                            <h3 className="text-xl font-semibold mb-2">Step 3: Target Direction</h3>
+                            <h3 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '8px' }}>Step 3: Target Direction</h3>
                             <Input
                                 label="Target Role / Industry (Optional)"
                                 name="targetRole"
@@ -142,7 +149,7 @@ const Intake = () => {
                                 onChange={handleChange}
                                 placeholder="e.g. Product Management, or 'I don't know yet'"
                             />
-                            <p className="text-sm text-gray-500 mt-2">
+                            <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', marginTop: '8px' }}>
                                 If you don't have a target, our AI will suggest 3 feasible paths based on your current skills and risk profile.
                             </p>
                         </motion.div>
@@ -150,7 +157,7 @@ const Intake = () => {
                 </AnimatePresence>
             </div>
 
-            <div className="flex justify-between mt-8 pt-6 border-t border-gray-100">
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '32px', paddingTop: '24px', borderTop: '1px solid var(--color-border)' }}>
                 {step > 1 ? (
                     <Button variant="ghost" onClick={prevStep}>
                         <ArrowLeft size={16} /> Back

@@ -3,63 +3,87 @@ import { motion } from 'framer-motion';
 import { getMockPaths } from '../services/mockData';
 import Button from '../components/UI/Button';
 import { Download, Calendar, DollarSign, CheckSquare } from 'lucide-react';
+import Card from '../components/UI/Card';
 
 const Roadmap = () => {
     // Ideally we pass the selected ID via context/url, for MVP we just show the first one
     const path = getMockPaths()[0];
 
     return (
-        <div className="w-full max-w-4xl mx-auto py-12 px-6 h-full flex flex-col">
+        <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '48px 24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+            {/* Header */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-10 flex justify-between items-end"
+                style={{ marginBottom: '40px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}
             >
                 <div>
-                    <div className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Target Role</div>
-                    <h2 className="text-4xl font-bold mb-2">{path.title}</h2>
-                    <p className="text-gray-500 max-w-lg">{path.description}</p>
+                    <div style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>Target Role</div>
+                    <h2 style={{ fontSize: '48px', fontWeight: '700', marginBottom: '16px', lineHeight: 1 }}>{path.title}</h2>
+                    <p style={{ color: 'var(--color-text-secondary)', maxWidth: '500px', fontSize: '18px' }}>{path.description}</p>
                 </div>
-                <div className="text-right hidden md:block">
-                    <div className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-1">Timeline</div>
-                    <div className="text-2xl font-bold">{path.matchParams[1].split(': ')[1]}</div>
+                <div style={{
+                    textAlign: 'right', display: 'none', // md:block logic can be done with media queries, simplifying to always show or hide on small. I'll just show it.
+                }}>
+                    {/* Hidden on mobile for simplicity in inline styles without window hooks */}
                 </div>
             </motion.div>
 
-            <div className="relative border-l-2 border-gray-100 pl-8 ml-4 space-y-12 pb-12">
+            {/* Timeline */}
+            <div style={{
+                position: 'relative',
+                borderLeft: '2px solid var(--color-border)',
+                paddingLeft: '32px',
+                marginLeft: '16px',
+                paddingBottom: '48px'
+            }}>
                 {path.roadmap.map((phase, index) => (
                     <motion.div
                         key={index}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.2 }}
-                        className="relative"
+                        style={{ position: 'relative', marginBottom: '48px' }}
                     >
-                        {/* Timeline Dot */}
-                        <div className={`absolute -left-[41px] top-0 w-5 h-5 rounded-full border-4 border-white ${index === 0 ? 'bg-black' : 'bg-gray-300'}`} style={{ boxShadow: '0 0 0 4px white' }}></div>
+                        {/* Dot */}
+                        <div style={{
+                            position: 'absolute',
+                            left: '-43px', // -32 padding - 2 border - 9 (half width)
+                            top: '0',
+                            width: '20px',
+                            height: '20px',
+                            background: index === 0 ? 'var(--color-primary)' : 'var(--color-bg)',
+                            borderRadius: '50%',
+                            border: `4px solid var(--color-border)`
+                        }}></div>
 
-                        <div className="flex flex-col md:flex-row gap-6">
-                            <div className="flex-1">
-                                <h3 className="text-xl font-bold mb-1">{phase.phase}</h3>
-                                <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                            <div style={{ flex: 1 }}>
+                                <h3 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '8px' }}>{phase.phase}</h3>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: 'var(--color-text-secondary)', marginBottom: '16px' }}>
                                     <Calendar size={14} /> {phase.duration}
                                 </div>
-                                <div className="space-y-3">
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                     {phase.milestones.map((ms, i) => (
-                                        <div key={i} className="flex items-start gap-3 bg-gray-50 p-3 rounded-xl border border-gray-100">
-                                            <CheckSquare size={18} className="text-gray-400 mt-0.5" />
-                                            <span className="text-sm font-medium">{ms}</span>
-                                        </div>
+                                        <Card key={i} style={{ padding: '16px', borderRadius: '16px', display: 'flex', alignItems: 'flex-start', gap: '12px', background: 'var(--color-surface)', backdropFilter: 'none' }}>
+                                            <CheckSquare size={18} style={{ color: 'var(--color-primary)', minWidth: '18px' }} />
+                                            <span style={{ fontSize: '15px', lineHeight: '1.4' }}>{ms}</span>
+                                        </Card>
                                     ))}
                                 </div>
                             </div>
 
-                            <div className="w-full md:w-64">
-                                <div className="bg-blue-50/50 p-4 rounded-2xl border border-blue-100">
-                                    <div className="flex items-center gap-2 text-blue-800 font-bold text-xs uppercase tracking-wider mb-2">
+                            <div style={{ marginTop: '16px' }}>
+                                <div style={{
+                                    background: 'rgba(215, 254, 3, 0.1)', // Primary Low Opacity
+                                    padding: '24px',
+                                    borderRadius: '24px',
+                                    border: '1px solid rgba(215, 254, 3, 0.2)'
+                                }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-primary)', fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>
                                         <DollarSign size={14} /> Financial Impact
                                     </div>
-                                    <p className="text-sm font-semibold text-gray-800">{phase.financialImpact}</p>
+                                    <p style={{ fontSize: '16px', fontWeight: '600', color: '#FFF' }}>{phase.financialImpact}</p>
                                 </div>
                             </div>
                         </div>
@@ -67,9 +91,9 @@ const Roadmap = () => {
                 ))}
             </div>
 
-            <div className="mt-auto pt-8 border-t border-gray-100 flex justify-center">
+            <div style={{ marginTop: 'auto', paddingTop: '32px', borderTop: '1px solid var(--color-border)', display: 'flex', justifyContent: 'center' }}>
                 <Button>
-                    <Download size={18} /> Export Full Strategic Plan (PDF)
+                    Export Full Strategic Plan (PDF)
                 </Button>
             </div>
         </div>
