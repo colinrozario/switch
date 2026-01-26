@@ -43,15 +43,21 @@ def estimate_transition_timeline(
     job_search_months = math.ceil(base_search_months * difficulty_multiplier)
     
     total_months_est = skill_phase_months + job_search_months
+    # Base effort in hours (Mock heuristic: 300 to 800 hours for a switch)
+    average_effort_hours = 500 
     
-    # Ranges
-    total_low = total_months_est
-    total_high = math.ceil(total_months_est * 1.5) # Buffer for reality
+    # Adjust by skill gap
+    effort_hours = average_effort_hours * (1 + skill_gap_score)
+    
+    # Weeks needed = Effort / Hours per week
+    weeks_needed = effort_hours / max(weekly_hours, 5) # Avoid div by zero
+    
+    months = weeks_needed / 4.0
     
     return {
-        "skill_phase_months": skill_phase_months,
-        "job_search_months": job_search_months,
-        "total_low": total_low,
-        "total_high": total_high,
-        "required_hours": int(required_hours)
+        "total_months": months,
+        "total_weeks": weeks_needed,
+        "total_low": int(months * 0.8),
+        "total_high": int(months * 1.2),
+        "effort_hours": effort_hours
     }

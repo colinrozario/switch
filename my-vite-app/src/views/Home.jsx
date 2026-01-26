@@ -1,11 +1,10 @@
 import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Button from '../components/UI/Button';
-import Card from '../components/UI/Card';
 import Section from '../components/Layout/Section';
 import Ticker from '../components/UI/Ticker';
-import { TrendingUp, Activity, Shield, CheckCircle, ArrowRight, Lock, Zap } from 'lucide-react';
+import { TrendingUp, Activity, Shield, CheckCircle, ArrowRight, Lock, Zap, Home as HomeIcon, PieChart, Map, User, Menu } from 'lucide-react';
 
 // --- Components ---
 
@@ -32,6 +31,45 @@ const BentoCard = ({ title, subtitle, icon: Icon, children, className, style }) 
     </div>
 );
 
+// --- Realistic Tablet UI Components ---
+
+const Sidebar = () => (
+    <div style={{
+        width: '80px',
+        height: '100%',
+        background: 'rgba(255,255,255,0.03)',
+        borderRight: '1px solid rgba(255,255,255,0.05)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        paddingTop: '30px',
+        gap: '40px'
+    }}>
+        <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#d7fe03' }} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+            <HomeIcon size={24} color="#fff" />
+            <PieChart size={24} color="#666" />
+            <Map size={24} color="#666" />
+            <User size={24} color="#666" />
+        </div>
+    </div>
+);
+
+const AppHeader = ({ title }) => (
+    <div style={{ padding: '24px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+            <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>Good Morning, Alex</div>
+            <div style={{ fontSize: '24px', fontWeight: '700', color: '#fff' }}>{title}</div>
+        </div>
+        <div style={{ display: 'flex', gap: '16px' }}>
+            <div style={{ padding: '8px 16px', borderRadius: '100px', background: 'rgba(255,255,255,0.1)', color: '#fff', fontSize: '14px' }}>Draft Mode</div>
+            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#333' }} />
+        </div>
+    </div>
+);
+
+// --- 3D Tablet Component ---
+
 const TabletScroll = () => {
     const containerRef = useRef(null);
     const { scrollYProgress } = useScroll({
@@ -39,104 +77,149 @@ const TabletScroll = () => {
         offset: ["start end", "end start"]
     });
 
-    // 3D Transforms
-    const rotateX = useTransform(scrollYProgress, [0.1, 0.3], [30, 0]);
-    const scale = useTransform(scrollYProgress, [0.1, 0.3, 0.8, 1], [0.8, 1, 1, 0.8]);
-    const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+    // 1. Entry Animation (Tilt Up + Fade In)
+    const rotateX = useTransform(scrollYProgress, [0.1, 0.3], [40, 0]);
+    // FIXED: Removed scale down. Kept constant scale.
+    const scale = useTransform(scrollYProgress, [0.1, 0.3], [0.9, 1]);
+    const opacity = useTransform(scrollYProgress, [0, 0.2, 0.9, 1], [0, 1, 1, 0]);
+    const y = useTransform(scrollYProgress, [0.1, 0.3], [100, 0]);
 
-    // Smooth content scroll
-    const contentY = useTransform(scrollYProgress, [0.3, 0.7], ['0%', '-66.66%']);
+    // 2. Horizontal Swipe Logic (0% to -50% for 2 slides)
+    // Locked phase: 0.3 to 0.7
+    const contentX = useTransform(scrollYProgress, [0.35, 0.65], ['0%', '-50%']);
 
     return (
-        <div ref={containerRef} style={{ height: '350vh', position: 'relative' }}>
+        // FIXED: Reduced height to remove blank space
+        <div ref={containerRef} style={{ height: '250vh', position: 'relative' }}>
             <div style={{ position: 'sticky', top: 0, height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', perspective: '1200px' }}>
                 <motion.div
                     style={{
-                        width: '90%',
-                        maxWidth: '1000px',
-                        aspectRatio: '16/10',
-                        background: '#111',
-                        borderRadius: '28px',
-                        border: '12px solid #222',
-                        boxShadow: '0 50px 200px -20px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1)',
+                        width: '900px', // Landscape Tablet Width
+                        height: '640px', // Landscape Tablet Height
+                        background: '#0a0a0a',
+                        borderRadius: '32px',
+                        border: '12px solid #222', // Thicker bezel
+                        boxShadow: '0 50px 150px -20px rgba(0,0,0,0.6), 0 0 0 2px rgba(255,255,255,0.1)',
                         position: 'relative',
                         rotateX,
                         scale,
                         opacity,
-                        overflow: 'hidden'
+                        y,
+                        // overflow: 'hidden' // Removed to show buttons outside
                     }}
                 >
-                    {/* Tablet Header */}
-                    <div style={{ height: '60px', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', padding: '0 24px', justifyContent: 'space-between', background: 'rgba(255,255,255,0.02)' }}>
-                        <div style={{ display: 'flex', gap: '8px' }}>
-                            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ff5f57' }} />
-                            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#febc2e' }} />
-                            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#28c840' }} />
-                        </div>
-                        <div style={{ fontSize: '12px', color: '#666', fontWeight: '600' }}>app.switch.io</div>
-                        <div />
-                    </div>
+                    {/* Hardware Buttons */}
+                    <div style={{ position: 'absolute', top: '60px', right: '-16px', width: '4px', height: '40px', background: '#333', borderRadius: '0 4px 4px 0' }} /> {/* Volume Up */}
+                    <div style={{ position: 'absolute', top: '110px', right: '-16px', width: '4px', height: '40px', background: '#333', borderRadius: '0 4px 4px 0' }} /> {/* Volume Down */}
+                    <div style={{ position: 'absolute', top: '40px', left: '-16px', width: '4px', height: '30px', background: '#333', borderRadius: '4px 0 0 4px' }} /> {/* Power */}
 
-                    {/* Tablet Body (Scrollable Content) */}
-                    <div style={{ position: 'relative', height: 'calc(100% - 60px)', overflow: 'hidden' }}>
-                        <motion.div style={{ height: '300%', y: contentY, display: 'flex', flexDirection: 'column' }}>
+                    {/* Camera Dot */}
+                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#333', position: 'absolute', top: '12px', left: '50%', transform: 'translateX(-50%)', zIndex: 20 }} />
 
-                            {/* Slide 1: Risk Analysis */}
-                            <div style={{ flex: 1, padding: '40px', display: 'flex', gap: '40px', alignItems: 'center' }}>
-                                <div style={{ flex: 1 }}>
-                                    <div style={{ fontSize: '12px', color: '#d7fe03', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '1px' }}>Risk Analysis</div>
-                                    <h2 style={{ fontSize: '40px', lineHeight: '1.1', marginBottom: '20px' }}>Fail-safe your future.</h2>
-                                    <p style={{ color: '#888', fontSize: '18px' }}>We run 50+ simulations to verify your financial runway before you resign.</p>
-                                </div>
-                                <div style={{ flex: 1.2, background: 'rgba(255,255,255,0.05)', borderRadius: '16px', padding: '30px', border: '1px solid rgba(255,255,255,0.1)' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-                                        <span>Safety Score</span>
-                                        <span style={{ color: '#d7fe03' }}>94/100</span>
+                    {/* Screen Glare / Gloss */}
+                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(120deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 40%)', pointerEvents: 'none', zIndex: 30 }} />
+
+                    {/* App Content Container (Horizontal Row) */}
+                    <motion.div style={{
+                        height: '100%',
+                        width: '200%', // 2 Slides
+                        display: 'flex',
+                        x: contentX,
+                        borderRadius: '20px', // Inner radius matching frame
+                        overflow: 'hidden'
+                    }}>
+
+                        {/* SCREEN 1: DASHBOARD (Landscape Layout) */}
+                        <div style={{ width: '50%', height: '100%', background: '#0a0a0a', display: 'flex' }}>
+                            <Sidebar />
+                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                                <AppHeader title="Financial Overview" />
+                                <div style={{ padding: '0 32px 32px 32px', display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px', height: '100%' }}>
+
+                                    {/* Main Chart Card */}
+                                    <div style={{ background: '#1c1c1c', borderRadius: '24px', padding: '32px', display: 'flex', flexDirection: 'column' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '40px' }}>
+                                            <div>
+                                                <div style={{ fontSize: '14px', color: '#888' }}>Runway Projection</div>
+                                                <div style={{ fontSize: '32px', fontWeight: '600', color: '#fff' }}>18 Months</div>
+                                            </div>
+                                            <div style={{ padding: '8px 16px', background: 'rgba(215, 254, 3, 0.1)', color: '#d7fe03', borderRadius: '8px', height: 'fit-content' }}>Safe</div>
+                                        </div>
+                                        <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '16px' }}>
+                                            {[40, 38, 36, 34, 32, 30, 28, 60, 65, 70, 75, 80].map((h, i) => (
+                                                <div key={i} style={{
+                                                    flex: 1,
+                                                    height: `${h}%`,
+                                                    background: i > 6 ? '#d7fe03' : 'rgba(255,255,255,0.1)',
+                                                    borderRadius: '4px'
+                                                }} />
+                                            ))}
+                                        </div>
                                     </div>
-                                    <div style={{ height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
-                                        <div style={{ width: '94%', height: '100%', background: '#d7fe03' }} />
+
+                                    {/* Side Stats */}
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                                        <div style={{ background: '#1c1c1c', borderRadius: '24px', padding: '24px', flex: 1 }}>
+                                            <div style={{ fontSize: '14px', color: '#888', marginBottom: '12px' }}>Switch Score</div>
+                                            <div style={{ fontSize: '48px', fontWeight: '700', color: '#fff' }}>94</div>
+                                            <div style={{ height: '6px', background: '#333', borderRadius: '100px', marginTop: '16px', overflow: 'hidden' }}>
+                                                <div style={{ width: '94%', height: '100%', background: '#d7fe03' }} />
+                                            </div>
+                                        </div>
+                                        <div style={{ background: '#1c1c1c', borderRadius: '24px', padding: '24px', flex: 1 }}>
+                                            <div style={{ fontSize: '14px', color: '#888', marginBottom: '12px' }}>Savings Buffer</div>
+                                            <div style={{ fontSize: '32px', fontWeight: '700', color: '#fff' }}>$24k</div>
+                                            <div style={{ fontSize: '12px', color: '#666', marginTop: '8px' }}>+ $2k this month</div>
+                                        </div>
                                     </div>
-                                    <div style={{ marginTop: '30px', display: 'flex', gap: '10px', fontSize: '12px', color: '#888' }}>
-                                        <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}><CheckCircle size={14} color="#d7fe03" /> Runway verified</div>
-                                        <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}><CheckCircle size={14} color="#d7fe03" /> Skills matched</div>
-                                    </div>
+
                                 </div>
                             </div>
+                        </div>
 
-                            {/* Slide 2: Roadmap */}
-                            <div style={{ flex: 1, padding: '40px', display: 'flex', gap: '40px', alignItems: 'center', background: 'rgba(0,0,0,0.2)' }}>
-                                <div style={{ flex: 1 }}>
-                                    <div style={{ fontSize: '12px', color: '#d7fe03', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '1px' }}>Timeline Engine</div>
-                                    <h2 style={{ fontSize: '40px', lineHeight: '1.1', marginBottom: '20px' }}>Visual timelines.</h2>
-                                    <p style={{ color: '#888', fontSize: '18px' }}>Know exactly when you'll recover your salary and hit senior level.</p>
-                                </div>
-                                <div style={{ flex: 1.2 }}>
-                                    <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end', height: '200px' }}>
-                                        {[20, 30, 45, 40, 60, 80, 100].map((h, i) => (
-                                            <div key={i} style={{ flex: 1, height: `${h}%`, background: i === 6 ? '#d7fe03' : 'rgba(255,255,255,0.1)', borderRadius: '4px 4px 0 0', position: 'relative' }}>
-                                                {i === 6 && <div style={{ position: 'absolute', top: '-30px', left: '50%', transform: 'translateX(-50%)', background: '#333', padding: '4px 8px', borderRadius: '4px', fontSize: '10px' }}>$140k</div>}
+                        {/* SCREEN 2: ROADMAP (Landscape Layout) */}
+                        <div style={{ width: '50%', height: '100%', background: '#0a0a0a', display: 'flex' }}>
+                            <Sidebar />
+                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                                <AppHeader title="Transition Roadmap" />
+                                <div style={{ padding: '0 32px 32px 32px', display: 'flex', gap: '32px', height: '100%' }}>
+
+                                    {/* Gantt / Timeline Area */}
+                                    <div style={{ flex: 2, background: '#1c1c1c', borderRadius: '24px', padding: '32px' }}>
+                                        <div style={{ fontSize: '14px', color: '#888', marginBottom: '24px', textTransform: 'uppercase', letterSpacing: '1px' }}>Phase 1: Validation</div>
+
+                                        {[
+                                            { week: "Week 1", task: "Market Research & Gaps", status: "Done" },
+                                            { week: "Week 2", task: "Resume Asset Generation", status: "In Progress" },
+                                            { week: "Week 3", task: "Outreach Campaign (10)", status: "Pending" },
+                                            { week: "Week 4", task: "First Interview Loop", status: "Locked" },
+                                        ].map((item, i) => (
+                                            <div key={i} style={{ display: 'flex', alignItems: 'center', marginBottom: '24px', opacity: i > 2 ? 0.3 : 1 }}>
+                                                <div style={{ width: '80px', fontSize: '14px', color: '#666' }}>{item.week}</div>
+                                                <div style={{ flex: 1, height: '48px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '0 16px', borderLeft: i === 1 ? '4px solid #d7fe03' : '4px solid transparent' }}>
+                                                    <span style={{ color: '#fff', fontSize: '14px' }}>{item.task}</span>
+                                                </div>
                                             </div>
                                         ))}
                                     </div>
+
+                                    {/* Action Panel */}
+                                    <div style={{ flex: 1, background: 'rgba(215, 254, 3, 0.05)', borderRadius: '24px', padding: '32px', border: '1px solid #d7fe03' }}>
+                                        <div style={{ fontSize: '12px', color: '#d7fe03', fontWeight: '700', textTransform: 'uppercase', marginBottom: '20px' }}>Current Focus</div>
+                                        <h3 style={{ fontSize: '24px', fontWeight: '600', color: '#fff', marginBottom: '16px' }}>Resume Update</h3>
+                                        <p style={{ color: '#aaa', fontSize: '14px', lineHeight: '1.6', marginBottom: '32px' }}>
+                                            Your resume needs to highlight "Product Strategy" over "Marketing Campaigns" to pass the ATS.
+                                        </p>
+                                        <button style={{ width: '100%', padding: '16px', background: '#d7fe03', color: '#000', fontWeight: '600', borderRadius: '12px', border: 'none', cursor: 'pointer' }}>
+                                            Auto-Fix Resume
+                                        </button>
+                                    </div>
+
                                 </div>
                             </div>
+                        </div>
 
-                            {/* Slide 3: Success */}
-                            <div style={{ flex: 1, padding: '40px', display: 'flex', gap: '40px', alignItems: 'center' }}>
-                                <div style={{ flex: 1 }}>
-                                    <div style={{ fontSize: '12px', color: '#d7fe03', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '1px' }}>Asset Builder</div>
-                                    <h2 style={{ fontSize: '40px', lineHeight: '1.1', marginBottom: '20px' }}>You, packaged.</h2>
-                                    <p style={{ color: '#888', fontSize: '18px' }}>Resumes, cover letters, and outreach messages generated to bypass ATS.</p>
-                                </div>
-                                <div style={{ flex: 1.2, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                                    {[1, 2, 3, 4].map((i) => (
-                                        <div key={i} style={{ aspectRatio: '1', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }} />
-                                    ))}
-                                </div>
-                            </div>
-
-                        </motion.div>
-                    </div>
+                    </motion.div>
                 </motion.div>
             </div>
         </div>
@@ -159,19 +242,19 @@ const Home = () => {
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1, ease: 'easeOut' }}
-                    style={{ zIndex: 1, textAlign: 'center' }}
+                    style={{ zIndex: 1, textAlign: 'center', padding: '0 20px' }}
                 >
-                    <h1 style={{ fontSize: 'clamp(80px, 15vw, 240px)', fontWeight: '500', lineHeight: 0.9, letterSpacing: '-0.06em', marginBottom: '20px' }}>
+                    <h1 style={{ fontSize: 'clamp(60px, 12vw, 180px)', fontWeight: '500', lineHeight: 0.9, letterSpacing: '-0.06em', marginBottom: '20px' }}>
                         switch.
                     </h1>
-                    <p style={{ fontSize: '24px', color: 'rgba(255,255,255,0.6)', maxWidth: '600px', margin: '0 auto 40px' }}>
+                    <p style={{ fontSize: 'clamp(18px, 4vw, 24px)', color: 'rgba(255,255,255,0.6)', maxWidth: '600px', margin: '0 auto 40px' }}>
                         The conservative career strategist for the risk-averse.
                     </p>
                     <Button onClick={() => navigate('/diagnosis')} style={{ padding: '16px 48px', fontSize: '1.2rem', borderRadius: '100px', background: '#d7fe03', color: '#000', fontWeight: '600', marginBottom: '60px' }}>
                         Start Diagnosis
                     </Button>
 
-                    <div style={{ width: '100%', maxWidth: '1000px', marginBottom: '80px', margin: '0 auto 80px auto' }}>
+                    <div style={{ width: '100%', maxWidth: '800px', margin: '0 auto 80px auto' }}>
                         <p style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.4)', marginBottom: '24px' }}>
                             Trusted by professionals from
                         </p>
@@ -183,13 +266,13 @@ const Home = () => {
                 </motion.div>
             </section>
 
-            {/* Scroll Interaction */}
+            {/* Scroll Interaction - Landscape Tablet */}
             <TabletScroll />
 
             {/* How It Works Section */}
             <Section style={{ background: '#080808', borderTop: '1px solid #222', borderBottom: '1px solid #222', padding: '120px 5%' }}>
                 <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center', marginBottom: '80px' }}>
-                    <h2 style={{ fontSize: '56px', fontWeight: 'bold', marginBottom: '24px', letterSpacing: '-0.03em' }}>
+                    <h2 style={{ fontSize: 'clamp(40px, 6vw, 56px)', fontWeight: 'bold', marginBottom: '24px', letterSpacing: '-0.04em' }}>
                         The System
                     </h2>
                     <p style={{ fontSize: '20px', color: '#888', lineHeight: '1.6' }}>
@@ -231,7 +314,7 @@ const Home = () => {
 
             {/* Comparison Section */}
             <Section style={{ padding: '120px 5%' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', maxWidth: '1200px', margin: '0 auto' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '40px', maxWidth: '1200px', margin: '0 auto' }}>
 
                     {/* The Old Way */}
                     <div style={{ padding: '40px', borderRadius: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid #333' }}>
@@ -276,7 +359,7 @@ const Home = () => {
             {/* Bento Grid */}
             <Section style={{ position: 'relative', zIndex: 10, background: '#000', paddingBottom: '100px' }}>
                 <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-                    <h2 style={{ fontSize: '60px', fontWeight: '600', letterSpacing: '-0.04em', color: '#fff' }}>Everything you need<br />to make the jump.</h2>
+                    <h2 style={{ fontSize: 'clamp(40px, 6vw, 60px)', fontWeight: '600', letterSpacing: '-0.04em', color: '#fff' }}>Everything you need<br />to make the jump.</h2>
                 </div>
 
                 <div style={{

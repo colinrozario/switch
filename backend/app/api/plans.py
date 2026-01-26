@@ -59,13 +59,24 @@ def build_plan_implementation(
     )
     
     # 2. Finance
+    # Extract financials from profile structure
+    try:
+        financials = profile.structured_data.get("financials", {})
+        monthly_expenses = financials.get("monthly_expenses", 3000)
+        savings = financials.get("liquid_savings", 10000)
+        # safe defaults if 0
+        if monthly_expenses == 0: monthly_expenses = 3000 
+    except:
+        monthly_expenses = 3000
+        savings = 10000
+
     finance_res = finance_engine.simulate_salary_bridge(
         current_income=profile.structured_data.get("current_income", 0),
-        monthly_expenses=3000, # Mock input, needs UI input
-        savings=10000, # Mock
+        monthly_expenses=monthly_expenses,
+        savings=savings,
         timeline_months=timeline_res["total_low"],
         side_income_schedule={},
-        target_income_p25=8000
+        target_income_p25=8000 # Should come from role data
     )
     
     # 3. Risk
