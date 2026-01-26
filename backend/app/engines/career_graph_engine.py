@@ -19,68 +19,41 @@ def generate_career_options(
         List of career option dictionaries.
     """
     
-    # TODO: Connect to a real graph database or in-memory graph structure.
-    # For Phase 2/Prototype, we will return mock deterministic options
-    # that would seemingly come from a graph analysis.
+    # Use AI to generate options
+    from app.ai.orchestrator import Orchestrator
+    from app.schemas.profile import UserProfileData
     
-    # Mock database of roles
-    mock_roles = [
-        {
-            "role_key": "backend_engineer",
-            "title": "Backend Engineer",
-            "base_salary_p25": 120000,
-            "difficulty": 1.2,
-            "match_score": 0.85
-        },
-        {
-            "role_key": "data_engineer",
-            "title": "Data Engineer",
-            "base_salary_p25": 130000,
-            "difficulty": 1.3,
-            "match_score": 0.75
-        },
-        {
-            "role_key": "technical_product_manager",
-            "title": "Technical Product Manager",
-            "base_salary_p25": 135000,
-            "difficulty": 1.4,
-            "match_score": 0.65
-        },
-        {
-            "role_key": "devops_engineer",
-            "title": "DevOps Engineer",
-            "base_salary_p25": 125000,
-            "difficulty": 1.3,
-            "match_score": 0.70
-        }
-    ]
-    
-    # Filter/Sort logic (basic implementation)
-    # real logic would traverse edges: current_role -> target_role
+    # Reconvert dict to Pydantic for the orchestrator (temporary hack until we standardize inputs)
+    # The engine should arguably receive the Pydantic object directly
+    try:
+        user_profile = UserProfileData(**profile)
+    except:
+        # If it's already an object or has issues, try best effort or fail
+        # For now assume it's the dict from the profile object
+        user_profile = UserProfileData(**profile)
+
+    orchestrator = Orchestrator()
+    ai_options = orchestrator.generate_career_paths(user_profile)
     
     results = []
     
-    for role in mock_roles:
-        # Check constraints (mock)
-        # Calculate feasibility
-        
-        # Mock values
-        salary_delta = role["base_salary_p25"] - profile.get("current_salary", 80000)
-        
+    for role in ai_options:
+        # Normalize keys if needed
         result = {
-            "role_key": role["role_key"],
-            "title": role["title"],
-            "feasibility_score": role["match_score"] * 100, # 0-100
+            "role_key": role.get("role_key"),
+            "title": role.get("title"),
+            "feasibility_score": role.get("feasibility_score"),
             "estimated_timeline": {
-                "low": 6, 
-                "high": 9 
-            },  # This would call timeline_engine in real flow
-            "salary_delta_p25": salary_delta,
+                "low": int(role.get("difficulty", 3) * 4), # Heuristic: difficulty * 4 weeks? No, maybe months. Let's say difficulty 1=3m, 5=15m.
+                "high": int(role.get("difficulty", 3) * 6) 
+            },  
+            "salary_delta_p25": role.get("salary_delta_p25"),
             "risk_preview": {
-                "level": "Medium" if role["difficulty"] > 1.2 else "Low",
-                "score": int(role["difficulty"] * 20)
+                "level": "High" if role.get("difficulty", 3) > 3.5 else "Medium" if role.get("difficulty", 3) > 2 else "Low",
+                "score": int(role.get("difficulty", 3) * 20)
             },
-            "reason_codes": ["high_demand", "skill_overlap"]
+            "reason_codes": role.get("reason_codes", []),
+            "ai_rationale": role.get("rationale")
         }
         results.append(result)
         

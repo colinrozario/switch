@@ -69,3 +69,23 @@ class Orchestrator:
             system_prompt="You are a tactical career coach.",
             response_model=list[str]
         )
+
+    def generate_career_paths(self, profile: UserProfileData) -> list[dict]:
+        template = self._load_prompt("career_paths.txt")
+        
+        skills_str = ", ".join([s.name for s in profile.skills])
+        interests_str = ", ".join(profile.interests)
+        constraints_str = str(profile.constraints.model_dump())
+        
+        prompt = template.format(
+            current_role=profile.current_role,
+            skills=skills_str,
+            interests=interests_str,
+            constraints=constraints_str
+        )
+        
+        return self.ai.generate_json(
+            prompt=prompt,
+            system_prompt="You are an expert career strategist.",
+            response_model=list[dict]
+        )

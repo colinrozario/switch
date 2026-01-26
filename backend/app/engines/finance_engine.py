@@ -84,14 +84,50 @@ def simulate_salary_bridge(
         required_buffer = abs(lowest_balance)
         warnings.append(f"Runway depleted at month {failure_month}. Need extra ${required_buffer} savings.")
     
-    if lowest_balance < buffered_expenses * 3 and failure_month is None:
-        warnings.append("Ending balance is low (< 3 months expenses). High financial risk.")
-
+    # Calculate Monthly Burn
+    monthly_burn = monthly_expenses
+    
+    # Calculate Runaway
+    # How many months until liquid_savings < 0
+    # Assuming income stops? Or partially stops?
+    # For a career switch, usually we assume they might quit.
+    # But let's act conservatively: 
+    # Scenario A: Quit Job -> Income = 0 (or side_income)
+    
+    current_savings = savings
+    months_survived = 0
+    failure_month = None
+    lowest_balance = current_savings
+    
+    max_simulation = 24 # Cap at 2 years
+    
+    for m in range(1, max_simulation + 1):
+        # Income
+        income = 0
+        # Note: side_income_schedule keys are integers, not strings.
+        if m in side_income_schedule:
+             income += side_income_schedule[m]
+        
+        # Expenses
+        expenses = monthly_burn
+        
+        # Net
+        net = income - expenses
+        current_savings += net
+        
+        if current_savings < lowest_balance:
+            lowest_balance = current_savings
+            
+        if current_savings <= 0 and failure_month is None:
+            failure_month = m
+            # We don't break, we want to see how deep the hole gets? No, let's stop for runway calc.
+            
+        if failure_month is None:
+            months_survived = m
+            
     return {
-        "monthly_cashflow": monthly_cashflow,
+        "simulation_months": months_survived,
         "lowest_balance": lowest_balance,
-        "required_buffer": required_buffer,
         "failure_month": failure_month,
-        "warnings": warnings,
-        "simulation_months": simulation_duration
+        "survived_full_timeline": failure_month is None or failure_month > timeline_months
     }
