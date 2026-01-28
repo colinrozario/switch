@@ -5,6 +5,7 @@ from app.db.models import Profile, User
 from app.schemas.profile import ProfileCreate, ProfileResponse, UserProfileData
 from app.ai.orchestrator import Orchestrator
 import uuid
+import json
 
 router = APIRouter()
 orchestrator = Orchestrator()
@@ -44,7 +45,7 @@ def create_profile_intake(
         
     profile = Profile(
         user_id=user.id,
-        structured_data=structured_data.model_dump()
+        structured_data=json.dumps(structured_data.model_dump())  # Serialize to JSON string
     )
     db.add(profile)
     db.commit()
