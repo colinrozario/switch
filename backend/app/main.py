@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.core.config import settings
+from app.api import profiles, plans
 
 app = FastAPI(title=settings.PROJECT_NAME)
 
@@ -10,3 +11,6 @@ def health_check():
         "app_name": settings.PROJECT_NAME,
         "mode": "production-ready-mvp"
     }
+
+app.include_router(profiles.router, prefix="/profiles", tags=["Profiles"])
+app.include_router(plans.router, prefix="/plans", tags=["Plans"])
