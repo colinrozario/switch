@@ -29,6 +29,7 @@ const IntakePage = () => {
 
     return (
         <div style={{
+            position: 'relative', // Fixes framer-motion scroll offset warning
             minHeight: '100vh',
             padding: '120px 20px',
             display: 'flex',
