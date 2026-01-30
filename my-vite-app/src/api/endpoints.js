@@ -33,7 +33,7 @@ function uuidv4() {
 export const endpoints = {
     createProfile: (text) => client.post('/profiles/intake', { input_text: text }),
 
-    getCareerOptions: (profileId) => client.post(`/plans/generate-options?profile_id=${profileId}`),
+    getCareerOptions: (profileId) => client.post('/plans/generate-options', null, { params: { profile_id: profileId } }),
 
     buildPlan: (profileId, targetRoleKey, horizon) => {
         const planId = uuidv4();
