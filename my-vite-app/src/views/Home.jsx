@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Button from '../components/UI/Button';
@@ -72,24 +72,34 @@ const AppHeader = ({ title }) => (
 
 const TabletScroll = () => {
     const containerRef = useRef(null);
+    const [maxScale, setMaxScale] = useState(1);
+
+    useEffect(() => {
+        const updateScale = () => {
+            // 900px width + 40px buffer = 940px required for full scale
+            const newScale = Math.min(1, window.innerWidth / 940);
+            setMaxScale(newScale);
+        };
+        updateScale();
+        window.addEventListener('resize', updateScale);
+        return () => window.removeEventListener('resize', updateScale);
+    }, []);
+
     const { scrollYProgress } = useScroll({
         target: containerRef,
-        offset: ["start end", "end start"]
+        offset: ["start end", "end end"]
     });
 
     // 1. Entry Animation (Tilt Up + Fade In)
-    const rotateX = useTransform(scrollYProgress, [0.1, 0.3], [40, 0]);
-    // FIXED: Removed scale down. Kept constant scale.
-    const scale = useTransform(scrollYProgress, [0.1, 0.3], [0.9, 1]);
-    const opacity = useTransform(scrollYProgress, [0, 0.2, 0.9, 1], [0, 1, 1, 0]);
-    const y = useTransform(scrollYProgress, [0.1, 0.3], [100, 0]);
+    const rotateX = useTransform(scrollYProgress, [0.05, 0.35], [40, 0]);
+    const scale = useTransform(scrollYProgress, [0.05, 0.35], [0.8 * maxScale, maxScale]);
+    const opacity = useTransform(scrollYProgress, [0.05, 0.25], [0, 1]);
+    const y = useTransform(scrollYProgress, [0.05, 0.35], [200, 0]);
 
     // 2. Horizontal Swipe Logic (0% to -50% for 2 slides)
-    // Locked phase: 0.3 to 0.7
-    const contentX = useTransform(scrollYProgress, [0.35, 0.65], ['0%', '-50%']);
+    const contentX = useTransform(scrollYProgress, [0.45, 0.95], ['0%', '-50%']);
 
     return (
-        // FIXED: Reduced height to remove blank space
         <div ref={containerRef} style={{ height: '250vh', position: 'relative' }}>
             <div style={{ position: 'sticky', top: 0, height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', perspective: '1200px' }}>
                 <motion.div
@@ -105,7 +115,6 @@ const TabletScroll = () => {
                         scale,
                         opacity,
                         y,
-                        // overflow: 'hidden' // Removed to show buttons outside
                     }}
                 >
                     {/* Hardware Buttons */}
