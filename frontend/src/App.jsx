@@ -7,8 +7,11 @@ import Navbar from './components/UI/Navbar';
 import Home from './views/Home';
 import IntakePage from './pages/IntakePage';
 import DiagnosisPage from './pages/DiagnosisPage'; // New wizard
+import ProfileReviewPage from './pages/ProfileReviewPage';
 import OptionsPage from './pages/OptionsPage';
+import BridgePage from './pages/BridgePage';
 import RoadmapPage from './pages/RoadmapPage';
+import SimulatorPage from './pages/SimulatorPage';
 import SwitchPromptGuide from './views/PromptGuide';
 
 function App() {
@@ -22,9 +25,11 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/diagnosis" element={<DiagnosisPage />} />
-            <Route path="/intake" element={<IntakePage />} /> {/* Legacy/Fallback */}
+            <Route path="/profile" element={<ProfileReviewPage />} />
             <Route path="/options" element={<OptionsPage />} />
+            <Route path="/bridge" element={<BridgePage />} />
             <Route path="/roadmap" element={<RoadmapPage />} />
+            <Route path="/simulator" element={<SimulatorPage />} />
             <Route path="/guide" element={<SwitchPromptGuide />} />
           </Routes>
         </div>

@@ -3,6 +3,8 @@ import client from './client';
 export const endpoints = {
     // Stage 1: Intake
     createIntake: (rawText) => client.post('/api/intake', { user_id: 1, raw_text: rawText }), // hardcoding user 1 for MVP
+    getIntake: (profileId) => client.get(`/api/intake/${profileId}`),
+    updateIntake: (profileId, updates) => client.patch(`/api/intake/${profileId}`, updates),
     
     // Stage 2: Paths
     getCareerPaths: (profileId) => client.get(`/api/paths/${profileId}`),
