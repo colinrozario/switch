@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { AlertCircle, CheckCircle, Save } from 'lucide-react';
+import { CircleAlert, CircleCheck, Save } from 'lucide-react';
 import useStore from '../store/useStore';
 import { endpoints } from '../api/endpoints';
 import Card from '../components/UI/Card';
@@ -170,7 +170,7 @@ const Field = ({ label, value, onChange, type = "text", isLowConfidence, fullWid
             {label}
             {isLowConfidence && (
                 <span style={{ color: '#ff9800', fontSize: '0.75rem', marginLeft: '8px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                    <AlertCircle size={12} /> Verification suggested
+                    <CircleAlert size={12} /> Verification suggested
                 </span>
             )}
         </label>

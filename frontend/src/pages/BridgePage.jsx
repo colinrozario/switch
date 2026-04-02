@@ -11,7 +11,7 @@ import {
     Tooltip, 
     ReferenceLine 
 } from 'recharts';
-import { AlertTriangle, Info, Lock, ArrowRight, Wallet, Calendar, Activity } from 'lucide-react';
+import { TriangleAlert, Info, Lock, ArrowRight, Wallet, Calendar, Activity } from 'lucide-react';
 import useStore from '../store/useStore';
 import { endpoints } from '../api/endpoints';
 import Card from '../components/UI/Card';
@@ -171,7 +171,7 @@ const BridgePage = () => {
                             subtext="At current monthly expense level"
                         />
                         <StatCard 
-                            icon={<AlertTriangle size={24} color={failure_threshold_month ? "#ff4444" : "var(--color-primary)"} />} 
+                            icon={<TriangleAlert size={24} color={failure_threshold_month ? "#ff4444" : "var(--color-primary)"} />} 
                             label="Failure Threshold" 
                             value={failure_threshold_month ? `Month ${failure_threshold_month}` : "Safe Margin"} 
                             subtext={failure_threshold_month ? "Month where savings are exhausted" : "Savings cover the entire transition"}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertTriangle, ChevronDown, ChevronUp, Clock, Target, Shield } from 'lucide-react';
+import { TriangleAlert, ChevronDown, ChevronUp, Clock, Target, Shield } from 'lucide-react';
 import useStore from '../store/useStore';
 import { endpoints } from '../api/endpoints';
 import Card from '../components/UI/Card';
@@ -131,7 +131,7 @@ const PathCard = ({ path, onSelect }) => (
         </div>
 
         <div style={{ marginBottom: '32px' }}>
-            <h4 style={sectionTitleStyle}><AlertTriangle size={14} /> Primary Risks</h4>
+            <h4 style={sectionTitleStyle}><TriangleAlert size={14} /> Primary Risks</h4>
             <ul style={listStyle}>
                 {path.key_risks?.map((risk, i) => <li key={i}>{risk}</li>)}
             </ul>
