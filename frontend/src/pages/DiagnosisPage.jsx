@@ -57,8 +57,8 @@ const DiagnosisPage = () => {
         `;
 
         try {
-            const response = await endpoints.createProfile(prompt);
-            setProfileId(response.id);
+            const response = await endpoints.createIntake(prompt);
+            setProfileId(response.data.result_ref);
             // Wait a bit to show the "Analysis" animation
             setTimeout(() => {
                 navigate('/options');
