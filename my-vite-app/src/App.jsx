@@ -9,6 +9,7 @@ import IntakePage from './pages/IntakePage';
 import DiagnosisPage from './pages/DiagnosisPage'; // New wizard
 import OptionsPage from './pages/OptionsPage';
 import RoadmapPage from './pages/RoadmapPage';
+import SwitchPromptGuide from './views/PromptGuide';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/intake" element={<IntakePage />} /> {/* Legacy/Fallback */}
             <Route path="/options" element={<OptionsPage />} />
             <Route path="/roadmap" element={<RoadmapPage />} />
+            <Route path="/guide" element={<SwitchPromptGuide />} />
           </Routes>
         </div>
       </MainContainer>
