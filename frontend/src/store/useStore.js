@@ -4,6 +4,12 @@ const useStore = create((set) => ({
     profileId: null,
     setProfileId: (id) => set({ profileId: id }),
 
+    pathSetId: null,
+    setPathSetId: (id) => set({ pathSetId: id }),
+
+    bridgeId: null,
+    setBridgeId: (id) => set({ bridgeId: id }),
+
     careerOptions: [],
     setCareerOptions: (options) => set({ careerOptions: options }),
 
