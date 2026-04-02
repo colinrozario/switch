@@ -25,3 +25,4 @@ build/
 backend/test_output.txt
 backend/test_output_2.txt
 backend/test_output_3.txt
+*.md
