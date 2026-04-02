@@ -7,8 +7,8 @@ import {
     TrendingUp, 
     History, 
     ArrowLeft, 
-    CheckCircle2, 
-    AlertCircle, 
+    CircleCheck, 
+    CircleAlert, 
     Info 
 } from 'lucide-react';
 import debounce from 'lodash/debounce';

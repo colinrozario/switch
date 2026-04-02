@@ -3,13 +3,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
     ShieldAlert, 
-    CheckCircle2, 
+    CircleCheck, 
     Clock, 
     Target, 
-    AlertCircle, 
+    CircleAlert, 
     RefreshCcw, 
-    ArrowRight, 
-    CheckCircle 
+    ArrowRight 
 } from 'lucide-react';
 import useStore from '../store/useStore';
 import { endpoints } from '../api/endpoints';
@@ -84,7 +83,7 @@ const RoadmapPage = () => {
                     )}
                     {go_no_go_signal && (
                         <div style={goNoGoBoxStyle}>
-                            <AlertCircle size={20} style={{ marginTop: '2px' }} />
+                            <CircleAlert size={20} style={{ marginTop: '2px' }} />
                             <div>
                                 <strong style={{ display: 'block', marginBottom: '4px' }}>ABORT SIGNAL — STOP IF THIS HAPPENS</strong>
                                 {go_no_go_signal}
@@ -145,7 +144,7 @@ const PhaseCard = ({ phase, index }) => (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     {phase.milestones.map((m, i) => (
                         <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'var(--color-text-secondary)' }}>
-                            <CheckCircle size={16} style={{ color: 'rgba(255,255,255,0.2)' }} />
+                            <CircleCheck size={16} style={{ color: 'rgba(255,255,255,0.2)' }} />
                             <span>{m}</span>
                         </div>
                     ))}
