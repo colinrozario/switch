@@ -1,23 +1,26 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const Card = ({ children, className = '', onClick }) => {
+const Card = ({ children, className = '', onClick, padding = '24px', hover = true, style = {} }) => {
     return (
         <motion.div
             onClick={onClick}
-            whileHover={onClick ? { y: -5, backgroundColor: 'var(--color-surface-hover)' } : {}}
-            className={`card-glass ${className}`}
+            whileHover={onClick && hover ? { 
+                y: -4, 
+                boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+                borderColor: 'var(--color-border-strong)'
+            } : {}}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className={`bento-card ${className}`}
             style={{
-                backgroundColor: 'var(--color-surface)',
-                borderRadius: 'var(--radius-lg)', // Large radius like Bombon
+                backgroundColor: 'var(--color-bg)',
+                borderRadius: 'var(--radius-lg)',
                 border: '1px solid var(--color-border)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                padding: '40px',
-                transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                padding: padding,
                 cursor: onClick ? 'pointer' : 'default',
+                position: 'relative',
                 overflow: 'hidden',
-                position: 'relative' // For absolute positioning children if any
+                ...style
             }}
         >
             {children}

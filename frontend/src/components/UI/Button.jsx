@@ -1,43 +1,58 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const Button = ({ children, onClick, variant = 'primary', className = '', type = 'button', disabled = false }) => {
+const Button = ({ children, onClick, variant = 'primary', size = 'md', className = '', type = 'button', disabled = false, style = {} }) => {
     const baseStyles = {
-        padding: '16px 32px',
-        fontSize: '16px',
-        fontWeight: '700',
-        borderRadius: 'var(--radius-pill)',
+        fontWeight: '600',
+        borderRadius: 'var(--radius-md)',
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
         gap: '8px',
         cursor: disabled ? 'not-allowed' : 'pointer',
-        transition: 'all 0.3s ease',
-        textTransform: 'uppercase',
-        letterSpacing: '0.02em',
+        transition: 'all 0.2s ease',
+        border: '1.5px solid transparent',
+        ...style
+    };
+
+    const sizes = {
+        sm: { padding: '8px 16px', fontSize: '13px' },
+        md: { padding: '12px 24px', fontSize: '14px' },
+        lg: { padding: '16px 32px', fontSize: '16px' },
     };
 
     const variants = {
         primary: {
             backgroundColor: 'var(--color-primary)',
-            color: '#000000',
-            border: 'none',
+            color: '#FFFFFF',
+            boxShadow: 'var(--shadow-sm)',
         },
         secondary: {
+            backgroundColor: 'var(--color-surface)',
+            color: 'var(--color-primary)',
+            borderColor: 'var(--color-border)',
+        },
+        outline: {
             backgroundColor: 'transparent',
-            color: '#FFFFFF',
-            border: '1px solid rgba(255,255,255,0.3)',
+            color: 'var(--color-primary)',
+            borderColor: 'var(--color-border)',
         },
         ghost: {
             backgroundColor: 'transparent',
             color: 'var(--color-text-secondary)',
             border: 'none',
-            padding: '8px 16px',
+        },
+        accent: {
+            backgroundColor: 'var(--color-accent)',
+            color: '#FFFFFF',
+            boxShadow: 'var(--shadow-sm)',
         }
     };
 
     const disabledStyles = {
         opacity: 0.5,
+        cursor: 'not-allowed',
+        boxShadow: 'none'
     };
 
     return (
@@ -45,10 +60,14 @@ const Button = ({ children, onClick, variant = 'primary', className = '', type =
             type={type}
             onClick={onClick}
             disabled={disabled}
-            whileHover={!disabled ? { scale: 1.05 } : {}}
-            whileTap={!disabled ? { scale: 0.95 } : {}}
+            whileHover={!disabled ? { 
+                y: -1,
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+            } : {}}
+            whileTap={!disabled ? { y: 0, scale: 0.98 } : {}}
             style={{
                 ...baseStyles,
+                ...sizes[size],
                 ...variants[variant],
                 ...(disabled ? disabledStyles : {}),
             }}
@@ -58,4 +77,5 @@ const Button = ({ children, onClick, variant = 'primary', className = '', type =
         </motion.button>
     );
 };
+
 export default Button;
