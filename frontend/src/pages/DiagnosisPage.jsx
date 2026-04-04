@@ -10,13 +10,13 @@ import useStore from '../store/useStore';
 import { endpoints } from '../api/endpoints';
 
 const steps = [
-    { title: "Introduction", description: "Context" },
-    { title: "Current State", description: "Professional Snapshot" },
-    { title: "Real Constraints", description: "Time & Location" },
-    { title: "Financials", description: "Runway & Expenses" },
-    { title: "The Goal", description: "Target Identity" },
-    { title: "Review", description: "System Audit" },
-    { title: "Analysis", description: "Monte Carlo Simulation" }
+    { title: "Hello", description: "Getting Started" },
+    { title: "Work", description: "Current Job" },
+    { title: "Time", description: "Your Schedule" },
+    { title: "Money", description: "Savings & Costs" },
+    { title: "Goals", description: "What's Next?" },
+    { title: "Check", description: "Review" },
+    { title: "Results", description: "Analysis" }
 ];
 
 const DiagnosisPage = () => {
@@ -44,7 +44,6 @@ const DiagnosisPage = () => {
         setIsAnalyzing(true);
         setCurrentStep(6); // Analysis screen
 
-        // Construct raw text for the backend agent to parse
         const rawText = `
             PROFILE SNAPSHOT:
             Role: ${localData.currentRole}
@@ -71,7 +70,6 @@ const DiagnosisPage = () => {
             const response = await endpoints.createIntake(rawText);
             setProfileId(response.result_ref);
             
-            // Artificial delay for "simulation" feel
             setTimeout(() => {
                 navigate('/profile');
             }, 3000);
@@ -79,7 +77,7 @@ const DiagnosisPage = () => {
             console.error("Analysis Error:", error);
             setIsAnalyzing(false);
             setCurrentStep(5);
-            alert("The simulation engine encountered an error. Please try again.");
+            alert("Something went wrong with the analysis. Please try again.");
         }
     };
 
@@ -108,53 +106,53 @@ const DiagnosisPage = () => {
                 />
             </div>
 
-            <Card style={{ width: '100%', maxWidth: '700px', minHeight: '500px', padding: '48px', display: 'flex', flexDirection: 'column' }}>
+            <Card padding="48px" style={{ width: '100%', maxWidth: '700px', minHeight: '500px', display: 'flex', flexDirection: 'column', background: '#FFFFFF' }}>
                 <AnimatePresence mode='wait'>
                     {currentStep === 0 && (
                         <motion.div key="step0" variants={variants} initial="enter" animate="center" exit="exit" style={{ flex: 1 }}>
-                            <div style={{ width: '56px', height: '56px', background: 'var(--color-surface)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '32px', color: 'var(--color-primary)' }}>
+                            <div style={{ width: '56px', height: '56px', background: 'var(--color-surface)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '32px', color: 'var(--color-accent)' }}>
                                 <Shield size={28} />
                             </div>
-                            <h2 style={{ fontSize: '32px', marginBottom: '20px', letterSpacing: '-0.02em' }}>Professional Risk Audit</h2>
+                            <h2 style={{ fontSize: '32px', marginBottom: '20px', letterSpacing: '-0.02em' }}>Your Career Checkup</h2>
                             <p style={{ color: 'var(--color-text-secondary)', marginBottom: '32px', fontSize: '18px', lineHeight: 1.5 }}>
-                                Before we run the simulations, we need to map your current coordinates. This audit covers your professional history, financial runway, and physical constraints.
+                                Let's map out your current situation. We'll look at your work history, your savings, and how much time you have to invest in your next move.
                             </p>
                             
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '48px' }}>
                                 <div style={{ padding: '16px', background: 'var(--color-surface)', borderRadius: '12px', border: '1px solid var(--color-border)' }}>
-                                    <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--color-primary)', marginBottom: '4px' }}>Deterministic</div>
-                                    <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>No generic advice. Only hard data.</div>
+                                    <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--color-accent)', marginBottom: '4px' }}>Real Data</div>
+                                    <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>No guesswork. Just the facts about your path.</div>
                                 </div>
                                 <div style={{ padding: '16px', background: 'var(--color-surface)', borderRadius: '12px', border: '1px solid var(--color-border)' }}>
-                                    <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--color-primary)', marginBottom: '4px' }}>Private</div>
-                                    <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>Calculations run in a secure sandbox.</div>
+                                    <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--color-accent)', marginBottom: '4px' }}>Private & Secure</div>
+                                    <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>Your data stays safe and secure with us.</div>
                                 </div>
                             </div>
                             
                             <Button onClick={nextStep} size="lg" style={{ width: '100%' }}>
-                                Begin Audit <ChevronRight size={18} style={{ marginLeft: '4px' }} />
+                                Start My Checkup <ChevronRight size={18} style={{ marginLeft: '4px' }} />
                             </Button>
                         </motion.div>
                     )}
 
                     {currentStep === 1 && (
                         <motion.div key="step1" variants={variants} initial="enter" animate="center" exit="exit" style={{ flex: 1 }}>
-                            <h2 style={{ fontSize: '28px', marginBottom: '32px', letterSpacing: '-0.02em' }}>Professional Snapshot</h2>
+                            <h2 style={{ fontSize: '28px', marginBottom: '32px', letterSpacing: '-0.02em' }}>Your Current Job</h2>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                                 <Input 
-                                    label="Current Role Title"
+                                    label="What's your current job title?"
                                     value={localData.currentRole}
                                     onChange={(e) => handleChange(null, 'currentRole', e.target.value)}
-                                    placeholder="e.g. Lead Sales Engineer"
+                                    placeholder="e.g. Sales Manager"
                                     icon={Target}
                                     required
                                 />
 
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <span style={{ fontSize: '13px', fontWeight: '500', color: 'var(--color-text-secondary)' }}>Years of Experience</span>
-                                        <span style={{ fontSize: '14px', fontWeight: '700', color: 'var(--color-primary)' }}>{localData.yearsExperience}y</span>
+                                        <span style={{ fontSize: '13px', fontWeight: '600', color: 'var(--color-text-secondary)' }}>Years of Experience</span>
+                                        <span style={{ fontSize: '14px', fontWeight: '800', color: 'var(--color-accent)' }}>{localData.yearsExperience}y</span>
                                     </div>
                                     <input
                                         type="range"
@@ -165,7 +163,7 @@ const DiagnosisPage = () => {
                                             width: '100%', 
                                             height: '6px', 
                                             borderRadius: '99px',
-                                            accentColor: 'var(--color-primary)',
+                                            accentColor: 'var(--color-accent)',
                                             background: '#E2E8F0',
                                             cursor: 'pointer'
                                         }}
@@ -174,7 +172,7 @@ const DiagnosisPage = () => {
                             </div>
 
                             <div style={{ display: 'flex', gap: '12px', marginTop: 'auto', paddingTop: '48px' }}>
-                                <Button variant="outline" onClick={prevStep} style={{ width: '100px' }}>Back</Button>
+                                <Button variant="outline" onClick={prevStep}>Back</Button>
                                 <Button onClick={nextStep} disabled={!localData.currentRole} style={{ flex: 1 }}>Continue</Button>
                             </div>
                         </motion.div>
@@ -182,11 +180,11 @@ const DiagnosisPage = () => {
 
                     {currentStep === 2 && (
                         <motion.div key="step2" variants={variants} initial="enter" animate="center" exit="exit" style={{ flex: 1 }}>
-                            <h2 style={{ fontSize: '28px', marginBottom: '32px', letterSpacing: '-0.02em' }}>Hard Constraints</h2>
+                            <h2 style={{ fontSize: '28px', marginBottom: '32px', letterSpacing: '-0.02em' }}>Your Schedule</h2>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                    <label style={{ fontSize: '13px', fontWeight: '500', color: 'var(--color-text-secondary)' }}>Weekly Commitment</label>
+                                    <label style={{ fontSize: '13px', fontWeight: '600', color: 'var(--color-text-secondary)' }}>How many hours can you put in per week?</label>
                                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                                         {['3-5', '5-10', '10-20', '20+'].map(hrs => (
                                             <div 
@@ -196,12 +194,13 @@ const DiagnosisPage = () => {
                                                     padding: '12px',
                                                     borderRadius: '8px',
                                                     border: '1.5px solid',
-                                                    borderColor: localData.constraints.hours === hrs ? 'var(--color-primary)' : 'var(--color-border)',
+                                                    borderColor: localData.constraints.hours === hrs ? 'var(--color-accent)' : 'var(--color-border)',
                                                     background: localData.constraints.hours === hrs ? 'var(--color-surface)' : 'transparent',
+                                                    color: localData.constraints.hours === hrs ? 'var(--color-accent)' : 'inherit',
                                                     cursor: 'pointer',
                                                     textAlign: 'center',
                                                     fontSize: '14px',
-                                                    fontWeight: '600',
+                                                    fontWeight: '700',
                                                     transition: 'all 0.2s ease'
                                                 }}
                                             >
@@ -212,7 +211,7 @@ const DiagnosisPage = () => {
                                 </div>
 
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                    <label style={{ fontSize: '13px', fontWeight: '500', color: 'var(--color-text-secondary)' }}>Work Format</label>
+                                    <label style={{ fontSize: '13px', fontWeight: '600', color: 'var(--color-text-secondary)' }}>Preferred work style</label>
                                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
                                         {['Flexible', 'Hybrid', 'On-site'].map(fmt => (
                                             <div 
@@ -222,12 +221,13 @@ const DiagnosisPage = () => {
                                                     padding: '12px',
                                                     borderRadius: '8px',
                                                     border: '1.5px solid',
-                                                    borderColor: localData.constraints.location === fmt ? 'var(--color-primary)' : 'var(--color-border)',
+                                                    borderColor: localData.constraints.location === fmt ? 'var(--color-accent)' : 'var(--color-border)',
                                                     background: localData.constraints.location === fmt ? 'var(--color-surface)' : 'transparent',
+                                                    color: localData.constraints.location === fmt ? 'var(--color-accent)' : 'inherit',
                                                     cursor: 'pointer',
                                                     textAlign: 'center',
                                                     fontSize: '14px',
-                                                    fontWeight: '600',
+                                                    fontWeight: '700',
                                                     transition: 'all 0.2s ease'
                                                 }}
                                             >
@@ -239,7 +239,7 @@ const DiagnosisPage = () => {
                             </div>
 
                             <div style={{ display: 'flex', gap: '12px', marginTop: 'auto', paddingTop: '48px' }}>
-                                <Button variant="outline" onClick={prevStep} style={{ width: '100px' }}>Back</Button>
+                                <Button variant="outline" onClick={prevStep}>Back</Button>
                                 <Button onClick={nextStep} style={{ flex: 1 }}>Continue</Button>
                             </div>
                         </motion.div>
@@ -247,14 +247,14 @@ const DiagnosisPage = () => {
 
                     {currentStep === 3 && (
                         <motion.div key="step3" variants={variants} initial="enter" animate="center" exit="exit" style={{ flex: 1 }}>
-                            <h2 style={{ fontSize: '28px', marginBottom: '12px', letterSpacing: '-0.02em' }}>Financial Stability</h2>
-                            <p style={{ color: 'var(--color-text-secondary)', marginBottom: '32px', fontSize: '14px' }}>
-                                We use these numbers to calculate your "Burn Horizon"—the moment risk becomes unacceptable.
+                            <h2 style={{ fontSize: '28px', marginBottom: '12px', letterSpacing: '-0.02em' }}>Savings & Costs</h2>
+                            <p style={{ color: 'var(--color-text-secondary)', marginBottom: '32px', fontSize: '15px' }}>
+                                We use these numbers to see how much time you have to make your move safely.
                             </p>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                                 <Input 
-                                    label="Average Monthly Expenses"
+                                    label="Monthly Living Expenses ($)"
                                     type="number"
                                     value={localData.financials.expenses}
                                     onChange={(e) => handleChange('financials', 'expenses', e.target.value)}
@@ -264,7 +264,7 @@ const DiagnosisPage = () => {
                                 />
 
                                 <Input 
-                                    label="Total Liquid Savings"
+                                    label="Total Savings Available ($)"
                                     type="number"
                                     value={localData.financials.savings}
                                     onChange={(e) => handleChange('financials', 'savings', e.target.value)}
@@ -275,7 +275,7 @@ const DiagnosisPage = () => {
                             </div>
 
                             <div style={{ display: 'flex', gap: '12px', marginTop: 'auto', paddingTop: '48px' }}>
-                                <Button variant="outline" onClick={prevStep} style={{ width: '100px' }}>Back</Button>
+                                <Button variant="outline" onClick={prevStep}>Back</Button>
                                 <Button onClick={nextStep} style={{ flex: 1 }}>Continue</Button>
                             </div>
                         </motion.div>
@@ -283,7 +283,7 @@ const DiagnosisPage = () => {
 
                     {currentStep === 4 && (
                         <motion.div key="step4" variants={variants} initial="enter" animate="center" exit="exit" style={{ flex: 1 }}>
-                            <h2 style={{ fontSize: '28px', marginBottom: '32px', letterSpacing: '-0.02em' }}>Target Identity</h2>
+                            <h2 style={{ fontSize: '28px', marginBottom: '32px', letterSpacing: '-0.02em' }}>What's Your Goal?</h2>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                                 <div style={{ display: 'flex', gap: '12px' }}>
@@ -296,16 +296,17 @@ const DiagnosisPage = () => {
                                                 padding: '16px',
                                                 borderRadius: '12px',
                                                 border: '1.5px solid',
-                                                borderColor: localData.goal.type === type.toLowerCase() ? 'var(--color-primary)' : 'var(--color-border)',
+                                                borderColor: localData.goal.type === type.toLowerCase() ? 'var(--color-accent)' : 'var(--color-border)',
                                                 background: localData.goal.type === type.toLowerCase() ? 'var(--color-surface)' : 'transparent',
+                                                color: localData.goal.type === type.toLowerCase() ? 'var(--color-accent)' : 'inherit',
                                                 cursor: 'pointer',
                                                 textAlign: 'center',
                                                 transition: 'all 0.2s ease'
                                             }}
                                         >
-                                            <div style={{ fontWeight: '700', fontSize: '15px' }}>{type === 'Searching' ? 'Exploratory' : 'Decided'}</div>
-                                            <div style={{ fontSize: '12px', color: 'var(--color-text-secondary)', marginTop: '4px' }}>
-                                                {type === 'Searching' ? 'Find best ROI paths' : 'Have a target goal'}
+                                            <div style={{ fontWeight: '800', fontSize: '15px' }}>{type === 'Searching' ? "I'm Exploring" : "I have a goal"}</div>
+                                            <div style={{ fontSize: '12px', color: 'var(--color-text-secondary)', marginTop: '4px', fontWeight: '500' }}>
+                                                {type === 'Searching' ? 'Find the best paths' : 'Have a target role'}
                                             </div>
                                         </div>
                                     ))}
@@ -313,17 +314,17 @@ const DiagnosisPage = () => {
 
                                 {localData.goal.type === 'specific' && (
                                     <Input 
-                                        label="Target Job Family / Role"
+                                        label="What role are you aiming for?"
                                         value={localData.goal.targetRole}
                                         onChange={(e) => handleChange('goal', 'targetRole', e.target.value)}
-                                        placeholder="e.g. Senior Product Manager"
+                                        placeholder="e.g. Product Manager"
                                         icon={Activity}
                                         required
                                     />
                                 )}
 
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                                    {['Better Pay', 'More Autonomy', 'Less Burnout', 'Tech Focus', 'Remote First'].map(tag => (
+                                    {['Better Pay', 'More Freedom', 'Less Stress', 'New Skills', 'Work from Home'].map(tag => (
                                         <div 
                                             key={tag}
                                             onClick={() => {
@@ -334,14 +335,15 @@ const DiagnosisPage = () => {
                                                 handleChange('goal', 'motivations', updated);
                                             }}
                                             style={{
-                                                padding: '6px 12px',
+                                                padding: '6px 14px',
                                                 borderRadius: '99px',
-                                                background: localData.goal.motivations.includes(tag) ? 'var(--color-primary)' : 'var(--color-surface)',
+                                                background: localData.goal.motivations.includes(tag) ? 'var(--color-accent)' : 'var(--color-surface)',
                                                 color: localData.goal.motivations.includes(tag) ? '#FFFFFF' : 'var(--color-text-secondary)',
-                                                fontSize: '12px',
-                                                fontWeight: '600',
+                                                fontSize: '13px',
+                                                fontWeight: '700',
                                                 cursor: 'pointer',
-                                                border: '1px solid var(--color-border)'
+                                                border: '1px solid var(--color-border)',
+                                                transition: 'all 0.2s ease'
                                             }}
                                         >
                                             {tag}
@@ -351,41 +353,41 @@ const DiagnosisPage = () => {
                             </div>
 
                             <div style={{ display: 'flex', gap: '12px', marginTop: 'auto', paddingTop: '48px' }}>
-                                <Button variant="outline" onClick={prevStep} style={{ width: '100px' }}>Back</Button>
-                                <Button onClick={nextStep} style={{ flex: 1 }}>Review Snapshot</Button>
+                                <Button variant="outline" onClick={prevStep}>Back</Button>
+                                <Button onClick={nextStep} style={{ flex: 1 }}>Review & Finish</Button>
                             </div>
                         </motion.div>
                     )}
 
                     {currentStep === 5 && (
                         <motion.div key="step5" variants={variants} initial="enter" animate="center" exit="exit" style={{ flex: 1 }}>
-                            <h2 style={{ fontSize: '28px', marginBottom: '8px', letterSpacing: '-0.02em' }}>Final System Audit</h2>
-                            <p style={{ color: 'var(--color-text-secondary)', marginBottom: '32px', fontSize: '14px' }}>
-                                Confirm your configuration before starting the simulation engine.
+                            <h2 style={{ fontSize: '28px', marginBottom: '8px', letterSpacing: '-0.02em' }}>One Last Look</h2>
+                            <p style={{ color: 'var(--color-text-secondary)', marginBottom: '32px', fontSize: '15px' }}>
+                                Make sure everything looks right before we start the analysis.
                             </p>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', background: 'var(--color-surface)', padding: '24px', borderRadius: '16px', border: '1px solid var(--color-border)' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '12px', borderBottom: '1px solid var(--color-border)' }}>
-                                    <span style={{ fontSize: '14px', color: 'var(--color-text-secondary)' }}>Identity:</span>
-                                    <span style={{ fontSize: '14px', fontWeight: '700' }}>{localData.currentRole}</span>
+                                    <span style={{ fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>Current Job:</span>
+                                    <span style={{ fontSize: '14px', fontWeight: '800' }}>{localData.currentRole}</span>
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '12px', borderBottom: '1px solid var(--color-border)' }}>
-                                    <span style={{ fontSize: '14px', color: 'var(--color-text-secondary)' }}>Commitment:</span>
-                                    <span style={{ fontSize: '14px', fontWeight: '700' }}>{localData.constraints.hours} hrs/wk</span>
+                                    <span style={{ fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>Time/Week:</span>
+                                    <span style={{ fontSize: '14px', fontWeight: '800' }}>{localData.constraints.hours} hrs</span>
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '12px', borderBottom: '1px solid var(--color-border)' }}>
-                                    <span style={{ fontSize: '14px', color: 'var(--color-text-secondary)' }}>Burn Rate:</span>
-                                    <span style={{ fontSize: '14px', fontWeight: '700' }}>${localData.financials.expenses}/mo</span>
+                                    <span style={{ fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>Monthly Costs:</span>
+                                    <span style={{ fontSize: '14px', fontWeight: '800' }}>${localData.financials.expenses}/mo</span>
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <span style={{ fontSize: '14px', color: 'var(--color-text-secondary)' }}>Objective:</span>
-                                    <span style={{ fontSize: '14px', fontWeight: '700', color: 'var(--color-accent)' }}>{localData.goal.type === 'specific' ? localData.goal.targetRole : 'Exploratory'}</span>
+                                    <span style={{ fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>Your Goal:</span>
+                                    <span style={{ fontSize: '14px', fontWeight: '800', color: 'var(--color-accent)' }}>{localData.goal.type === 'specific' ? localData.goal.targetRole : 'Exploring'}</span>
                                 </div>
                             </div>
 
                             <div style={{ display: 'flex', gap: '12px', marginTop: 'auto', paddingTop: '48px' }}>
-                                <Button variant="outline" onClick={prevStep} style={{ width: '100px' }}>Edit</Button>
-                                <Button onClick={handleAnalysis} style={{ flex: 1 }}>Execute System Analysis</Button>
+                                <Button variant="outline" onClick={prevStep}>Edit</Button>
+                                <Button onClick={handleAnalysis} style={{ flex: 1 }}>Start the Analysis</Button>
                             </div>
                         </motion.div>
                     )}
@@ -405,13 +407,13 @@ const DiagnosisPage = () => {
                                     animate={{ rotate: 360 }}
                                     transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
                                 >
-                                    <Activity size={64} style={{ color: 'var(--color-primary)' }} />
+                                    <Activity size={64} style={{ color: 'var(--color-accent)' }} />
                                 </motion.div>
                             </div>
                             
-                            <h2 style={{ fontSize: '24px', marginBottom: '16px', letterSpacing: '-0.02em' }}>Simulating Market Dynamics</h2>
-                            <p style={{ color: 'var(--color-text-secondary)', maxWidth: '400px', lineHeight: 1.6, fontSize: '15px' }}>
-                                Running 1,000 Monte Carlo iterations to stress-test your runway and map viable income transitions...
+                            <h2 style={{ fontSize: '24px', marginBottom: '16px', letterSpacing: '-0.02em' }}>Calculating Your Best Moves</h2>
+                            <p style={{ color: 'var(--color-text-secondary)', maxWidth: '450px', lineHeight: 1.6, fontSize: '15px' }}>
+                                We're checking thousands of possibilities to find your safest and fastest path forward. Just a second...
                             </p>
                             
                             <div style={{ marginTop: '48px', width: '240px' }}>
@@ -420,7 +422,7 @@ const DiagnosisPage = () => {
                                         initial={{ width: 0 }}
                                         animate={{ width: '100%' }}
                                         transition={{ duration: 3, ease: 'easeInOut' }}
-                                        style={{ height: '100%', background: 'var(--color-primary)' }}
+                                        style={{ height: '100%', background: 'var(--color-accent)' }}
                                     />
                                 </div>
                             </div>
