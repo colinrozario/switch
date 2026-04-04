@@ -104,8 +104,8 @@ const SimulatorPage = () => {
     if (loading) {
         return (
             <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#F8FAFC' }}>
-                <Loader2 size={40} className="animate-spin" style={{ color: 'var(--color-primary)', marginBottom: '16px' }} />
-                <h2 style={{ fontSize: '18px', fontWeight: '600' }}>Initializing risk sandbox...</h2>
+                <Loader2 size={40} className="animate-spin" style={{ color: 'var(--color-accent)', marginBottom: '16px' }} />
+                <h2 style={{ fontSize: '18px', fontWeight: '600' }}>Getting your simulator ready...</h2>
             </div>
         );
     }
@@ -115,9 +115,9 @@ const SimulatorPage = () => {
     if (!displayOut) return null;
 
     const getRiskConfig = (score) => {
-        if (score <= 40) return { label: "Critical Risk", color: "#DC2626", bg: "#FEF2F2" };
-        if (score <= 70) return { label: "Elevated Risk", color: "#B45309", bg: "#FFFBEB" };
-        return { label: "Safe Path", color: "#059669", bg: "#ECFDF5" };
+        if (score <= 40) return { label: "Careful!", color: "#DC2626", bg: "#FEF2F2" };
+        if (score <= 70) return { label: "Looking Good", color: "#B45309", bg: "#FFFBEB" };
+        return { label: "Very Safe", color: "#059669", bg: "#ECFDF5" };
     };
 
     const risk = getRiskConfig(displayOut.risk_score);
@@ -142,31 +142,31 @@ const SimulatorPage = () => {
                                 fontWeight: '700',
                                 marginBottom: '16px'
                             }}>
-                                <Zap size={14} style={{ color: 'var(--color-accent)' }} /> LIVE RISK SIMULATOR
+                                <Zap size={14} style={{ color: 'var(--color-accent)' }} /> TRY A SCENARIO
                             </div>
-                            <h1 style={{ fontSize: '40px', letterSpacing: '-0.02em', fontWeight: '800' }}>What-If Scenario Sandbox</h1>
+                            <h1 style={{ fontSize: '40px', letterSpacing: '-0.02em', fontWeight: '800' }}>Practice Your Move</h1>
                             <p style={{ color: 'var(--color-text-secondary)', fontSize: '18px', marginTop: '8px' }}>
-                                Stress-test your financial runway by adjusting critical transition variables.
+                                See how changing your savings, costs, or timeline affects your safety.
                             </p>
                         </div>
                         <Button variant="outline" onClick={() => navigate(-1)} style={{ background: '#FFFFFF' }}>
-                            <ArrowLeft size={16} /> Return to Roadmap
+                            <ArrowLeft size={16} /> Back to My Plan
                         </Button>
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: '400px 1fr', gap: '24px' }}>
                         {/* Control Panel */}
                         <Card padding="32px" style={{ background: '#FFFFFF', height: 'fit-content' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '40px' }}>
-                                <div style={{ padding: '8px', background: 'var(--color-surface)', borderRadius: '10px', color: 'var(--color-primary)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px' }}>
+                                <div style={{ padding: '8px', background: 'var(--color-surface)', borderRadius: '10px', color: 'var(--color-accent)' }}>
                                     <Sliders size={20} />
                                 </div>
-                                <h3 style={{ fontSize: '18px', fontWeight: '700' }}>Variables</h3>
+                                <h3 style={{ fontSize: '18px', fontWeight: '800' }}>What if...</h3>
                             </div>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
                                 <SliderControl 
-                                    label="Monthly Living Expenses" 
+                                    label="Monthly Costs" 
                                     value={inputs.monthly_expenses} 
                                     min={500} 
                                     max={10000} 
@@ -175,7 +175,7 @@ const SimulatorPage = () => {
                                     onChange={(v) => handleSliderChange('monthly_expenses', v)}
                                 />
                                 <SliderControl 
-                                    label="Transition Timeline" 
+                                    label="How many months?" 
                                     value={inputs.transition_months} 
                                     min={1} 
                                     max={24} 
@@ -184,7 +184,7 @@ const SimulatorPage = () => {
                                     onChange={(v) => handleSliderChange('transition_months', v)}
                                 />
                                 <SliderControl 
-                                    label="Available Liquid Capital" 
+                                    label="Total Savings" 
                                     value={inputs.liquid_savings} 
                                     min={0} 
                                     max={100000} 
@@ -193,7 +193,7 @@ const SimulatorPage = () => {
                                     onChange={(v) => handleSliderChange('liquid_savings', v)}
                                 />
                                 <SliderControl 
-                                    label="Weekly Effort Commitment" 
+                                    label="Hours per week" 
                                     value={inputs.weekly_hours_available} 
                                     min={0} 
                                     max={60} 
@@ -225,7 +225,7 @@ const SimulatorPage = () => {
                                             </div>
                                         )}
                                         <div style={{ fontSize: '12px', fontWeight: '800', color: risk.color, textTransform: 'uppercase', marginBottom: '16px', letterSpacing: '0.1em' }}>
-                                            Simulated Risk Score
+                                            Your Safety Score
                                         </div>
                                         <div style={{ fontSize: '100px', fontWeight: '800', color: risk.color, lineHeight: 1, letterSpacing: '-0.05em' }}>
                                             {displayOut.risk_score}
@@ -237,15 +237,15 @@ const SimulatorPage = () => {
                                     
                                     <div style={{ padding: '48px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '32px' }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <div style={{ fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>Projected Capital Bridge</div>
+                                            <div style={{ fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '700' }}>Total Savings Used</div>
                                             <div style={{ fontSize: '20px', fontWeight: '800' }}>${Math.round(displayOut.total_bridge_required).toLocaleString()}</div>
                                         </div>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <div style={{ fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>Monthly Burn Profile</div>
+                                            <div style={{ fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '700' }}>Monthly Cost</div>
                                             <div style={{ fontSize: '20px', fontWeight: '800' }}>${Math.round(displayOut.total_bridge_required / (inputs.transition_months || 1)).toLocaleString()}/mo</div>
                                         </div>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <div style={{ fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>Calculated Runway</div>
+                                            <div style={{ fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '700' }}>Months of Safety</div>
                                             <div style={{ fontSize: '20px', fontWeight: '800' }}>{Math.round(displayOut.runway_months)} Months</div>
                                         </div>
                                     </div>
@@ -265,8 +265,8 @@ const SimulatorPage = () => {
                                                 alignItems: 'flex-start'
                                             }}
                                         >
-                                            <Info size={20} style={{ color: 'var(--color-primary)', marginTop: '2px' }} />
-                                            <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', lineHeight: 1.6, fontStyle: 'italic' }}>
+                                            <Info size={20} style={{ color: 'var(--color-accent)', marginTop: '2px' }} />
+                                            <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', lineHeight: 1.6, fontStyle: 'italic', fontWeight: '500' }}>
                                                 {currentScenario.narrative}
                                             </p>
                                         </motion.div>
@@ -280,11 +280,11 @@ const SimulatorPage = () => {
                                     <div style={{ padding: '8px', background: 'var(--color-surface)', borderRadius: '10px', color: 'var(--color-text-secondary)' }}>
                                         <History size={18} />
                                     </div>
-                                    <h3 style={{ fontSize: '16px', fontWeight: '700' }}>History of Runs</h3>
+                                    <h3 style={{ fontSize: '16px', fontWeight: '800' }}>Previous Scenarios</h3>
                                 </div>
                                 
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                    {pastRuns.length === 0 && <div style={{ color: 'var(--color-text-secondary)', fontSize: '14px' }}>No simulations run yet.</div>}
+                                    {pastRuns.length === 0 && <div style={{ color: 'var(--color-text-secondary)', fontSize: '14px', fontWeight: '500' }}>Try a few changes to see what happens.</div>}
                                     {pastRuns.map((run, i) => {
                                         const runRisk = getRiskConfig(run.deterministic_out.risk_score);
                                         return (
@@ -299,10 +299,10 @@ const SimulatorPage = () => {
                                             }}>
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                                     <div style={{ width: '12px', height: '12px', borderRadius: '3px', background: runRisk.color }} />
-                                                    <div style={{ fontSize: '14px', fontWeight: '700' }}>Risk Score: {run.deterministic_out.risk_score}</div>
+                                                    <div style={{ fontSize: '14px', fontWeight: '700' }}>Safety Score: {run.deterministic_out.risk_score}</div>
                                                 </div>
-                                                <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>
-                                                    ${run.modified_inputs.monthly_expenses || inputs.monthly_expenses} Burn • {run.modified_inputs.transition_months || inputs.transition_months}m Span
+                                                <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>
+                                                    ${run.modified_inputs.monthly_expenses || inputs.monthly_expenses} Cost • {run.modified_inputs.transition_months || inputs.transition_months}mo Span
                                                 </div>
                                             </div>
                                         );
@@ -314,10 +314,9 @@ const SimulatorPage = () => {
 
                     {/* Operational Notice */}
                     <div style={{ marginTop: '80px', textAlign: 'center', padding: '24px', borderTop: '1px solid var(--color-border)' }}>
-                        <p style={{ color: 'var(--color-text-secondary)', fontSize: '12px', maxWidth: '800px', margin: '0 auto', lineHeight: 1.6 }}>
-                            <strong>SIMULATOR NOTICE:</strong> This sandbox use a deterministic model applied to your inputs. 
-                            It does not account for catastrophic black-swan events or personal health variables. 
-                            A "Safe" score is a mathematical projection, not a personal guarantee.
+                        <p style={{ color: 'var(--color-text-secondary)', fontSize: '12px', maxWidth: '800px', margin: '0 auto', lineHeight: 1.6, fontWeight: '500' }}>
+                            <strong>Just so you know:</strong> This is a helpful tool, but it doesn't cover everything. 
+                            It's a great way to see how your money might move, but keep a little extra for emergencies.
                         </p>
                     </div>
                 </motion.div>
@@ -332,7 +331,7 @@ const SliderControl = ({ label, value, min, max, step, prefix = "", suffix = "",
             <label style={{ fontSize: '13px', fontWeight: '700', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
                 {label}
             </label>
-            <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--color-primary)' }}>
+            <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--color-accent)' }}>
                 {prefix}{Math.round(value).toLocaleString()}{suffix}
             </div>
         </div>
@@ -362,7 +361,7 @@ const SliderControl = ({ label, value, min, max, step, prefix = "", suffix = "",
                 left: 0, 
                 height: '100%', 
                 width: `${((value - min) / (max - min)) * 100}%`, 
-                background: 'var(--color-primary)', 
+                background: 'var(--color-accent)', 
                 borderRadius: '3px',
                 zIndex: 5
             }} />
