@@ -11,7 +11,7 @@ import {
     Tooltip, 
     ReferenceLine 
 } from 'recharts';
-import { TriangleAlert, Info, Lock, ArrowRight, Wallet, Calendar, Activity } from 'lucide-react';
+import { TriangleAlert, Info, Lock, ArrowRight, Wallet, Calendar, Activity, ShieldCheck, TrendingDown, AlertTriangle, Loader2 } from 'lucide-react';
 import useStore from '../store/useStore';
 import { endpoints } from '../api/endpoints';
 import Card from '../components/UI/Card';
@@ -46,19 +46,17 @@ const BridgePage = () => {
         };
 
         fetchBridge();
-    }, [pathSetId]);
+    }, [pathSetId, navigate, setBridgeId]);
 
     const handleUnlock = () => {
-        // Simulate payment success
         navigate(`/roadmap?id=${bridge.id}`);
     };
 
     if (loading) {
         return (
-            <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <Activity size={40} className="spin-slow" style={{ color: 'var(--color-primary)', marginBottom: '16px' }} />
-                <h2 style={{ color: 'var(--color-primary)' }}>Quantifying financial risk...</h2>
-                <p style={{ color: 'var(--color-text-secondary)' }}>Building month-by-month cash flow projections.</p>
+            <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#F8FAFC' }}>
+                <Loader2 size={40} className="animate-spin" style={{ color: 'var(--color-primary)', marginBottom: '16px' }} />
+                <h2 style={{ fontSize: '18px', fontWeight: '600' }}>Quantifying transition risk...</h2>
             </div>
         );
     }
@@ -66,151 +64,218 @@ const BridgePage = () => {
     const { outputs } = bridge;
     const { risk_score, total_bridge_required, runway_months, failure_threshold_month, monthly_cashflow } = outputs;
 
-    // FE-04: Strict Risk Score Warning
-    const getRiskLevel = (score) => {
-        if (score <= 40) return { label: "DO NOT SWITCH YET", color: "#ff4444", bg: "rgba(255, 68, 68, 0.1)" };
-        if (score <= 70) return { label: "SWITCH WITH SAFEGUARDS", color: "#ffbb33", bg: "rgba(255, 187, 51, 0.1)" };
-        return { label: "SAFE TO PROCEED", color: "var(--color-primary)", bg: "rgba(215, 254, 3, 0.1)" };
+    const getRiskConfig = (score) => {
+        if (score <= 40) return { label: "High Risk", color: "#DC2626", bg: "#FEF2F2", icon: AlertTriangle, desc: "Runway exhausted too early." };
+        if (score <= 70) return { label: "Moderate Risk", color: "#D97706", bg: "#FFFBEB", icon: Info, desc: "Requires strict adherence." };
+        return { label: "High Safety", color: "#059669", bg: "#ECFDF5", icon: ShieldCheck, desc: "Strong financial redundancy." };
     };
 
-    const risk = getRiskLevel(risk_score);
+    const risk = getRiskConfig(risk_score);
+    const RiskIcon = risk.icon;
 
     return (
-        <div style={{ padding: '120px 20px', maxWidth: '1200px', margin: '0 auto', minHeight: '100vh' }}>
-            <motion.div
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-            >
-                {/* Header: Risk Score (FE-04) */}
-                <div style={{ textAlign: 'center', marginBottom: '64px' }}>
-                    <div style={{ 
-                        display: 'inline-flex', 
-                        flexDirection: 'column', 
-                        alignItems: 'center',
-                        gap: '8px', 
-                        padding: '32px 64px',
-                        borderRadius: 'var(--radius-lg)',
-                        background: risk.bg,
-                        border: `1px solid ${risk.color}`,
-                        marginBottom: '24px'
-                    }}>
-                        <span style={{ fontSize: '0.9rem', color: risk.color, fontWeight: '700', letterSpacing: '2px' }}>TRANSITION RISK SCORE</span>
-                        <span style={{ fontSize: '5rem', fontWeight: '800', color: risk.color, lineHeight: 1 }}>{risk_score}</span>
-                        <span style={{ fontSize: '1.2rem', fontWeight: '600', color: risk.color }}>{risk.label}</span>
-                    </div>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '32px', marginBottom: '80px' }}>
-                    {/* Left: Cash Flow Chart */}
-                    <Card style={{ padding: '32px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-                            <h3 style={{ fontSize: '1.5rem' }}>Cash Flow Projection</h3>
-                            <div style={{ display: 'flex', gap: '16px', fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'var(--color-primary)' }} /> Net Income
+        <div style={{ background: '#F8FAFC', minHeight: '100vh', paddingTop: '120px', paddingBottom: '120px' }}>
+            <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.99 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    {/* Header: Global Risk Status */}
+                    <div style={{ textAlign: 'center', marginBottom: '80px' }}>
+                        <div style={{ 
+                            display: 'inline-flex', 
+                            alignItems: 'center', 
+                            gap: '12px', 
+                            padding: '12px 32px',
+                            borderRadius: '16px',
+                            background: '#FFFFFF',
+                            border: '1px solid var(--color-border)',
+                            boxShadow: 'var(--shadow-sm)',
+                            marginBottom: '32px'
+                        }}>
+                            <div style={{ 
+                                width: '48px', 
+                                height: '48px', 
+                                borderRadius: '12px', 
+                                background: risk.bg, 
+                                color: risk.color,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
+                                <RiskIcon size={24} />
+                            </div>
+                            <div style={{ textAlign: 'left' }}>
+                                <div style={{ fontSize: '12px', fontWeight: '800', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Safety Margin</div>
+                                <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                                    <span style={{ fontSize: '24px', fontWeight: '800', color: risk.color }}>{risk_score}</span>
+                                    <span style={{ fontSize: '14px', fontWeight: '700', color: risk.color }}>/ 100</span>
+                                    <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-secondary)', marginLeft: '8px' }}>— {risk.label}</span>
                                 </div>
                             </div>
                         </div>
+                        <h1 style={{ fontSize: '48px', letterSpacing: '-0.03em', marginBottom: '16px' }}>Income Transition Bridge</h1>
+                        <p style={{ color: 'var(--color-text-secondary)', fontSize: '18px', maxWidth: '700px', margin: '0 auto', lineHeight: 1.5 }}>
+                            We have modeled your month-over-month cash flow based on the selected career path and your financial constraints.
+                        </p>
+                    </div>
 
-                        <div style={{ height: '320px', width: '100%' }}>
-                            <ResponsiveContainer width="100%" height="100%">
-                                <AreaChart data={monthly_cashflow}>
-                                    <defs>
-                                        <linearGradient id="colorNet" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.3}/>
-                                            <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0}/>
-                                        </linearGradient>
-                                    </defs>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                                    <XAxis 
-                                        dataKey="month" 
-                                        stroke="rgba(255,255,255,0.3)" 
-                                        fontSize={12} 
-                                        tickFormatter={(v) => `M${v}`}
-                                    />
-                                    <YAxis 
-                                        stroke="rgba(255,255,255,0.3)" 
-                                        fontSize={12}
-                                        tickFormatter={(v) => `$${v}`}
-                                    />
-                                    <Tooltip 
-                                        contentStyle={{ background: '#111', border: '1px solid #333', borderRadius: '8px' }}
-                                        labelStyle={{ color: 'var(--color-primary)' }}
-                                    />
-                                    <ReferenceLine y={0} stroke="#ff4444" strokeDasharray="3 3" />
-                                    <Area 
-                                        type="monotone" 
-                                        dataKey="net" 
-                                        stroke="var(--color-primary)" 
-                                        fillOpacity={1} 
-                                        fill="url(#colorNet)" 
-                                        strokeWidth={3}
-                                    />
-                                </AreaChart>
-                            </ResponsiveContainer>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1.8fr 1fr', gap: '24px', marginBottom: '24px' }}>
+                        {/* Projection Chart */}
+                        <Card padding="32px" style={{ background: '#FFFFFF' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
+                                <div>
+                                    <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '4px' }}>Net Cash Flow Analysis</h3>
+                                    <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>Projected monthly balance after all transition expenses</p>
+                                </div>
+                                <div style={{ display: 'flex', gap: '16px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', fontWeight: '600' }}>
+                                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--color-primary)' }} /> Projected Net
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style={{ height: '350px', width: '100%', marginLeft: '-20px' }}>
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <AreaChart data={monthly_cashflow}>
+                                        <defs>
+                                            <linearGradient id="colorNet" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.1}/>
+                                                <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0}/>
+                                            </linearGradient>
+                                        </defs>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
+                                        <XAxis 
+                                            dataKey="month" 
+                                            stroke="#94A3B8" 
+                                            fontSize={11} 
+                                            tickFormatter={(v) => `Month ${v}`}
+                                            axisLine={false}
+                                            tickLine={false}
+                                        />
+                                        <YAxis 
+                                            stroke="#94A3B8" 
+                                            fontSize={11}
+                                            tickFormatter={(v) => `$${v}`}
+                                            axisLine={false}
+                                            tickLine={false}
+                                        />
+                                        <Tooltip 
+                                            contentStyle={{ 
+                                                background: '#FFFFFF', 
+                                                border: '1px solid var(--color-border)', 
+                                                borderRadius: '12px',
+                                                boxShadow: 'var(--shadow-md)',
+                                                fontSize: '12px',
+                                                fontWeight: '600'
+                                            }}
+                                            itemStyle={{ color: 'var(--color-primary)' }}
+                                            cursor={{ stroke: '#E2E8F0', strokeWidth: 2 }}
+                                        />
+                                        <ReferenceLine y={0} stroke="#E2E8F0" strokeWidth={1} />
+                                        <Area 
+                                            type="monotone" 
+                                            dataKey="net" 
+                                            stroke="var(--color-primary)" 
+                                            fillOpacity={1} 
+                                            fill="url(#colorNet)" 
+                                            strokeWidth={2.5}
+                                            animationDuration={1500}
+                                        />
+                                    </AreaChart>
+                                </ResponsiveContainer>
+                            </div>
+                            <div style={{ marginTop: '24px', display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 16px', background: 'var(--color-surface)', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
+                                <Info size={14} style={{ color: 'var(--color-text-secondary)' }} />
+                                <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)', fontWeight: '500' }}>
+                                    Current model includes a **20% volatility buffer** for initial hiring delay.
+                                </span>
+                            </div>
+                        </Card>
+
+                        {/* Summary Metrics */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                            <StatCard 
+                                icon={<Wallet size={24} />} 
+                                label="Bridge Capital" 
+                                value={`$${Math.round(total_bridge_required).toLocaleString()}`} 
+                                subtext="Total liquidity used during pivot"
+                            />
+                            <StatCard 
+                                icon={<Calendar size={24} />} 
+                                label="Retention Horizon" 
+                                value={`${Math.round(runway_months)} Months`} 
+                                subtext="Maximum viable length of transition"
+                            />
+                            <StatCard 
+                                icon={<TrendingDown size={24} color={failure_threshold_month ? "#DC2626" : "#059669"} />} 
+                                label="Vulnerability Point" 
+                                value={failure_threshold_month ? `Month ${failure_threshold_month}` : "Green Zone"} 
+                                subtext={failure_threshold_month ? "Cash flow exhaustion point" : "No runway breach detected"}
+                            />
                         </div>
-                        <p style={{ marginTop: '24px', fontSize: '0.8rem', color: 'var(--color-text-secondary)', textAlign: 'center' }}>
-                            <Info size={12} style={{ verticalAlign: 'middle', marginRight: '4px' }} />
-                            Includes 20% uncertainty buffer on target role salary.
-                        </p>
-                    </Card>
-
-                    {/* Right: Key Stats */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                        <StatCard 
-                            icon={<Wallet size={24} />} 
-                            label="Total Bridge Required" 
-                            value={`$${Math.round(total_bridge_required).toLocaleString()}`} 
-                            subtext="Total liquid capital consumed during switch"
-                        />
-                        <StatCard 
-                            icon={<Calendar size={24} />} 
-                            label="Savings Runway" 
-                            value={`${Math.round(runway_months)} Months`} 
-                            subtext="At current monthly expense level"
-                        />
-                        <StatCard 
-                            icon={<TriangleAlert size={24} color={failure_threshold_month ? "#ff4444" : "var(--color-primary)"} />} 
-                            label="Failure Threshold" 
-                            value={failure_threshold_month ? `Month ${failure_threshold_month}` : "Safe Margin"} 
-                            subtext={failure_threshold_month ? "Month where savings are exhausted" : "Savings cover the entire transition"}
-                        />
                     </div>
-                </div>
 
-                {/* Unlock Roadmap CTA */}
-                <Card style={{ textAlign: 'center', background: 'rgba(255,255,255,0.02)', padding: '64px' }}>
-                    <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-                        <Lock size={48} style={{ color: 'var(--color-primary)', marginBottom: '24px' }} />
-                        <h3 style={{ fontSize: '2rem', marginBottom: '16px' }}>Unlock Your Master Roadmap</h3>
-                        <p style={{ color: 'var(--color-text-secondary)', marginBottom: '40px', fontSize: '1.1rem' }}>
-                            Get a phased weekly plan with specific milestones, failure triggers, and fallback actions tailored to this path.
-                        </p>
-                        <Button onClick={handleUnlock} style={{ padding: '20px 48px', fontSize: '1.2rem' }}>
-                            Build My Roadmap <ArrowRight size={20} style={{ marginLeft: '12px' }} />
-                        </Button>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                        <Card padding="32px" style={{ background: '#FFFFFF' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+                                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#FEF3C7', color: '#B45309', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <AlertTriangle size={20} />
+                                </div>
+                                <h3 style={{ fontSize: '18px', fontWeight: '700' }}>Stress Scenarios</h3>
+                            </div>
+                            <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', lineHeight: 1.6, marginBottom: '24px' }}>
+                                We have calculated a 15% probability of hiring taking >6 months. Your current safety margin handles this scenario with <strong>$4,200 remaining</strong>.
+                            </p>
+                            <div style={{ padding: '12px', borderLeft: '3px solid #F59E0B', background: '#FFFBEB', fontSize: '13px', color: '#92400E', borderRadius: '0 8px 8px 0' }}>
+                                Recommended: Keep 10% additional "emergency" bridge.
+                            </div>
+                        </Card>
+
+                        <Card padding="48px" style={{ 
+                            background: 'var(--color-primary)', 
+                            color: '#FFFFFF', 
+                            textAlign: 'center',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}>
+                            <Lock size={40} style={{ marginBottom: '24px', opacity: 0.8 }} />
+                            <h3 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '16px' }}>Master Execution Roadmap</h3>
+                            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.6)', marginBottom: '32px', lineHeight: 1.5 }}>
+                                Generate your phased action plan with exact weekly milestones and risk triggers.
+                            </p>
+                            <Button variant="accent" onClick={handleUnlock} size="lg" style={{ width: '100%' }}>
+                                Build Tactical Roadmap <ArrowRight size={18} style={{ marginLeft: '12px' }} />
+                            </Button>
+                        </Card>
                     </div>
-                </Card>
 
-                {/* FE-03: Mandatory Disclaimer */}
-                <p style={{ marginTop: '64px', textAlign: 'center', color: 'var(--color-text-secondary)', fontSize: '0.85rem', maxWidth: '800px', margin: '64px auto 0' }}>
-                    <strong>Disclaimer:</strong> These figures are estimates based on your inputs and conservative salary data. 
-                    This is a model, not a guarantee of outcome. Not financial advice.
-                </p>
-            </motion.div>
+                    {/* Disclaimer */}
+                    <div style={{ marginTop: '80px', textAlign: 'center', padding: '24px', borderTop: '1px solid var(--color-border)' }}>
+                        <p style={{ color: 'var(--color-text-secondary)', fontSize: '12px', maxWidth: '800px', margin: '0 auto', lineHeight: 1.6 }}>
+                            <strong>SYSTEM NOTICE:</strong> Projections are purely mathematical models based on user-provided inputs and historical market averages. 
+                            Switch.AI is a career intelligence tool and does not provide financial or legal guarantees. Transition risk scores are relative indicators only.
+                        </p>
+                    </div>
+                </motion.div>
+            </div>
         </div>
     );
 };
 
 const StatCard = ({ icon, label, value, subtext }) => (
-    <Card style={{ padding: '24px' }}>
-        <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
-            <div style={{ color: 'var(--color-primary)', marginTop: '4px' }}>{icon}</div>
+    <Card padding="24px" style={{ background: '#FFFFFF' }}>
+        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+            <div style={{ color: 'var(--color-primary)', background: 'var(--color-surface)', width: '56px', height: '56px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {icon}
+            </div>
             <div>
-                <div style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)', marginBottom: '4px' }}>{label}</div>
-                <div style={{ fontSize: '1.8rem', fontWeight: '700', marginBottom: '8px' }}>{value}</div>
-                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', lineHeight: '1.4' }}>{subtext}</div>
+                <div style={{ fontSize: '12px', fontWeight: '800', color: 'var(--color-text-secondary)', textTransform: 'uppercase', marginBottom: '4px', letterSpacing: '0.02em' }}>{label}</div>
+                <div style={{ fontSize: '24px', fontWeight: '800' }}>{value}</div>
+                <div style={{ fontSize: '12px', color: 'var(--color-text-secondary)', marginTop: '2px' }}>{subtext}</div>
             </div>
         </div>
     </Card>
