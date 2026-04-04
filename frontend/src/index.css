@@ -3,15 +3,15 @@
 :root {
   /* Ramp-inspired Functional Minimalist Palette */
   --color-bg: #FFFFFF;
-  --color-text: #000000;
-  --color-text-secondary: #64748B; /* Slate 500 */
-  --color-primary: #111827; /* Gray 900 - professional dark accent */
-  --color-accent: #FF5D01; /* Ramp-style Safety Orange for highlights */
+  --color-text: #0F172A; /* Slate 900 */
+  --color-text-secondary: #475569; /* Slate 600 */
+  --color-primary: #1D4ED8; /* Blue 700 - trustworthy primary */
+  --color-accent: #2563EB; /* Blue 600 - modern tech accent */
   
   --color-surface: #F8FAFC; /* Slate 50 */
-  --color-surface-hover: #F1F5F9; /* Slate 100 */
-  --color-border: #E2E8F0; /* Slate 200 - subtle, professional */
-  --color-border-strong: #CBD5E1; /* Slate 300 */
+  --color-surface-hover: #EFF6FF; /* Blue 50 */
+  --color-border: #E2E8F0; /* Slate 200 */
+  --color-border-strong: #BFDBFE; /* Blue 200 */
 
   --font-main: 'Inter', sans-serif;
 
