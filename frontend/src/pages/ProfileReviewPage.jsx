@@ -111,7 +111,7 @@ const ProfileReviewPage = () => {
                         {/* Section: Identity */}
                         <Card padding="32px">
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px' }}>
-                                <div style={{ padding: '8px', background: 'var(--color-surface)', borderRadius: '10px', color: 'var(--color-accent)' }}>
+                                <div style={{ padding: '8px', background: '#F1F5F9', borderRadius: '10px', color: 'var(--color-text)' }}>
                                     <User size={20} />
                                 </div>
                                 <h3 style={{ fontSize: '18px', fontWeight: '800' }}>Job Details</h3>
@@ -142,7 +142,7 @@ const ProfileReviewPage = () => {
                         {/* Section: Financials */}
                         <Card padding="32px">
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px' }}>
-                                <div style={{ padding: '8px', background: 'var(--color-surface)', borderRadius: '10px', color: 'var(--color-accent)' }}>
+                                <div style={{ padding: '8px', background: '#F1F5F9', borderRadius: '10px', color: 'var(--color-text)' }}>
                                     <Calculator size={20} />
                                 </div>
                                 <h3 style={{ fontSize: '18px', fontWeight: '800' }}>Money & Savings</h3>
@@ -182,7 +182,7 @@ const ProfileReviewPage = () => {
                         {/* Section: Constraints */}
                         <Card padding="32px">
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px' }}>
-                                <div style={{ padding: '8px', background: 'var(--color-surface)', borderRadius: '10px', color: 'var(--color-accent)' }}>
+                                <div style={{ padding: '8px', background: '#F1F5F9', borderRadius: '10px', color: 'var(--color-text)' }}>
                                     <AlertCircle size={20} />
                                 </div>
                                 <h3 style={{ fontSize: '18px', fontWeight: '800' }}>Time Commitment</h3>

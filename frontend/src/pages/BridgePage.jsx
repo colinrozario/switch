@@ -189,7 +189,7 @@ const BridgePage = () => {
                                 </ResponsiveContainer>
                             </div>
                             <div style={{ marginTop: '24px', display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 16px', background: 'var(--color-surface)', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
-                                <Info size={14} style={{ color: 'var(--color-accent)' }} />
+                                <Info size={14} style={{ color: 'var(--color-text-secondary)' }} />
                                 <span style={{ fontSize: '13px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>
                                     We've added a **20% safety buffer** in case it takes a little longer to get hired.
                                 </span>
@@ -222,7 +222,7 @@ const BridgePage = () => {
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
                         <Card padding="32px" style={{ background: '#FFFFFF' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
-                                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#DBEAFE', color: 'var(--color-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#F1F5F9', color: 'var(--color-text)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                     <AlertTriangle size={20} />
                                 </div>
                                 <h3 style={{ fontSize: '18px', fontWeight: '800' }}>What if things change?</h3>
@@ -230,13 +230,13 @@ const BridgePage = () => {
                             <p style={{ fontSize: '15px', color: 'var(--color-text-secondary)', lineHeight: 1.6, marginBottom: '24px', fontWeight: '500' }}>
                                 Even if it takes 6 months to find a job, your current plan still leaves you with <strong>$4,200</strong> in your pocket.
                             </p>
-                            <div style={{ padding: '12px', borderLeft: '3px solid var(--color-accent)', background: '#EFF6FF', fontSize: '13px', color: 'var(--color-accent)', borderRadius: '0 8px 8px 0', fontWeight: '700' }}>
+                            <div style={{ padding: '12px', borderLeft: '3px solid #CBD5E1', background: '#F8FAFC', fontSize: '13px', color: 'var(--color-text-secondary)', borderRadius: '0 8px 8px 0', fontWeight: '700' }}>
                                 Tip: Keep a small "emergency fund" just in case.
                             </div>
                         </Card>
 
                         <Card padding="48px" style={{ 
-                            background: 'var(--color-accent)', 
+                            background: '#0F172A', 
                             color: '#FFFFFF', 
                             textAlign: 'center',
                             display: 'flex',
@@ -245,11 +245,11 @@ const BridgePage = () => {
                             justifyContent: 'center'
                         }}>
                             <Lock size={40} style={{ marginBottom: '24px', opacity: 0.8 }} />
-                            <h3 style={{ fontSize: '24px', fontWeight: '800', marginBottom: '16px' }}>Your Step-by-Step Plan</h3>
-                            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.8)', marginBottom: '32px', lineHeight: 1.5, fontWeight: '500' }}>
+                            <h3 style={{ fontSize: '24px', fontWeight: '800', marginBottom: '16px', color: '#FFFFFF' }}>Your Step-by-Step Plan</h3>
+                            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.7)', marginBottom: '32px', lineHeight: 1.5, fontWeight: '500' }}>
                                 See exactly what to do each week to make your career move a success.
                             </p>
-                            <Button variant="accent" onClick={handleUnlock} size="lg" style={{ width: '100%', background: '#FFFFFF', color: 'var(--color-accent)' }}>
+                            <Button onClick={handleUnlock} size="lg" style={{ width: '100%' }}>
                                 Get My Plan <ArrowRight size={18} style={{ marginLeft: '12px' }} />
                             </Button>
                         </Card>
@@ -271,7 +271,7 @@ const BridgePage = () => {
 const StatCard = ({ icon, label, value, subtext }) => (
     <Card padding="24px" style={{ background: '#FFFFFF' }}>
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-            <div style={{ color: 'var(--color-accent)', background: 'var(--color-surface)', width: '56px', height: '56px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ color: 'var(--color-text)', background: '#F1F5F9', width: '56px', height: '56px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {icon}
             </div>
             <div>

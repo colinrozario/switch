@@ -94,11 +94,11 @@ const RoadmapPage = () => {
                     {/* Risk Indicators */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '80px' }}>
                         {opening_warning && (
-                            <Card padding="24px" style={{ background: '#EFF6FF', border: '1px solid var(--color-accent)' }}>
+                            <Card padding="24px" style={{ background: '#F8FAFC', border: '1px solid var(--color-border)' }}>
                                 <div style={{ display: 'flex', gap: '16px' }}>
-                                    <div style={{ color: 'var(--color-accent)', marginTop: '2px' }}><AlertTriangle size={20} /></div>
+                                    <div style={{ color: 'var(--color-text)', marginTop: '2px' }}><AlertTriangle size={20} /></div>
                                     <div>
-                                        <div style={{ fontSize: '14px', fontWeight: '800', color: 'var(--color-accent)', textTransform: 'uppercase', marginBottom: '4px' }}>Safety Tips</div>
+                                        <div style={{ fontSize: '14px', fontWeight: '800', color: 'var(--color-text)', textTransform: 'uppercase', marginBottom: '4px' }}>Safety Tips</div>
                                         <div style={{ fontSize: '15px', color: 'var(--color-text)', lineHeight: 1.5, fontWeight: '500' }}>{opening_warning}</div>
                                     </div>
                                 </div>
@@ -144,10 +144,10 @@ const RoadmapPage = () => {
                                             </div>
                                             <h3 style={{ fontSize: '28px', fontWeight: '800', letterSpacing: '-0.02em', marginBottom: '12px' }}>{phase.name}</h3>
                                             <div style={{ display: 'flex', gap: '24px' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '700', color: 'var(--color-accent)' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '700', color: 'var(--color-text-secondary)' }}>
                                                     <Clock size={16} /> {phase.duration_months}mo Time
                                                 </div>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '700', color: 'var(--color-accent)' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '700', color: 'var(--color-text-secondary)' }}>
                                                     <Wind size={16} /> {phase.weekly_effort_hours}h / Week
                                                 </div>
                                             </div>
@@ -179,8 +179,8 @@ const RoadmapPage = () => {
                                                 </div>
                                             </div>
                                             <div>
-                                                <div style={{ ...sectionTagStyle, color: 'var(--color-accent)' }}><Navigation size={14} /> If things slow down</div>
-                                                <div style={{ fontSize: '14px', lineHeight: 1.6, padding: '12px', background: '#EFF6FF', borderLeft: '3px solid var(--color-accent)', color: 'var(--color-primary)', borderRadius: '0 8px 8px 0', fontWeight: '600' }}>
+                                                <div style={{ ...sectionTagStyle, color: 'var(--color-text-secondary)' }}><Navigation size={14} /> If things slow down</div>
+                                                <div style={{ fontSize: '14px', lineHeight: 1.6, padding: '12px', background: '#F8FAFC', borderLeft: '3px solid #CBD5E1', color: 'var(--color-text-secondary)', borderRadius: '0 8px 8px 0', fontWeight: '600' }}>
                                                     {phase.fallback_action}
                                                 </div>
                                             </div>
@@ -194,19 +194,18 @@ const RoadmapPage = () => {
                     {/* Navigation to Simulator */}
                     <Card padding="48px" style={{ 
                         marginTop: '80px', 
-                        background: 'var(--color-accent)', 
+                        background: '#0F172A', 
                         color: '#FFFFFF',
                         textAlign: 'center'
                     }}>
-                        <h3 style={{ fontSize: '32px', fontWeight: '800', letterSpacing: '-0.02em', marginBottom: '16px' }}>Try a Scenario</h3>
-                        <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.8)', marginBottom: '40px', maxWidth: '600px', margin: '0 auto 40px', fontWeight: '500' }}>
+                        <h3 style={{ fontSize: '32px', fontWeight: '800', letterSpacing: '-0.02em', marginBottom: '16px', color: '#FFFFFF' }}>Try a Scenario</h3>
+                        <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.7)', marginBottom: '40px', maxWidth: '600px', margin: '0 auto 40px', fontWeight: '500' }}>
                             Change your savings or work hours to see how it affects your plan in real-time.
                         </p>
                         <Button 
-                            variant="accent" 
                             size="lg" 
                             onClick={() => navigate(`/simulator?id=${roadmap.id}`)}
-                            style={{ background: '#FFFFFF', color: 'var(--color-accent)' }}
+                            style={{ width: '100%', maxWidth: '320px' }}
                         >
                             Practice Your Plan <ArrowRight size={18} style={{ marginLeft: '12px' }} />
                         </Button>

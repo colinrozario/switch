@@ -110,7 +110,7 @@ const DiagnosisPage = () => {
                 <AnimatePresence mode='wait'>
                     {currentStep === 0 && (
                         <motion.div key="step0" variants={variants} initial="enter" animate="center" exit="exit" style={{ flex: 1 }}>
-                            <div style={{ width: '56px', height: '56px', background: 'var(--color-surface)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '32px', color: 'var(--color-accent)' }}>
+                            <div style={{ width: '56px', height: '56px', background: '#F1F5F9', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '32px', color: 'var(--color-text)' }}>
                                 <Shield size={28} />
                             </div>
                             <h2 style={{ fontSize: '32px', marginBottom: '20px', letterSpacing: '-0.02em' }}>Your Career Checkup</h2>
@@ -120,11 +120,11 @@ const DiagnosisPage = () => {
                             
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '48px' }}>
                                 <div style={{ padding: '16px', background: 'var(--color-surface)', borderRadius: '12px', border: '1px solid var(--color-border)' }}>
-                                    <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--color-accent)', marginBottom: '4px' }}>Real Data</div>
+                                    <div style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-text)', marginBottom: '4px' }}>Real Data</div>
                                     <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>No guesswork. Just the facts about your path.</div>
                                 </div>
                                 <div style={{ padding: '16px', background: 'var(--color-surface)', borderRadius: '12px', border: '1px solid var(--color-border)' }}>
-                                    <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--color-accent)', marginBottom: '4px' }}>Private & Secure</div>
+                                    <div style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-text)', marginBottom: '4px' }}>Private & Secure</div>
                                     <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>Your data stays safe and secure with us.</div>
                                 </div>
                             </div>
@@ -407,7 +407,7 @@ const DiagnosisPage = () => {
                                     animate={{ rotate: 360 }}
                                     transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
                                 >
-                                    <Activity size={64} style={{ color: 'var(--color-accent)' }} />
+                                    <Activity size={64} style={{ color: 'var(--color-text)' }} />
                                 </motion.div>
                             </div>
                             

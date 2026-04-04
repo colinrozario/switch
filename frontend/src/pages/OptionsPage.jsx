@@ -177,12 +177,12 @@ const PathCard = ({ path, onSelect }) => (
             </h3>
             <div style={{ 
                 padding: '6px 12px', 
-                background: 'var(--color-surface)', 
+                background: '#F1F5F9', 
                 borderRadius: '8px', 
                 display: 'flex', 
                 alignItems: 'center', 
                 gap: '6px',
-                color: 'var(--color-accent)',
+                color: 'var(--color-text)',
                 fontSize: '13px',
                 fontWeight: '800'
             }}>
@@ -203,7 +203,7 @@ const PathCard = ({ path, onSelect }) => (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {path.key_risks?.map((risk, i) => (
                     <div key={i} style={{ display: 'flex', gap: '8px', fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '500' }}>
-                        <span style={{ color: 'var(--color-accent)' }}>•</span>
+                        <span style={{ color: 'var(--color-text-secondary)' }}>•</span>
                         {risk}
                     </div>
                 ))}

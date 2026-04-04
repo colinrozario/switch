@@ -10,7 +10,7 @@ const Home = () => {
     const containerRef = useRef(null);
     
     return (
-        <div style={{ background: '#FFFFFF', minHeight: '100vh', color: 'var(--color-primary)', overflowX: 'hidden' }}>
+        <div style={{ background: '#FFFFFF', minHeight: '100vh', color: 'var(--color-text)', overflowX: 'hidden' }}>
             
             {/* Hero Section */}
             <section style={{ 
@@ -154,7 +154,7 @@ const Home = () => {
                     <div style={{ gridColumn: 'span 8' }}>
                         <Card style={{ height: '100%', display: 'flex', gap: '32px', alignItems: 'center' }}>
                             <div style={{ flex: 1 }}>
-                                <div style={{ width: '48px', height: '48px', background: 'var(--color-surface)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', color: 'var(--color-accent)' }}>
+                                <div style={{ width: '48px', height: '48px', background: '#F1F5F9', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', color: 'var(--color-text)' }}>
                                     <BarChart3 size={24} />
                                 </div>
                                 <h3 style={{ fontSize: '24px', marginBottom: '16px' }}>Pay Gap Planner</h3>
@@ -170,7 +170,7 @@ const Home = () => {
 
                     <div style={{ gridColumn: 'span 4' }}>
                         <Card style={{ height: '100%' }}>
-                            <div style={{ width: '48px', height: '48px', background: 'var(--color-surface)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', color: 'var(--color-accent)' }}>
+                            <div style={{ width: '48px', height: '48px', background: '#F1F5F9', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', color: 'var(--color-text)' }}>
                                 <Shield size={24} />
                             </div>
                             <h3 style={{ fontSize: '20px', marginBottom: '16px' }}>Keep it Private</h3>
@@ -182,7 +182,7 @@ const Home = () => {
 
                     <div style={{ gridColumn: 'span 4' }}>
                         <Card style={{ height: '100%' }}>
-                            <div style={{ width: '48px', height: '48px', background: 'var(--color-surface)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', color: 'var(--color-accent)' }}>
+                            <div style={{ width: '48px', height: '48px', background: '#F1F5F9', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', color: 'var(--color-text)' }}>
                                 <Target size={24} />
                             </div>
                             <h3 style={{ fontSize: '20px', marginBottom: '16px' }}>Skill Checkup</h3>
@@ -202,7 +202,7 @@ const Home = () => {
                                 </div>
                             </div>
                             <div style={{ flex: 1 }}>
-                                <div style={{ width: '48px', height: '48px', background: 'var(--color-surface)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', color: 'var(--color-accent)' }}>
+                                <div style={{ width: '48px', height: '48px', background: '#F1F5F9', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', color: 'var(--color-text)' }}>
                                     <Map size={24} />
                                 </div>
                                 <h3 style={{ fontSize: '24px', marginBottom: '16px' }}>Your Step-by-Step Plan</h3>
@@ -218,18 +218,19 @@ const Home = () => {
             {/* CTA Section */}
             <section style={{ 
                 padding: '120px 24px', 
-                background: 'var(--color-accent)', 
-                color: '#FFFFFF', 
-                textAlign: 'center'
+                background: '#F8FAFC', 
+                color: 'var(--color-text)', 
+                textAlign: 'center',
+                borderTop: '1px solid var(--color-border)'
             }}>
                 <div style={{ maxWidth: '800px', margin: '0 auto' }}>
                     <h2 style={{ fontSize: 'clamp(32px, 5vw, 48px)', marginBottom: '24px', letterSpacing: '-0.02em' }}>
                         Ready to plan your move?
                     </h2>
-                    <p style={{ fontSize: '20px', color: 'rgba(255,255,255,0.8)', marginBottom: '48px' }}>
+                    <p style={{ fontSize: '20px', color: 'var(--color-text-secondary)', marginBottom: '48px' }}>
                         It takes just 2 minutes to start your first simulation. It's free while we're in early access.
                     </p>
-                    <Button size="lg" variant="accent" onClick={() => navigate('/diagnosis')} style={{ background: '#FFFFFF', color: 'var(--color-accent)' }}>
+                    <Button size="lg" onClick={() => navigate('/diagnosis')}>
                         Assess My Profile
                     </Button>
                 </div>

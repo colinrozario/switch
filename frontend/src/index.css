@@ -3,15 +3,15 @@
 :root {
   /* Ramp-inspired Functional Minimalist Palette */
   --color-bg: #FFFFFF;
-  --color-text: #0F172A; /* Slate 900 */
+  --color-text: #0F172A; /* Slate 900 - dark neutral */
   --color-text-secondary: #475569; /* Slate 600 */
-  --color-primary: #1D4ED8; /* Blue 700 - trustworthy primary */
-  --color-accent: #2563EB; /* Blue 600 - modern tech accent */
+  --color-primary: #0F172A; /* Slate 900 - neutral headings for trust */
+  --color-accent: #2563EB; /* Blue 600 - tech accent strictly for actions */
   
   --color-surface: #F8FAFC; /* Slate 50 */
-  --color-surface-hover: #EFF6FF; /* Blue 50 */
+  --color-surface-hover: #F1F5F9; /* Slate 100 - neutral hover */
   --color-border: #E2E8F0; /* Slate 200 */
-  --color-border-strong: #BFDBFE; /* Blue 200 */
+  --color-border-strong: #CBD5E1; /* Slate 300 */
 
   --font-main: 'Inter', sans-serif;
 

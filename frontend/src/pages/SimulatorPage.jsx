@@ -142,7 +142,7 @@ const SimulatorPage = () => {
                                 fontWeight: '700',
                                 marginBottom: '16px'
                             }}>
-                                <Zap size={14} style={{ color: 'var(--color-accent)' }} /> TRY A SCENARIO
+                                <Zap size={14} style={{ color: 'var(--color-text)' }} /> TRY A SCENARIO
                             </div>
                             <h1 style={{ fontSize: '40px', letterSpacing: '-0.02em', fontWeight: '800' }}>Practice Your Move</h1>
                             <p style={{ color: 'var(--color-text-secondary)', fontSize: '18px', marginTop: '8px' }}>
@@ -158,7 +158,7 @@ const SimulatorPage = () => {
                         {/* Control Panel */}
                         <Card padding="32px" style={{ background: '#FFFFFF', height: 'fit-content' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px' }}>
-                                <div style={{ padding: '8px', background: 'var(--color-surface)', borderRadius: '10px', color: 'var(--color-accent)' }}>
+                                <div style={{ padding: '8px', background: '#F1F5F9', borderRadius: '10px', color: 'var(--color-text)' }}>
                                     <Sliders size={20} />
                                 </div>
                                 <h3 style={{ fontSize: '18px', fontWeight: '800' }}>What if...</h3>
