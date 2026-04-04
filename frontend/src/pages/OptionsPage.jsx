@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { TriangleAlert, ChevronDown, ChevronUp, Clock, Target, Shield } from 'lucide-react';
+import { TriangleAlert, ChevronDown, ChevronUp, Clock, Target, Shield, ArrowRight, Briefcase, AlertCircle } from 'lucide-react';
 import useStore from '../store/useStore';
 import { endpoints } from '../api/endpoints';
 import Card from '../components/UI/Card';
@@ -33,7 +33,7 @@ const OptionsPage = () => {
         };
 
         fetchPaths();
-    }, [profileId]);
+    }, [profileId, navigate, setPathSetId]);
 
     const handleSelect = async (pathId) => {
         try {
@@ -46,27 +46,58 @@ const OptionsPage = () => {
 
     if (loading) {
         return (
-            <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <h2 style={{ color: 'var(--color-primary)', marginBottom: '16px' }}>Analyzing viable transitions...</h2>
-                <p style={{ color: 'var(--color-text-secondary)' }}>Modeling feasibility based on your constraints.</p>
+            <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#F8FAFC' }}>
+                <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
+                    style={{ marginBottom: '32px', color: 'var(--color-primary)' }}
+                >
+                    <Briefcase size={48} />
+                </motion.div>
+                <h2 style={{ fontSize: '24px', letterSpacing: '-0.02em', marginBottom: '12px' }}>Synthesizing Viable Paths</h2>
+                <p style={{ color: 'var(--color-text-secondary)', maxWidth: '400px', textAlign: 'center', lineHeight: 1.6 }}>
+                    Our engine is filtering 100k+ permutations against your constraints to find paths with the highest safety margin.
+                </p>
+                <div style={{ marginTop: '32px', width: '200px', height: '4px', background: '#E2E8F0', borderRadius: '2px', overflow: 'hidden' }}>
+                    <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: '100%' }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        style={{ height: '100%', background: 'var(--color-primary)' }}
+                    />
+                </div>
             </div>
         );
     }
 
     return (
-        <div style={{ padding: '120px 20px', maxWidth: '1200px', margin: '0 auto', minHeight: '100vh' }}>
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-            >
+        <div style={{ background: '#F8FAFC', minHeight: '100vh', paddingTop: '120px', paddingBottom: '120px' }}>
+            <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
                 <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-                    <h2 style={{ fontSize: '3rem', marginBottom: '16px' }}>Viable Paths</h2>
-                    <p style={{ color: 'var(--color-text-secondary)', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto' }}>
-                        We found {pathSet?.paths?.length || 0} paths that respect your financial and time constraints.
+                    <div style={{ 
+                        display: 'inline-flex', 
+                        alignItems: 'center', 
+                        gap: '8px', 
+                        background: '#FFFFFF', 
+                        padding: '4px 12px', 
+                        borderRadius: '99px',
+                        border: '1px solid var(--color-border)',
+                        color: 'var(--color-text-secondary)',
+                        fontSize: '12px',
+                        fontWeight: '700',
+                        marginBottom: '24px'
+                    }}>
+                        SYSTEM OUTPUT: FEASIBILITY ENGINE
+                    </div>
+                    <h1 style={{ fontSize: '48px', letterSpacing: '-0.03em', marginBottom: '16px' }}>
+                        Calculated Transitions
+                    </h1>
+                    <p style={{ color: 'var(--color-text-secondary)', fontSize: '18px', maxWidth: '600px', margin: '0 auto', lineHeight: 1.5 }}>
+                        We found {pathSet?.paths?.length || 0} pathways that preserve your liquid runway while maximizing long-term ROI.
                     </p>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '32px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px' }}>
                     {pathSet?.paths?.map((path, index) => (
                         <PathCard 
                             key={index} 
@@ -77,14 +108,30 @@ const OptionsPage = () => {
                 </div>
 
                 {pathSet?.rejected_paths?.length > 0 && (
-                    <div style={{ marginTop: '80px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '40px' }}>
-                        <button 
-                            onClick={() => setShowRejected(!showRejected)}
-                            style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'var(--color-text-secondary)', fontSize: '1rem', background: 'none', border: 'none', cursor: 'pointer', margin: '0 auto' }}
-                        >
-                            {showRejected ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                            {showRejected ? "Hide" : "Show"} {pathSet.rejected_paths.length} Rejected Paths
-                        </button>
+                    <div style={{ marginTop: '100px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '40px' }}>
+                            <div style={{ height: '1px', flex: 1, background: 'var(--color-border)' }} />
+                            <button 
+                                onClick={() => setShowRejected(!showRejected)}
+                                style={{ 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    gap: '8px', 
+                                    color: 'var(--color-text-secondary)', 
+                                    fontSize: '14px', 
+                                    fontWeight: '600',
+                                    background: '#FFFFFF', 
+                                    border: '1px solid var(--color-border)', 
+                                    padding: '8px 16px',
+                                    borderRadius: '99px',
+                                    cursor: 'pointer' 
+                                }}
+                            >
+                                {showRejected ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                                {showRejected ? "Hide" : "Show"} Negative Results ({pathSet.rejected_paths.length})
+                            </button>
+                            <div style={{ height: '1px', flex: 1, background: 'var(--color-border)' }} />
+                        </div>
                         
                         <AnimatePresence>
                             {showRejected && (
@@ -94,12 +141,21 @@ const OptionsPage = () => {
                                     exit={{ height: 0, opacity: 0 }}
                                     style={{ overflow: 'hidden' }}
                                 >
-                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginTop: '32px' }}>
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
                                         {pathSet.rejected_paths.map((r, i) => (
-                                            <div key={i} style={rejectedCardStyle}>
-                                                <h4 style={{ color: '#fff', marginBottom: '8px' }}>{r.target_role_id.replace(/_/g, ' ')}</h4>
-                                                <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.9rem' }}>{r.rejection_reason}</p>
-                                            </div>
+                                            <Card key={i} padding="24px" style={{ background: '#FFFFFF', opacity: 0.7 }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                                                    <div style={{ padding: '6px', background: '#FEF2F2', borderRadius: '6px', color: '#DC2626' }}>
+                                                        <AlertCircle size={16} />
+                                                    </div>
+                                                    <h4 style={{ fontSize: '15px', fontWeight: '700', textTransform: 'capitalize' }}>
+                                                        {r.target_role_id.replace(/_/g, ' ')}
+                                                    </h4>
+                                                </div>
+                                                <p style={{ color: 'var(--color-text-secondary)', fontSize: '13px', lineHeight: 1.5 }}>
+                                                    Reason: {r.rejection_reason}
+                                                </p>
+                                            </Card>
                                         ))}
                                     </div>
                                 </motion.div>
@@ -107,98 +163,87 @@ const OptionsPage = () => {
                         </AnimatePresence>
                     </div>
                 )}
-            </motion.div>
+            </div>
         </div>
     );
 };
 
 const PathCard = ({ path, onSelect }) => (
-    <Card className="path-card">
-        <h3 style={{ fontSize: '1.8rem', marginBottom: '16px', textTransform: 'capitalize' }}>
-            {path.target_role_id.replace(/_/g, ' ')}
-        </h3>
-
-        <div style={{ display: 'flex', gap: '20px', marginBottom: '24px' }}>
-            <div style={statStyle}>
+    <Card padding="32px" style={{ display: 'flex', flexDirection: 'column', background: '#FFFFFF' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
+            <h3 style={{ fontSize: '24px', letterSpacing: '-0.02em', textTransform: 'capitalize', fontWeight: '700', flex: 1 }}>
+                {path.target_role_id.replace(/_/g, ' ')}
+            </h3>
+            <div style={{ 
+                padding: '6px 12px', 
+                background: 'var(--color-surface)', 
+                borderRadius: '8px', 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '6px',
+                color: 'var(--color-primary)',
+                fontSize: '13px',
+                fontWeight: '700'
+            }}>
                 <Clock size={14} />
-                <span>~{path.estimated_transition_months} Months</span>
+                {path.estimated_transition_months}m
             </div>
         </div>
 
-        <div style={{ marginBottom: '24px' }}>
-            <h4 style={sectionTitleStyle}><Target size={14} /> Why this fits</h4>
-            <p style={reasoningStyle}>{path.feasibility_reasoning}</p>
+        <div style={{ marginBottom: '32px' }}>
+            <div style={labelStyle}><Target size={14} /> Strategic Rationale</div>
+            <p style={{ fontSize: '15px', lineHeight: 1.6, color: 'var(--color-text)' }}>
+                {path.feasibility_reasoning}
+            </p>
         </div>
 
         <div style={{ marginBottom: '32px' }}>
-            <h4 style={sectionTitleStyle}><TriangleAlert size={14} /> Primary Risks</h4>
-            <ul style={listStyle}>
-                {path.key_risks?.map((risk, i) => <li key={i}>{risk}</li>)}
-            </ul>
-        </div>
-
-        <div style={{ marginBottom: '40px' }}>
-            <h4 style={sectionTitleStyle}><Shield size={14} /> Skill Gaps</h4>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {path.skill_gaps?.map((gap, i) => (
-                    <span key={i} style={gapBadgeStyle}>{gap}</span>
+            <div style={labelStyle}><TriangleAlert size={14} /> Primary Friction Points</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {path.key_risks?.map((risk, i) => (
+                    <div key={i} style={{ display: 'flex', gap: '8px', fontSize: '14px', color: 'var(--color-text-secondary)' }}>
+                        <span style={{ color: 'var(--color-accent)' }}>•</span>
+                        {risk}
+                    </div>
                 ))}
             </div>
         </div>
 
-        <Button onClick={onSelect} style={{ width: '100%' }}>
-            Select This Path →
-        </Button>
+        <div style={{ marginBottom: '40px' }}>
+            <div style={labelStyle}><Shield size={14} /> Bridge Requirements</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                {path.skill_gaps?.map((gap, i) => (
+                    <span key={i} style={{
+                        padding: '6px 12px',
+                        background: 'var(--color-surface)',
+                        border: '1px solid var(--color-border)',
+                        borderRadius: '99px',
+                        fontSize: '12px',
+                        fontWeight: '600',
+                        color: 'var(--color-text-secondary)'
+                    }}>{gap}</span>
+                ))}
+            </div>
+        </div>
+
+        <div style={{ marginTop: 'auto' }}>
+            <Button onClick={onSelect} style={{ width: '100%' }} size="lg">
+                Engage This Track <ArrowRight size={18} style={{ marginLeft: '8px' }} />
+            </Button>
+        </div>
     </Card>
 );
 
-const statStyle = {
+const labelStyle = {
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
-    color: 'var(--color-primary)',
-    fontSize: '0.9rem',
-    fontWeight: '600'
-};
-
-const sectionTitleStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    fontSize: '0.9rem',
+    fontSize: '12px',
+    fontWeight: '700',
     color: 'var(--color-text-secondary)',
-    marginBottom: '12px',
     textTransform: 'uppercase',
-    letterSpacing: '1px'
-};
-
-const reasoningStyle = {
-    fontSize: '1rem',
-    lineHeight: '1.6',
-    color: '#fff'
-};
-
-const listStyle = {
-    paddingLeft: '18px',
-    color: '#ffaaaa', // Light red for risk
-    fontSize: '0.95rem',
-    lineHeight: '1.6'
-};
-
-const gapBadgeStyle = {
-    padding: '6px 12px',
-    background: 'rgba(255,255,255,0.05)',
-    border: '1px solid rgba(255,255,255,0.1)',
-    borderRadius: '20px',
-    fontSize: '0.8rem',
-    color: 'rgba(255,255,255,0.7)'
-};
-
-const rejectedCardStyle = {
-    padding: '24px',
-    background: 'rgba(255,255,255,0.02)',
-    border: '1px solid rgba(255,255,255,0.05)',
-    borderRadius: '20px'
+    letterSpacing: '0.05em',
+    marginBottom: '12px'
 };
 
 export default OptionsPage;
