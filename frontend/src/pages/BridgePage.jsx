@@ -55,8 +55,8 @@ const BridgePage = () => {
     if (loading) {
         return (
             <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#F8FAFC' }}>
-                <Loader2 size={40} className="animate-spin" style={{ color: 'var(--color-primary)', marginBottom: '16px' }} />
-                <h2 style={{ fontSize: '18px', fontWeight: '600' }}>Quantifying transition risk...</h2>
+                <Loader2 size={40} className="animate-spin" style={{ color: 'var(--color-accent)', marginBottom: '16px' }} />
+                <h2 style={{ fontSize: '18px', fontWeight: '600' }}>Checking your safety levels...</h2>
             </div>
         );
     }
@@ -65,9 +65,9 @@ const BridgePage = () => {
     const { risk_score, total_bridge_required, runway_months, failure_threshold_month, monthly_cashflow } = outputs;
 
     const getRiskConfig = (score) => {
-        if (score <= 40) return { label: "High Risk", color: "#DC2626", bg: "#FEF2F2", icon: AlertTriangle, desc: "Runway exhausted too early." };
-        if (score <= 70) return { label: "Moderate Risk", color: "#D97706", bg: "#FFFBEB", icon: Info, desc: "Requires strict adherence." };
-        return { label: "High Safety", color: "#059669", bg: "#ECFDF5", icon: ShieldCheck, desc: "Strong financial redundancy." };
+        if (score <= 40) return { label: "Careful!", color: "#DC2626", bg: "#FEF2F2", icon: AlertTriangle, desc: "Runway gets tight early." };
+        if (score <= 70) return { label: "Looking Good", color: "#D97706", bg: "#FFFBEB", icon: Info, desc: "Follow the plan closely." };
+        return { label: "Very Safe", color: "#059669", bg: "#ECFDF5", icon: ShieldCheck, desc: "You have plenty of backup." };
     };
 
     const risk = getRiskConfig(risk_score);
@@ -107,17 +107,17 @@ const BridgePage = () => {
                                 <RiskIcon size={24} />
                             </div>
                             <div style={{ textAlign: 'left' }}>
-                                <div style={{ fontSize: '12px', fontWeight: '800', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Safety Margin</div>
+                                <div style={{ fontSize: '12px', fontWeight: '800', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Your Safety Score</div>
                                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
                                     <span style={{ fontSize: '24px', fontWeight: '800', color: risk.color }}>{risk_score}</span>
                                     <span style={{ fontSize: '14px', fontWeight: '700', color: risk.color }}>/ 100</span>
-                                    <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-secondary)', marginLeft: '8px' }}>— {risk.label}</span>
+                                    <span style={{ fontSize: '14px', fontWeight: '700', color: 'var(--color-text-secondary)', marginLeft: '8px' }}>— {risk.label}</span>
                                 </div>
                             </div>
                         </div>
-                        <h1 style={{ fontSize: '48px', letterSpacing: '-0.03em', marginBottom: '16px' }}>Income Transition Bridge</h1>
+                        <h1 style={{ fontSize: '48px', letterSpacing: '-0.03em', marginBottom: '16px' }}>Your Money Map</h1>
                         <p style={{ color: 'var(--color-text-secondary)', fontSize: '18px', maxWidth: '700px', margin: '0 auto', lineHeight: 1.5 }}>
-                            We have modeled your month-over-month cash flow based on the selected career path and your financial constraints.
+                            This shows how your income will change over time and when you'll start earning more than you do now.
                         </p>
                     </div>
 
@@ -126,12 +126,12 @@ const BridgePage = () => {
                         <Card padding="32px" style={{ background: '#FFFFFF' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
                                 <div>
-                                    <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '4px' }}>Net Cash Flow Analysis</h3>
-                                    <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>Projected monthly balance after all transition expenses</p>
+                                    <h3 style={{ fontSize: '18px', fontWeight: '800', marginBottom: '4px' }}>Your Monthly Balance</h3>
+                                    <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', fontWeight: '500' }}>What's left in your pocket each month after expenses.</p>
                                 </div>
                                 <div style={{ display: 'flex', gap: '16px' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', fontWeight: '600' }}>
-                                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--color-primary)' }} /> Projected Net
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', fontWeight: '700' }}>
+                                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--color-accent)' }} /> Predicted Balance
                                     </div>
                                 </div>
                             </div>
@@ -141,8 +141,8 @@ const BridgePage = () => {
                                     <AreaChart data={monthly_cashflow}>
                                         <defs>
                                             <linearGradient id="colorNet" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.1}/>
-                                                <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0}/>
+                                                <stop offset="5%" stopColor="var(--color-accent)" stopOpacity={0.15}/>
+                                                <stop offset="95%" stopColor="var(--color-accent)" stopOpacity={0}/>
                                             </linearGradient>
                                         </defs>
                                         <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
@@ -150,9 +150,10 @@ const BridgePage = () => {
                                             dataKey="month" 
                                             stroke="#94A3B8" 
                                             fontSize={11} 
-                                            tickFormatter={(v) => `Month ${v}`}
+                                            tickFormatter={(v) => `Mo ${v}`}
                                             axisLine={false}
                                             tickLine={false}
+                                            style={{ fontWeight: '600' }}
                                         />
                                         <YAxis 
                                             stroke="#94A3B8" 
@@ -160,6 +161,7 @@ const BridgePage = () => {
                                             tickFormatter={(v) => `$${v}`}
                                             axisLine={false}
                                             tickLine={false}
+                                            style={{ fontWeight: '600' }}
                                         />
                                         <Tooltip 
                                             contentStyle={{ 
@@ -168,28 +170,28 @@ const BridgePage = () => {
                                                 borderRadius: '12px',
                                                 boxShadow: 'var(--shadow-md)',
                                                 fontSize: '12px',
-                                                fontWeight: '600'
+                                                fontWeight: '800'
                                             }}
-                                            itemStyle={{ color: 'var(--color-primary)' }}
+                                            itemStyle={{ color: 'var(--color-accent)' }}
                                             cursor={{ stroke: '#E2E8F0', strokeWidth: 2 }}
                                         />
                                         <ReferenceLine y={0} stroke="#E2E8F0" strokeWidth={1} />
                                         <Area 
                                             type="monotone" 
                                             dataKey="net" 
-                                            stroke="var(--color-primary)" 
+                                            stroke="var(--color-accent)" 
                                             fillOpacity={1} 
                                             fill="url(#colorNet)" 
-                                            strokeWidth={2.5}
+                                            strokeWidth={3}
                                             animationDuration={1500}
                                         />
                                     </AreaChart>
                                 </ResponsiveContainer>
                             </div>
                             <div style={{ marginTop: '24px', display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 16px', background: 'var(--color-surface)', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
-                                <Info size={14} style={{ color: 'var(--color-text-secondary)' }} />
-                                <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)', fontWeight: '500' }}>
-                                    Current model includes a **20% volatility buffer** for initial hiring delay.
+                                <Info size={14} style={{ color: 'var(--color-accent)' }} />
+                                <span style={{ fontSize: '13px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>
+                                    We've added a **20% safety buffer** in case it takes a little longer to get hired.
                                 </span>
                             </div>
                         </Card>
@@ -198,21 +200,21 @@ const BridgePage = () => {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                             <StatCard 
                                 icon={<Wallet size={24} />} 
-                                label="Bridge Capital" 
+                                label="Savings Needed" 
                                 value={`$${Math.round(total_bridge_required).toLocaleString()}`} 
-                                subtext="Total liquidity used during pivot"
+                                subtext="Total cushion used for the move"
                             />
                             <StatCard 
                                 icon={<Calendar size={24} />} 
-                                label="Retention Horizon" 
+                                label="How Long You're Safe" 
                                 value={`${Math.round(runway_months)} Months`} 
-                                subtext="Maximum viable length of transition"
+                                subtext="How long your savings will last"
                             />
                             <StatCard 
                                 icon={<TrendingDown size={24} color={failure_threshold_month ? "#DC2626" : "#059669"} />} 
-                                label="Vulnerability Point" 
-                                value={failure_threshold_month ? `Month ${failure_threshold_month}` : "Green Zone"} 
-                                subtext={failure_threshold_month ? "Cash flow exhaustion point" : "No runway breach detected"}
+                                label="The Red Zone" 
+                                value={failure_threshold_month ? `Month ${failure_threshold_month}` : "Safe Zone"} 
+                                subtext={failure_threshold_month ? "When you'll need a paycheck" : "No risks detected!"}
                             />
                         </div>
                     </div>
@@ -220,21 +222,21 @@ const BridgePage = () => {
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
                         <Card padding="32px" style={{ background: '#FFFFFF' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
-                                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#FEF3C7', color: '#B45309', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#DBEAFE', color: 'var(--color-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                     <AlertTriangle size={20} />
                                 </div>
-                                <h3 style={{ fontSize: '18px', fontWeight: '700' }}>Stress Scenarios</h3>
+                                <h3 style={{ fontSize: '18px', fontWeight: '800' }}>What if things change?</h3>
                             </div>
-                            <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', lineHeight: 1.6, marginBottom: '24px' }}>
-                                We have calculated a 15% probability of hiring taking >6 months. Your current safety margin handles this scenario with <strong>$4,200 remaining</strong>.
+                            <p style={{ fontSize: '15px', color: 'var(--color-text-secondary)', lineHeight: 1.6, marginBottom: '24px', fontWeight: '500' }}>
+                                Even if it takes 6 months to find a job, your current plan still leaves you with <strong>$4,200</strong> in your pocket.
                             </p>
-                            <div style={{ padding: '12px', borderLeft: '3px solid #F59E0B', background: '#FFFBEB', fontSize: '13px', color: '#92400E', borderRadius: '0 8px 8px 0' }}>
-                                Recommended: Keep 10% additional "emergency" bridge.
+                            <div style={{ padding: '12px', borderLeft: '3px solid var(--color-accent)', background: '#EFF6FF', fontSize: '13px', color: 'var(--color-accent)', borderRadius: '0 8px 8px 0', fontWeight: '700' }}>
+                                Tip: Keep a small "emergency fund" just in case.
                             </div>
                         </Card>
 
                         <Card padding="48px" style={{ 
-                            background: 'var(--color-primary)', 
+                            background: 'var(--color-accent)', 
                             color: '#FFFFFF', 
                             textAlign: 'center',
                             display: 'flex',
@@ -243,21 +245,21 @@ const BridgePage = () => {
                             justifyContent: 'center'
                         }}>
                             <Lock size={40} style={{ marginBottom: '24px', opacity: 0.8 }} />
-                            <h3 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '16px' }}>Master Execution Roadmap</h3>
-                            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.6)', marginBottom: '32px', lineHeight: 1.5 }}>
-                                Generate your phased action plan with exact weekly milestones and risk triggers.
+                            <h3 style={{ fontSize: '24px', fontWeight: '800', marginBottom: '16px' }}>Your Step-by-Step Plan</h3>
+                            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.8)', marginBottom: '32px', lineHeight: 1.5, fontWeight: '500' }}>
+                                See exactly what to do each week to make your career move a success.
                             </p>
-                            <Button variant="accent" onClick={handleUnlock} size="lg" style={{ width: '100%' }}>
-                                Build Tactical Roadmap <ArrowRight size={18} style={{ marginLeft: '12px' }} />
+                            <Button variant="accent" onClick={handleUnlock} size="lg" style={{ width: '100%', background: '#FFFFFF', color: 'var(--color-accent)' }}>
+                                Get My Plan <ArrowRight size={18} style={{ marginLeft: '12px' }} />
                             </Button>
                         </Card>
                     </div>
 
                     {/* Disclaimer */}
                     <div style={{ marginTop: '80px', textAlign: 'center', padding: '24px', borderTop: '1px solid var(--color-border)' }}>
-                        <p style={{ color: 'var(--color-text-secondary)', fontSize: '12px', maxWidth: '800px', margin: '0 auto', lineHeight: 1.6 }}>
-                            <strong>SYSTEM NOTICE:</strong> Projections are purely mathematical models based on user-provided inputs and historical market averages. 
-                            Switch.AI is a career intelligence tool and does not provide financial or legal guarantees. Transition risk scores are relative indicators only.
+                        <p style={{ color: 'var(--color-text-secondary)', fontSize: '12px', maxWidth: '800px', margin: '0 auto', lineHeight: 1.6, fontWeight: '500' }}>
+                            <strong>Just so you know:</strong> These are best-guess plans based on your info and common market trends. 
+                            Switch is a helpful guide, but not a financial guarantee.
                         </p>
                     </div>
                 </motion.div>
@@ -269,13 +271,13 @@ const BridgePage = () => {
 const StatCard = ({ icon, label, value, subtext }) => (
     <Card padding="24px" style={{ background: '#FFFFFF' }}>
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-            <div style={{ color: 'var(--color-primary)', background: 'var(--color-surface)', width: '56px', height: '56px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ color: 'var(--color-accent)', background: 'var(--color-surface)', width: '56px', height: '56px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {icon}
             </div>
             <div>
                 <div style={{ fontSize: '12px', fontWeight: '800', color: 'var(--color-text-secondary)', textTransform: 'uppercase', marginBottom: '4px', letterSpacing: '0.02em' }}>{label}</div>
-                <div style={{ fontSize: '24px', fontWeight: '800' }}>{value}</div>
-                <div style={{ fontSize: '12px', color: 'var(--color-text-secondary)', marginTop: '2px' }}>{subtext}</div>
+                <div style={{ fontSize: '24px', fontWeight: '800', color: 'var(--color-text)' }}>{value}</div>
+                <div style={{ fontSize: '12px', color: 'var(--color-text-secondary)', marginTop: '2px', fontWeight: '600' }}>{subtext}</div>
             </div>
         </div>
     </Card>
