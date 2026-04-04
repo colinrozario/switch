@@ -27,7 +27,6 @@ const ProfileReviewPage = () => {
                 const response = await endpoints.getIntake(profileId);
                 setProfile(response.data);
                 
-                // Merge structured data with defaults if needed
                 const structured = response.data.structured || {};
                 setFormData({
                     current_role: structured.current_role || '',
@@ -59,7 +58,7 @@ const ProfileReviewPage = () => {
             navigate('/options');
         } catch (error) {
             console.error("Failed to update profile", error);
-            alert("Failed to save changes. Please try again.");
+            alert("Oops! We couldn't save your changes. Please try again.");
         } finally {
             setSaving(false);
         }
@@ -68,8 +67,8 @@ const ProfileReviewPage = () => {
     if (loading) {
         return (
             <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#F8FAFC' }}>
-                <Loader2 size={40} className="animate-spin" style={{ color: 'var(--color-primary)', marginBottom: '16px' }} />
-                <h2 style={{ fontSize: '18px', fontWeight: '600' }}>Retrieving analyzed profile...</h2>
+                <Loader2 size={40} className="animate-spin" style={{ color: 'var(--color-accent)', marginBottom: '16px' }} />
+                <h2 style={{ fontSize: '18px', fontWeight: '600' }}>Getting your profile ready...</h2>
             </div>
         );
     }
@@ -98,13 +97,13 @@ const ProfileReviewPage = () => {
                             fontWeight: '700',
                             marginBottom: '24px'
                         }}>
-                            SYSTEM OUTPUT: PROFILE EXTRACTION
+                            YOUR PROFILE SUMMARY
                         </div>
                         <h1 style={{ fontSize: '40px', letterSpacing: '-0.03em', marginBottom: '16px' }}>
-                            Verify your profile audit.
+                            Let's make sure we've got this right.
                         </h1>
                         <p style={{ color: 'var(--color-text-secondary)', fontSize: '18px', lineHeight: 1.5 }}>
-                            Our agent has extracted these coordinates from your diagnosis. Please review and adjust any values highlighted in <span style={{ color: '#F59E0B', fontWeight: '600' }}>amber</span>—these were inferred with lower certainty.
+                            We've pulled these details from your checkup. Take a quick look and fix anything that doesn't seem quite right—especially the ones marked <span style={{ color: '#F59E0B', fontWeight: '700' }}>"Double Check"</span>.
                         </p>
                     </div>
 
@@ -112,16 +111,16 @@ const ProfileReviewPage = () => {
                         {/* Section: Identity */}
                         <Card padding="32px">
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px' }}>
-                                <div style={{ padding: '8px', background: 'var(--color-surface)', borderRadius: '10px', color: 'var(--color-primary)' }}>
+                                <div style={{ padding: '8px', background: 'var(--color-surface)', borderRadius: '10px', color: 'var(--color-accent)' }}>
                                     <User size={20} />
                                 </div>
-                                <h3 style={{ fontSize: '18px', fontWeight: '700' }}>Professional Identity</h3>
+                                <h3 style={{ fontSize: '18px', fontWeight: '800' }}>Job Details</h3>
                             </div>
                             
                             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
                                 <div style={{ position: 'relative' }}>
                                     <Input 
-                                        label="Current Occupation"
+                                        label="Current Job Title"
                                         value={formData.current_role}
                                         onChange={(e) => handleInputChange('current_role', e.target.value)}
                                         icon={FileEdit}
@@ -130,7 +129,7 @@ const ProfileReviewPage = () => {
                                 </div>
                                 <div style={{ position: 'relative' }}>
                                     <Input 
-                                        label="Years Exp."
+                                        label="Years of Exp."
                                         type="number"
                                         value={formData.years_experience}
                                         onChange={(e) => handleInputChange('years_experience', parseFloat(e.target.value))}
@@ -143,16 +142,16 @@ const ProfileReviewPage = () => {
                         {/* Section: Financials */}
                         <Card padding="32px">
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px' }}>
-                                <div style={{ padding: '8px', background: 'var(--color-surface)', borderRadius: '10px', color: 'var(--color-primary)' }}>
+                                <div style={{ padding: '8px', background: 'var(--color-surface)', borderRadius: '10px', color: 'var(--color-accent)' }}>
                                     <Calculator size={20} />
                                 </div>
-                                <h3 style={{ fontSize: '18px', fontWeight: '700' }}>Financial Coordinates</h3>
+                                <h3 style={{ fontSize: '18px', fontWeight: '800' }}>Money & Savings</h3>
                             </div>
                             
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
                                 <div style={{ position: 'relative' }}>
                                     <Input 
-                                        label="Monthly Net Income ($)"
+                                        label="Monthly Take-Home Pay ($)"
                                         type="number"
                                         value={formData.monthly_net_income}
                                         onChange={(e) => handleInputChange('monthly_net_income', parseFloat(e.target.value))}
@@ -161,7 +160,7 @@ const ProfileReviewPage = () => {
                                 </div>
                                 <div style={{ position: 'relative' }}>
                                     <Input 
-                                        label="Monthly Living Expenses ($)"
+                                        label="Monthly Living Costs ($)"
                                         type="number"
                                         value={formData.monthly_expenses}
                                         onChange={(e) => handleInputChange('monthly_expenses', parseFloat(e.target.value))}
@@ -170,7 +169,7 @@ const ProfileReviewPage = () => {
                                 </div>
                                 <div style={{ gridColumn: 'span 2', position: 'relative' }}>
                                     <Input 
-                                        label="Total Liquid Savings ($)"
+                                        label="Total Savings Available ($)"
                                         type="number"
                                         value={formData.liquid_savings}
                                         onChange={(e) => handleInputChange('liquid_savings', parseFloat(e.target.value))}
@@ -183,16 +182,16 @@ const ProfileReviewPage = () => {
                         {/* Section: Constraints */}
                         <Card padding="32px">
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px' }}>
-                                <div style={{ padding: '8px', background: 'var(--color-surface)', borderRadius: '10px', color: 'var(--color-primary)' }}>
+                                <div style={{ padding: '8px', background: 'var(--color-surface)', borderRadius: '10px', color: 'var(--color-accent)' }}>
                                     <AlertCircle size={20} />
                                 </div>
-                                <h3 style={{ fontSize: '18px', fontWeight: '700' }}>Temporal Constraints</h3>
+                                <h3 style={{ fontSize: '18px', fontWeight: '800' }}>Time Commitment</h3>
                             </div>
                             
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '24px' }}>
                                 <div style={{ position: 'relative' }}>
                                     <Input 
-                                        label="Investable Hrs/Wk"
+                                        label="Hours for Learning / Wk"
                                         type="number"
                                         value={formData.weekly_hours_available}
                                         onChange={(e) => handleInputChange('weekly_hours_available', parseFloat(e.target.value))}
@@ -201,7 +200,7 @@ const ProfileReviewPage = () => {
                                 </div>
                                 <div style={{ position: 'relative' }}>
                                     <Input 
-                                        label="Hard Constraints (comma separated)"
+                                        label="Other Constraints (like locations)"
                                         value={formData.hard_constraints?.join(', ')}
                                         onChange={(e) => handleInputChange('hard_constraints', e.target.value.split(',').map(s => s.trim()))}
                                     />
@@ -220,11 +219,11 @@ const ProfileReviewPage = () => {
                         >
                             {saving ? (
                                 <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <Loader2 size={18} className="animate-spin" /> Finalizing System Registry...
+                                    <Loader2 size={18} className="animate-spin" /> Saving Your Profile...
                                 </span>
                             ) : (
                                 <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    Confirm Audit & View Paths <ArrowRight size={18} />
+                                    Looks Good, See My Options <ArrowRight size={18} />
                                 </span>
                             )}
                         </Button>
@@ -245,11 +244,11 @@ const ConfidenceAlert = () => (
         gap: '4px',
         color: '#F59E0B',
         fontSize: '11px',
-        fontWeight: '700',
+        fontWeight: '800',
         textTransform: 'uppercase',
         letterSpacing: '0.02em'
     }}>
-        <CircleAlert size={12} /> Verify
+        <CircleAlert size={12} /> Double Check
     </div>
 );
 
