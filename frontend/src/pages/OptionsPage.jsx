@@ -50,20 +50,20 @@ const OptionsPage = () => {
                 <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
-                    style={{ marginBottom: '32px', color: 'var(--color-primary)' }}
+                    style={{ marginBottom: '32px', color: 'var(--color-accent)' }}
                 >
                     <Briefcase size={48} />
                 </motion.div>
-                <h2 style={{ fontSize: '24px', letterSpacing: '-0.02em', marginBottom: '12px' }}>Synthesizing Viable Paths</h2>
+                <h2 style={{ fontSize: '24px', letterSpacing: '-0.02em', marginBottom: '12px' }}>Finding Your Best Options</h2>
                 <p style={{ color: 'var(--color-text-secondary)', maxWidth: '400px', textAlign: 'center', lineHeight: 1.6 }}>
-                    Our engine is filtering 100k+ permutations against your constraints to find paths with the highest safety margin.
+                    We're checking thousands of possibilities to find the safest paths for your career change.
                 </p>
                 <div style={{ marginTop: '32px', width: '200px', height: '4px', background: '#E2E8F0', borderRadius: '2px', overflow: 'hidden' }}>
                     <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: '100%' }}
                         transition={{ duration: 2, repeat: Infinity }}
-                        style={{ height: '100%', background: 'var(--color-primary)' }}
+                        style={{ height: '100%', background: 'var(--color-accent)' }}
                     />
                 </div>
             </div>
@@ -87,13 +87,13 @@ const OptionsPage = () => {
                         fontWeight: '700',
                         marginBottom: '24px'
                     }}>
-                        SYSTEM OUTPUT: FEASIBILITY ENGINE
+                        CAREER OPTIONS FOUND
                     </div>
                     <h1 style={{ fontSize: '48px', letterSpacing: '-0.03em', marginBottom: '16px' }}>
-                        Calculated Transitions
+                        Select Your Next Path
                     </h1>
                     <p style={{ color: 'var(--color-text-secondary)', fontSize: '18px', maxWidth: '600px', margin: '0 auto', lineHeight: 1.5 }}>
-                        We found {pathSet?.paths?.length || 0} pathways that preserve your liquid runway while maximizing long-term ROI.
+                        We've found {pathSet?.paths?.length || 0} paths that match your skills and protect your savings.
                     </p>
                 </div>
 
@@ -119,16 +119,17 @@ const OptionsPage = () => {
                                     gap: '8px', 
                                     color: 'var(--color-text-secondary)', 
                                     fontSize: '14px', 
-                                    fontWeight: '600',
+                                    fontWeight: '700',
                                     background: '#FFFFFF', 
                                     border: '1px solid var(--color-border)', 
-                                    padding: '8px 16px',
+                                    padding: '8px 20px',
                                     borderRadius: '99px',
-                                    cursor: 'pointer' 
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease'
                                 }}
                             >
                                 {showRejected ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                                {showRejected ? "Hide" : "Show"} Negative Results ({pathSet.rejected_paths.length})
+                                {showRejected ? "Hide" : "See Why Other Paths Didn't Make It"} ({pathSet.rejected_paths.length})
                             </button>
                             <div style={{ height: '1px', flex: 1, background: 'var(--color-border)' }} />
                         </div>
@@ -148,12 +149,12 @@ const OptionsPage = () => {
                                                     <div style={{ padding: '6px', background: '#FEF2F2', borderRadius: '6px', color: '#DC2626' }}>
                                                         <AlertCircle size={16} />
                                                     </div>
-                                                    <h4 style={{ fontSize: '15px', fontWeight: '700', textTransform: 'capitalize' }}>
+                                                    <h4 style={{ fontSize: '15px', fontWeight: '800', textTransform: 'capitalize' }}>
                                                         {r.target_role_id.replace(/_/g, ' ')}
                                                     </h4>
                                                 </div>
-                                                <p style={{ color: 'var(--color-text-secondary)', fontSize: '13px', lineHeight: 1.5 }}>
-                                                    Reason: {r.rejection_reason}
+                                                <p style={{ color: 'var(--color-text-secondary)', fontSize: '14px', lineHeight: 1.5 }}>
+                                                    Why this didn't fit: {r.rejection_reason}
                                                 </p>
                                             </Card>
                                         ))}
@@ -171,7 +172,7 @@ const OptionsPage = () => {
 const PathCard = ({ path, onSelect }) => (
     <Card padding="32px" style={{ display: 'flex', flexDirection: 'column', background: '#FFFFFF' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
-            <h3 style={{ fontSize: '24px', letterSpacing: '-0.02em', textTransform: 'capitalize', fontWeight: '700', flex: 1 }}>
+            <h3 style={{ fontSize: '24px', letterSpacing: '-0.02em', textTransform: 'capitalize', fontWeight: '800', flex: 1 }}>
                 {path.target_role_id.replace(/_/g, ' ')}
             </h3>
             <div style={{ 
@@ -181,27 +182,27 @@ const PathCard = ({ path, onSelect }) => (
                 display: 'flex', 
                 alignItems: 'center', 
                 gap: '6px',
-                color: 'var(--color-primary)',
+                color: 'var(--color-accent)',
                 fontSize: '13px',
-                fontWeight: '700'
+                fontWeight: '800'
             }}>
                 <Clock size={14} />
-                {path.estimated_transition_months}m
+                {path.estimated_transition_months}mo
             </div>
         </div>
 
         <div style={{ marginBottom: '32px' }}>
-            <div style={labelStyle}><Target size={14} /> Strategic Rationale</div>
+            <div style={labelStyle}><Target size={14} /> Why this works</div>
             <p style={{ fontSize: '15px', lineHeight: 1.6, color: 'var(--color-text)' }}>
                 {path.feasibility_reasoning}
             </p>
         </div>
 
         <div style={{ marginBottom: '32px' }}>
-            <div style={labelStyle}><TriangleAlert size={14} /> Primary Friction Points</div>
+            <div style={labelStyle}><TriangleAlert size={14} /> Challenges to watch</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {path.key_risks?.map((risk, i) => (
-                    <div key={i} style={{ display: 'flex', gap: '8px', fontSize: '14px', color: 'var(--color-text-secondary)' }}>
+                    <div key={i} style={{ display: 'flex', gap: '8px', fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '500' }}>
                         <span style={{ color: 'var(--color-accent)' }}>•</span>
                         {risk}
                     </div>
@@ -210,16 +211,16 @@ const PathCard = ({ path, onSelect }) => (
         </div>
 
         <div style={{ marginBottom: '40px' }}>
-            <div style={labelStyle}><Shield size={14} /> Bridge Requirements</div>
+            <div style={labelStyle}><Shield size={14} /> Things to learn</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {path.skill_gaps?.map((gap, i) => (
                     <span key={i} style={{
-                        padding: '6px 12px',
+                        padding: '6px 14px',
                         background: 'var(--color-surface)',
                         border: '1px solid var(--color-border)',
                         borderRadius: '99px',
                         fontSize: '12px',
-                        fontWeight: '600',
+                        fontWeight: '700',
                         color: 'var(--color-text-secondary)'
                     }}>{gap}</span>
                 ))}
@@ -228,7 +229,7 @@ const PathCard = ({ path, onSelect }) => (
 
         <div style={{ marginTop: 'auto' }}>
             <Button onClick={onSelect} style={{ width: '100%' }} size="lg">
-                Engage This Track <ArrowRight size={18} style={{ marginLeft: '8px' }} />
+                Choose This Path <ArrowRight size={18} style={{ marginLeft: '8px' }} />
             </Button>
         </div>
     </Card>
@@ -239,7 +240,7 @@ const labelStyle = {
     alignItems: 'center',
     gap: '8px',
     fontSize: '12px',
-    fontWeight: '700',
+    fontWeight: '800',
     color: 'var(--color-text-secondary)',
     textTransform: 'uppercase',
     letterSpacing: '0.05em',
