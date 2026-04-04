@@ -1,15 +1,20 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Sliders, 
     TrendingDown, 
     TrendingUp, 
     History, 
     ArrowLeft, 
-    CircleCheck, 
-    CircleAlert, 
-    Info 
+    CheckCircle2, 
+    AlertCircle, 
+    Info,
+    LayoutDashboard,
+    Zap,
+    Scale,
+    ShieldCheck,
+    Loader2
 } from 'lucide-react';
 import debounce from 'lodash/debounce';
 import useStore from '../store/useStore';
@@ -29,6 +34,7 @@ const SimulatorPage = () => {
     const [currentScenario, setCurrentScenario] = useState(null);
     const [pastRuns, setPastRuns] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [simulating, setSimulating] = useState(false);
     
     // Sliders state
     const [inputs, setInputs] = useState({
@@ -46,20 +52,22 @@ const SimulatorPage = () => {
 
         const fetchData = async () => {
             try {
-                // For MVP, we fetch the roadmap then the bridge
+                // Fetch roadmap to get bridge ID if not in store
                 const roadmapRes = await endpoints.getRoadmap(roadmapId);
                 const bridgeRes = await endpoints.getSalaryBridge(roadmapRes.data.salary_bridge_id);
                 
                 setBaseBridge(bridgeRes.data);
-                setInputs({
+                const initialInputs = {
                     monthly_expenses: bridgeRes.data.inputs.monthly_expenses,
                     transition_months: bridgeRes.data.inputs.transition_months,
                     liquid_savings: bridgeRes.data.inputs.liquid_savings,
                     weekly_hours_available: bridgeRes.data.inputs.weekly_hours_available
-                });
+                };
+                setInputs(initialInputs);
                 
-                const historyRes = await endpoints.runSimulator(roadmapId, {}); // Get current baseline as run
-                setPastRuns(prev => [historyRes.data]);
+                // Initial baseline simulation
+                const historyRes = await endpoints.runSimulator(roadmapId, {});
+                setPastRuns([historyRes.data]);
                 
             } catch (error) {
                 console.error("Failed to fetch simulator data", error);
@@ -69,17 +77,19 @@ const SimulatorPage = () => {
         };
 
         fetchData();
-    }, [roadmapId]);
+    }, [roadmapId, navigate]);
 
-    // DB: runSimulator
     const triggerSimulation = useCallback(
         debounce(async (newInputs) => {
+            setSimulating(true);
             try {
                 const response = await endpoints.runSimulator(roadmapId, newInputs);
                 setCurrentScenario(response.data);
-                setPastRuns(prev => [response.data, ...prev].slice(0, 5)); // Keep last 5
+                setPastRuns(prev => [response.data, ...prev].slice(0, 5));
             } catch (error) {
                 console.error("Simulation failed", error);
+            } finally {
+                setSimulating(false);
             }
         }, 500),
         [roadmapId]
@@ -93,196 +103,271 @@ const SimulatorPage = () => {
 
     if (loading) {
         return (
-            <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <h2 style={{ color: 'var(--color-primary)' }}>Initializing simulator sandbox...</h2>
+            <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#F8FAFC' }}>
+                <Loader2 size={40} className="animate-spin" style={{ color: 'var(--color-primary)', marginBottom: '16px' }} />
+                <h2 style={{ fontSize: '18px', fontWeight: '600' }}>Initializing risk sandbox...</h2>
             </div>
         );
     }
 
-    const displayOut = currentScenario ? currentScenario.deterministic_out : baseBridge.outputs;
-    const risk = getRiskLevel(displayOut.risk_score);
+    const displayOut = currentScenario ? currentScenario.deterministic_out : (baseBridge ? baseBridge.outputs : null);
+    
+    if (!displayOut) return null;
+
+    const getRiskConfig = (score) => {
+        if (score <= 40) return { label: "Critical Risk", color: "#DC2626", bg: "#FEF2F2" };
+        if (score <= 70) return { label: "Elevated Risk", color: "#B45309", bg: "#FFFBEB" };
+        return { label: "Safe Path", color: "#059669", bg: "#ECFDF5" };
+    };
+
+    const risk = getRiskConfig(displayOut.risk_score);
 
     return (
-        <div style={{ padding: '120px 20px', maxWidth: '1200px', margin: '0 auto', minHeight: '100vh' }}>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                <div style={{ marginBottom: '64px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div>
-                        <h2 style={{ fontSize: '2.5rem', marginBottom: '8px' }}>What-If Simulator</h2>
-                        <p style={{ color: 'var(--color-text-secondary)' }}>Stress-test your assumptions and find a safer path.</p>
+        <div style={{ background: '#F8FAFC', minHeight: '100vh', paddingTop: '120px', paddingBottom: '120px' }}>
+            <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                    
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '64px' }}>
+                        <div>
+                            <div style={{ 
+                                display: 'inline-flex', 
+                                alignItems: 'center', 
+                                gap: '8px', 
+                                background: '#FFFFFF', 
+                                padding: '4px 12px', 
+                                borderRadius: '99px',
+                                border: '1px solid var(--color-border)',
+                                color: 'var(--color-text-secondary)',
+                                fontSize: '12px',
+                                fontWeight: '700',
+                                marginBottom: '16px'
+                            }}>
+                                <Zap size={14} style={{ color: 'var(--color-accent)' }} /> LIVE RISK SIMULATOR
+                            </div>
+                            <h1 style={{ fontSize: '40px', letterSpacing: '-0.02em', fontWeight: '800' }}>What-If Scenario Sandbox</h1>
+                            <p style={{ color: 'var(--color-text-secondary)', fontSize: '18px', marginTop: '8px' }}>
+                                Stress-test your financial runway by adjusting critical transition variables.
+                            </p>
+                        </div>
+                        <Button variant="outline" onClick={() => navigate(-1)} style={{ background: '#FFFFFF' }}>
+                            <ArrowLeft size={16} /> Return to Roadmap
+                        </Button>
                     </div>
-                    <Button variant="secondary" onClick={() => window.history.back()}>
-                        <ArrowLeft size={16} /> Back to Roadmap
-                    </Button>
-                </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '40px' }}>
-                    {/* Left: Sliders */}
-                    <Card style={{ padding: '32px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px', color: 'var(--color-primary)' }}>
-                            <Sliders size={20} />
-                            <h3 style={{ fontSize: '1.2rem', fontWeight: '700' }}>Adjust Variables</h3>
-                        </div>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-                            <SliderControl 
-                                label="Monthly Expenses" 
-                                value={inputs.monthly_expenses} 
-                                min={inputs.monthly_expenses * 0.5} 
-                                max={inputs.monthly_expenses * 1.5} 
-                                step={100}
-                                unit="$"
-                                onChange={(v) => handleSliderChange('monthly_expenses', v)}
-                            />
-                            <SliderControl 
-                                label="Transition Timeline" 
-                                value={inputs.transition_months} 
-                                min={3} 
-                                max={36} 
-                                step={1}
-                                unit=" Mo"
-                                onChange={(v) => handleSliderChange('transition_months', v)}
-                            />
-                            <SliderControl 
-                                label="Liquid Savings" 
-                                value={inputs.liquid_savings} 
-                                min={0} 
-                                max={inputs.liquid_savings * 3} 
-                                step={1000}
-                                unit="$"
-                                onChange={(v) => handleSliderChange('liquid_savings', v)}
-                            />
-                            <SliderControl 
-                                label="Weekly Effort" 
-                                value={inputs.weekly_hours_available} 
-                                min={2} 
-                                max={40} 
-                                step={1}
-                                unit=" Hrs"
-                                onChange={(v) => handleSliderChange('weekly_hours_available', v)}
-                            />
-                        </div>
-                    </Card>
-
-                    {/* Right: Results & Comparison */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-                        {/* Summary Result */}
-                        <Card style={{ padding: '32px', borderColor: risk.color }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '48px', alignItems: 'center' }}>
-                                <div style={{ textAlign: 'center', borderRight: '1px solid rgba(255,255,255,0.05)' }}>
-                                    <div style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', marginBottom: '4px', letterSpacing: '1px' }}>RISK SCORE</div>
-                                    <div style={{ fontSize: '4.5rem', fontWeight: '800', color: risk.color }}>{displayOut.risk_score}</div>
-                                    <div style={{ fontSize: '0.9rem', fontWeight: '700', color: risk.color }}>{risk.label}</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '400px 1fr', gap: '24px' }}>
+                        {/* Control Panel */}
+                        <Card padding="32px" style={{ background: '#FFFFFF', height: 'fit-content' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '40px' }}>
+                                <div style={{ padding: '8px', background: 'var(--color-surface)', borderRadius: '10px', color: 'var(--color-primary)' }}>
+                                    <Sliders size={20} />
                                 </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                    <StatRow label="Monthly Burn" value={`$${Math.round(displayOut.total_bridge_required / (inputs.transition_months || 1))}`} />
-                                    <StatRow label="Bridge Required" value={`$${Math.round(displayOut.total_bridge_required).toLocaleString()}`} />
-                                    <StatRow label="Runway Buffer" value={`${Math.round(displayOut.runway_months)} Months`} />
-                                </div>
+                                <h3 style={{ fontSize: '18px', fontWeight: '700' }}>Variables</h3>
                             </div>
 
-                            {currentScenario?.narrative && (
-                                <div style={narrativeStyle}>
-                                    <Info size={16} style={{ marginTop: '3px' }} />
-                                    <p>{currentScenario.narrative}</p>
-                                </div>
-                            )}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
+                                <SliderControl 
+                                    label="Monthly Living Expenses" 
+                                    value={inputs.monthly_expenses} 
+                                    min={500} 
+                                    max={10000} 
+                                    step={100}
+                                    prefix="$"
+                                    onChange={(v) => handleSliderChange('monthly_expenses', v)}
+                                />
+                                <SliderControl 
+                                    label="Transition Timeline" 
+                                    value={inputs.transition_months} 
+                                    min={1} 
+                                    max={24} 
+                                    step={1}
+                                    suffix=" Months"
+                                    onChange={(v) => handleSliderChange('transition_months', v)}
+                                />
+                                <SliderControl 
+                                    label="Available Liquid Capital" 
+                                    value={inputs.liquid_savings} 
+                                    min={0} 
+                                    max={100000} 
+                                    step={1000}
+                                    prefix="$"
+                                    onChange={(v) => handleSliderChange('liquid_savings', v)}
+                                />
+                                <SliderControl 
+                                    label="Weekly Effort Commitment" 
+                                    value={inputs.weekly_hours_available} 
+                                    min={0} 
+                                    max={60} 
+                                    step={1}
+                                    suffix=" Hrs"
+                                    onChange={(v) => handleSliderChange('weekly_hours_available', v)}
+                                />
+                            </div>
                         </Card>
 
-                        {/* Past Runs History */}
-                        <Card style={{ padding: '32px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', color: 'var(--color-text-secondary)' }}>
-                                <History size={18} />
-                                <h4 style={{ fontSize: '1rem', fontWeight: '600' }}>Recent Scenarios</h4>
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                {pastRuns.map((run, i) => (
-                                    <div key={i} style={historyItemStyle}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                             <Shield style={{ color: getRiskLevel(run.deterministic_out.risk_score).color }} size={16} />
-                                             <span style={{ fontWeight: '600' }}>Score: {run.deterministic_out.risk_score}</span>
+                        {/* Analysis View */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                            {/* Main Result Card */}
+                            <Card padding="0" style={{ overflow: 'hidden', background: '#FFFFFF' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '350px' }}>
+                                    <div style={{ 
+                                        padding: '48px', 
+                                        display: 'flex', 
+                                        flexDirection: 'column', 
+                                        alignItems: 'center', 
+                                        justifyContent: 'center',
+                                        borderRight: '1px solid var(--color-border)',
+                                        background: risk.bg,
+                                        position: 'relative'
+                                    }}>
+                                        {simulating && (
+                                            <div style={{ position: 'absolute', top: '16px', right: '16px' }}>
+                                                <Loader2 size={20} className="animate-spin" style={{ color: risk.color, opacity: 0.5 }} />
+                                            </div>
+                                        )}
+                                        <div style={{ fontSize: '12px', fontWeight: '800', color: risk.color, textTransform: 'uppercase', marginBottom: '16px', letterSpacing: '0.1em' }}>
+                                            Simulated Risk Score
                                         </div>
-                                        <div style={{ color: 'var(--color-text-secondary)', fontSize: '0.85rem' }}>
-                                            ${run.modified_inputs.monthly_expenses || inputs.monthly_expenses} Exp / {run.modified_inputs.transition_months || inputs.transition_months} Mo
+                                        <div style={{ fontSize: '100px', fontWeight: '800', color: risk.color, lineHeight: 1, letterSpacing: '-0.05em' }}>
+                                            {displayOut.risk_score}
+                                        </div>
+                                        <div style={{ fontSize: '18px', fontWeight: '700', color: risk.color, marginTop: '8px' }}>
+                                            {risk.label}
                                         </div>
                                     </div>
-                                ))}
-                            </div>
-                        </Card>
+                                    
+                                    <div style={{ padding: '48px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '32px' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <div style={{ fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>Projected Capital Bridge</div>
+                                            <div style={{ fontSize: '20px', fontWeight: '800' }}>${Math.round(displayOut.total_bridge_required).toLocaleString()}</div>
+                                        </div>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <div style={{ fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>Monthly Burn Profile</div>
+                                            <div style={{ fontSize: '20px', fontWeight: '800' }}>${Math.round(displayOut.total_bridge_required / (inputs.transition_months || 1)).toLocaleString()}/mo</div>
+                                        </div>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <div style={{ fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>Calculated Runway</div>
+                                            <div style={{ fontSize: '20px', fontWeight: '800' }}>{Math.round(displayOut.runway_months)} Months</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <AnimatePresence mode="wait">
+                                    {currentScenario?.narrative && (
+                                        <motion.div 
+                                            initial={{ height: 0, opacity: 0 }}
+                                            animate={{ height: 'auto', opacity: 1 }}
+                                            style={{ 
+                                                borderTop: '1px solid var(--color-border)', 
+                                                padding: '24px 48px', 
+                                                background: 'var(--color-surface)',
+                                                display: 'flex',
+                                                gap: '16px',
+                                                alignItems: 'flex-start'
+                                            }}
+                                        >
+                                            <Info size={20} style={{ color: 'var(--color-primary)', marginTop: '2px' }} />
+                                            <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', lineHeight: 1.6, fontStyle: 'italic' }}>
+                                                {currentScenario.narrative}
+                                            </p>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </Card>
+
+                            {/* Run History */}
+                            <Card padding="32px" style={{ background: '#FFFFFF' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+                                    <div style={{ padding: '8px', background: 'var(--color-surface)', borderRadius: '10px', color: 'var(--color-text-secondary)' }}>
+                                        <History size={18} />
+                                    </div>
+                                    <h3 style={{ fontSize: '16px', fontWeight: '700' }}>History of Runs</h3>
+                                </div>
+                                
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                    {pastRuns.length === 0 && <div style={{ color: 'var(--color-text-secondary)', fontSize: '14px' }}>No simulations run yet.</div>}
+                                    {pastRuns.map((run, i) => {
+                                        const runRisk = getRiskConfig(run.deterministic_out.risk_score);
+                                        return (
+                                            <div key={i} style={{ 
+                                                display: 'flex', 
+                                                justifyContent: 'space-between', 
+                                                alignItems: 'center', 
+                                                padding: '12px 20px', 
+                                                background: 'var(--color-surface)', 
+                                                borderRadius: '12px', 
+                                                border: '1px solid var(--color-border)' 
+                                            }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                                    <div style={{ width: '12px', height: '12px', borderRadius: '3px', background: runRisk.color }} />
+                                                    <div style={{ fontSize: '14px', fontWeight: '700' }}>Risk Score: {run.deterministic_out.risk_score}</div>
+                                                </div>
+                                                <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>
+                                                    ${run.modified_inputs.monthly_expenses || inputs.monthly_expenses} Burn • {run.modified_inputs.transition_months || inputs.transition_months}m Span
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </Card>
+                        </div>
                     </div>
-                </div>
-            </motion.div>
+
+                    {/* Operational Notice */}
+                    <div style={{ marginTop: '80px', textAlign: 'center', padding: '24px', borderTop: '1px solid var(--color-border)' }}>
+                        <p style={{ color: 'var(--color-text-secondary)', fontSize: '12px', maxWidth: '800px', margin: '0 auto', lineHeight: 1.6 }}>
+                            <strong>SIMULATOR NOTICE:</strong> This sandbox use a deterministic model applied to your inputs. 
+                            It does not account for catastrophic black-swan events or personal health variables. 
+                            A "Safe" score is a mathematical projection, not a personal guarantee.
+                        </p>
+                    </div>
+                </motion.div>
+            </div>
         </div>
     );
 };
 
-const SliderControl = ({ label, value, min, max, step, unit, onChange }) => (
-    <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <span style={{ fontSize: '0.9rem', fontWeight: '500' }}>{label}</span>
-            <span style={{ color: 'var(--color-primary)', fontWeight: '700' }}>{unit}{Math.round(value).toLocaleString()}</span>
+const SliderControl = ({ label, value, min, max, step, prefix = "", suffix = "", onChange }) => (
+    <div style={{ width: '100%' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <label style={{ fontSize: '13px', fontWeight: '700', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                {label}
+            </label>
+            <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--color-primary)' }}>
+                {prefix}{Math.round(value).toLocaleString()}{suffix}
+            </div>
         </div>
-        <input 
-            type="range" 
-            min={min} 
-            max={max} 
-            step={step} 
-            value={value} 
-            onChange={(e) => onChange(e.target.value)}
-            style={sliderStyle}
-        />
+        <div style={{ position: 'relative', height: '6px', width: '100%', background: '#F1F5F9', borderRadius: '3px' }}>
+            <input 
+                type="range" 
+                min={min} 
+                max={max} 
+                step={step} 
+                value={value} 
+                onChange={(e) => onChange(e.target.value)}
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    width: '100%',
+                    height: '6px',
+                    appearance: 'none',
+                    background: 'transparent',
+                    cursor: 'pointer',
+                    zIndex: 10,
+                    outline: 'none'
+                }}
+            />
+            <div style={{ 
+                position: 'absolute', 
+                top: 0, 
+                left: 0, 
+                height: '100%', 
+                width: `${((value - min) / (max - min)) * 100}%`, 
+                background: 'var(--color-primary)', 
+                borderRadius: '3px',
+                zIndex: 5
+            }} />
+        </div>
     </div>
 );
-
-const StatRow = ({ label, value }) => (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ color: 'var(--color-text-secondary)', fontSize: '0.9rem' }}>{label}</span>
-        <span style={{ fontWeight: '600', fontSize: '1.1rem' }}>{value}</span>
-    </div>
-);
-
-const Shield = ({ size, color }) => (
-    <div style={{ width: size, height: size, borderRadius: '50%', background: `${color}33`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ width: size * 0.5, height: size * 0.5, borderRadius: '50%', background: color }} />
-    </div>
-);
-
-const getRiskLevel = (score) => {
-    if (score <= 40) return { label: "High Risk", color: "#ff4444" };
-    if (score <= 70) return { label: "Medium Risk", color: "#ffbb33" };
-    return { label: "Safe Path", color: "var(--color-primary)" };
-};
-
-const sliderStyle = {
-    width: '100%',
-    height: '6px',
-    background: 'rgba(255,255,255,0.1)',
-    borderRadius: '3px',
-    appearance: 'none',
-    outline: 'none',
-    accentColor: 'var(--color-primary)'
-};
-
-const narrativeStyle = {
-    marginTop: '32px',
-    padding: '20px',
-    background: 'rgba(215, 254, 3, 0.05)',
-    border: '1px solid rgba(215, 254, 3, 0.1)',
-    borderRadius: '12px',
-    fontSize: '0.9rem',
-    lineHeight: '1.6',
-    display: 'flex',
-    gap: '12px',
-    color: '#eee'
-};
-
-const historyItemStyle = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '12px 16px',
-    background: 'rgba(255,255,255,0.02)',
-    borderRadius: '10px',
-    border: '1px solid rgba(255,255,255,0.05)'
-};
 
 export default SimulatorPage;
