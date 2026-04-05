@@ -115,9 +115,9 @@ const SimulatorPage = () => {
     if (!displayOut) return null;
 
     const getRiskConfig = (score) => {
-        if (score <= 40) return { label: "Careful!", color: "#DC2626", bg: "#FEF2F2" };
-        if (score <= 70) return { label: "Looking Good", color: "#B45309", bg: "#FFFBEB" };
-        return { label: "Very Safe", color: "#059669", bg: "#ECFDF5" };
+        if (score <= 40) return { label: "Capital Risk", color: "#B91C1C", bg: "#FEF2F2" };
+        if (score <= 75) return { label: "Stable Buffer", color: "#B45309", bg: "#FFFBEB" };
+        return { label: "Low Risk", color: "#059669", bg: "#ECFDF5" };
     };
 
     const risk = getRiskConfig(displayOut.risk_score);
@@ -142,11 +142,11 @@ const SimulatorPage = () => {
                                 fontWeight: '700',
                                 marginBottom: '16px'
                             }}>
-                                <Zap size={14} style={{ color: 'var(--color-text)' }} /> TRY A SCENARIO
+                                <Zap size={14} style={{ color: 'var(--color-text)' }} /> STRESS TEST YOUR PLAN
                             </div>
                             <h1 style={{ fontSize: '40px', letterSpacing: '-0.02em', fontWeight: '800' }}>Practice Your Move</h1>
                             <p style={{ color: 'var(--color-text-secondary)', fontSize: '18px', marginTop: '8px' }}>
-                                See how changing your savings, costs, or timeline affects your safety.
+                                We've built this simulator to help you stress-test your plan. Change the variables to see where your limits are.
                             </p>
                         </div>
                         <Button variant="outline" onClick={() => navigate(-1)} style={{ background: '#FFFFFF' }}>
@@ -168,9 +168,9 @@ const SimulatorPage = () => {
                                 <SliderControl 
                                     label="Monthly Costs" 
                                     value={inputs.monthly_expenses} 
-                                    min={500} 
-                                    max={10000} 
-                                    step={100}
+                                    min={15000} 
+                                    max={300000} 
+                                    step={5000}
                                     prefix="₹"
                                     onChange={(v) => handleSliderChange('monthly_expenses', v)}
                                 />
@@ -186,9 +186,9 @@ const SimulatorPage = () => {
                                 <SliderControl 
                                     label="Total Savings" 
                                     value={inputs.liquid_savings} 
-                                    min={0} 
-                                    max={100000} 
-                                    step={1000}
+                                    min={50000} 
+                                    max={5000000} 
+                                    step={10000}
                                     prefix="₹"
                                     onChange={(v) => handleSliderChange('liquid_savings', v)}
                                 />
