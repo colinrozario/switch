@@ -47,7 +47,7 @@ const Home = () => {
                         margin: '0 auto 48px',
                         lineHeight: 1.5
                     }}>
-                        Stop guessing about your next move. We use real data to help you plan your career transition with total confidence and zero blind spots.
+                        Stop guessing your next move. We use real data to help you plan your career transition with total confidence and zero blind spots.
                     </p>
                     
                     <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
