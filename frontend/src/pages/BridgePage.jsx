@@ -65,9 +65,9 @@ const BridgePage = () => {
     const { risk_score, total_bridge_required, runway_months, failure_threshold_month, monthly_cashflow } = outputs;
 
     const getRiskConfig = (score) => {
-        if (score <= 40) return { label: "Careful!", color: "#DC2626", bg: "#FEF2F2", icon: AlertTriangle, desc: "Runway gets tight early." };
-        if (score <= 70) return { label: "Looking Good", color: "#D97706", bg: "#FFFBEB", icon: Info, desc: "Follow the plan closely." };
-        return { label: "Very Safe", color: "#059669", bg: "#ECFDF5", icon: ShieldCheck, desc: "You have plenty of backup." };
+        if (score <= 40) return { label: "Capital Risk", color: "#B91C1C", bg: "#FEF2F2", icon: AlertTriangle, desc: "Runway exhaustion probable." };
+        if (score <= 75) return { label: "Stable Buffer", color: "#D97706", bg: "#FFFBEB", icon: Info, desc: "Maintain current burn rate." };
+        return { label: "Low Risk", color: "#059669", bg: "#ECFDF5", icon: ShieldCheck, desc: "Significant capital headroom." };
     };
 
     const risk = getRiskConfig(risk_score);
@@ -228,10 +228,10 @@ const BridgePage = () => {
                                 <h3 style={{ fontSize: '18px', fontWeight: '800' }}>What if things change?</h3>
                             </div>
                             <p style={{ fontSize: '15px', color: 'var(--color-text-secondary)', lineHeight: 1.6, marginBottom: '24px', fontWeight: '500' }}>
-                                Even if it takes 6 months to find a job, your current plan still leaves you with <strong>$4,200</strong> in your pocket.
+                                Based on our model, even if the job search takes 6 months, your current safety buffer still leaves you with <strong>₹3,50,000</strong> in available capital.
                             </p>
                             <div style={{ padding: '12px', borderLeft: '3px solid #CBD5E1', background: '#F8FAFC', fontSize: '13px', color: 'var(--color-text-secondary)', borderRadius: '0 8px 8px 0', fontWeight: '700' }}>
-                                Tip: Keep a small "emergency fund" just in case.
+                                We recommend maintaining a separate ₹1,50,000 "Red Zone" emergency fund.
                             </div>
                         </Card>
 
