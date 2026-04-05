@@ -201,7 +201,7 @@ const BridgePage = () => {
                             <StatCard 
                                 icon={<Wallet size={24} />} 
                                 label="Savings Needed" 
-                                value={`$${Math.round(total_bridge_required).toLocaleString()}`} 
+                                value={`₹${Math.round(total_bridge_required).toLocaleString()}`} 
                                 subtext="Total cushion used for the move"
                             />
                             <StatCard 
