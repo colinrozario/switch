@@ -52,7 +52,7 @@ const Home = () => {
                     
                     <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
                         <Button size="lg" onClick={() => navigate('/diagnosis')}>
-                            Start Your Career Checkup
+                            Switch Now
                         </Button>
                         <Button size="lg" variant="outline">
                             How it works
