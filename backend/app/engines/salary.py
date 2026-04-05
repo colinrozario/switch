@@ -49,7 +49,7 @@ def calculate_salary_bridge(data: SalaryBridgeInput) -> SalaryBridgeOutput:
     required_buffer = max(0.0, safety_margin - lowest_balance)
     
     if required_buffer > 0:
-        warnings.append(f"Projected shortfall. You need an additional ${required_buffer:,.2f} buffer to maintain a safety margin.")
+        warnings.append(f"Projected shortfall. You need an additional ₹{required_buffer:,.2f} buffer to maintain a safety margin.")
         
     if failure_month:
         warnings.append(f"Critical: You will run out of money in month {failure_month}.")

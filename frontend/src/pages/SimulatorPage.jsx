@@ -171,7 +171,7 @@ const SimulatorPage = () => {
                                     min={500} 
                                     max={10000} 
                                     step={100}
-                                    prefix="$"
+                                    prefix="₹"
                                     onChange={(v) => handleSliderChange('monthly_expenses', v)}
                                 />
                                 <SliderControl 
@@ -189,7 +189,7 @@ const SimulatorPage = () => {
                                     min={0} 
                                     max={100000} 
                                     step={1000}
-                                    prefix="$"
+                                    prefix="₹"
                                     onChange={(v) => handleSliderChange('liquid_savings', v)}
                                 />
                                 <SliderControl 
@@ -238,11 +238,11 @@ const SimulatorPage = () => {
                                     <div style={{ padding: '48px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '32px' }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <div style={{ fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '700' }}>Total Savings Used</div>
-                                            <div style={{ fontSize: '20px', fontWeight: '800' }}>${Math.round(displayOut.total_bridge_required).toLocaleString()}</div>
+                                            <div style={{ fontSize: '20px', fontWeight: '800' }}>₹{Math.round(displayOut.total_bridge_required).toLocaleString()}</div>
                                         </div>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <div style={{ fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '700' }}>Monthly Cost</div>
-                                            <div style={{ fontSize: '20px', fontWeight: '800' }}>${Math.round(displayOut.total_bridge_required / (inputs.transition_months || 1)).toLocaleString()}/mo</div>
+                                            <div style={{ fontSize: '20px', fontWeight: '800' }}>₹{Math.round(displayOut.total_bridge_required / (inputs.transition_months || 1)).toLocaleString()}/mo</div>
                                         </div>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <div style={{ fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '700' }}>Months of Safety</div>
@@ -302,7 +302,7 @@ const SimulatorPage = () => {
                                                     <div style={{ fontSize: '14px', fontWeight: '700' }}>Safety Score: {run.deterministic_out.risk_score}</div>
                                                 </div>
                                                 <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>
-                                                    ${run.modified_inputs.monthly_expenses || inputs.monthly_expenses} Cost • {run.modified_inputs.transition_months || inputs.transition_months}mo Span
+                                                    ₹{run.modified_inputs.monthly_expenses || inputs.monthly_expenses} Cost • {run.modified_inputs.transition_months || inputs.transition_months}mo Span
                                                 </div>
                                             </div>
                                         );

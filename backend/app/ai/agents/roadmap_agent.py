@@ -25,5 +25,5 @@ class RoadmapAgent:
             "phases": phases,
             "total_months": 5,
             "opening_warning": "You are transitioning into a high-demand role, but your savings runway is tight. Strict budget adherence is required.",
-            "go_no_go_signal": "If your liquid savings drop below $2000 before reaching Phase 2, halt the transition immediately."
+            "go_no_go_signal": "If your liquid savings drop below ₹1,50,000 before reaching Phase 2, halt the transition immediately."
         }

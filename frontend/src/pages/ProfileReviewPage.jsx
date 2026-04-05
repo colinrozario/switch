@@ -151,7 +151,7 @@ const ProfileReviewPage = () => {
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
                                 <div style={{ position: 'relative' }}>
                                     <Input 
-                                        label="Monthly Take-Home Pay ($)"
+                                        label="Monthly Take-Home Pay (₹)"
                                         type="number"
                                         value={formData.monthly_net_income}
                                         onChange={(e) => handleInputChange('monthly_net_income', parseFloat(e.target.value))}
@@ -160,7 +160,7 @@ const ProfileReviewPage = () => {
                                 </div>
                                 <div style={{ position: 'relative' }}>
                                     <Input 
-                                        label="Monthly Living Costs ($)"
+                                        label="Monthly Living Costs (₹)"
                                         type="number"
                                         value={formData.monthly_expenses}
                                         onChange={(e) => handleInputChange('monthly_expenses', parseFloat(e.target.value))}
@@ -169,7 +169,7 @@ const ProfileReviewPage = () => {
                                 </div>
                                 <div style={{ gridColumn: 'span 2', position: 'relative' }}>
                                     <Input 
-                                        label="Total Savings Available ($)"
+                                        label="Total Savings Available (₹)"
                                         type="number"
                                         value={formData.liquid_savings}
                                         onChange={(e) => handleInputChange('liquid_savings', parseFloat(e.target.value))}

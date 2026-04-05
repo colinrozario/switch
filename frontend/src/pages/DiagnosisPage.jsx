@@ -56,8 +56,8 @@ const DiagnosisPage = () => {
             Dependents: ${localData.constraints.dependents}
             
             FINANCIAL RUNWAY:
-            Monthly Burn: $${localData.financials.expenses}
-            Liquid Savings: $${localData.financials.savings}
+            Monthly Burn: ₹${localData.financials.expenses}
+            Liquid Savings: ₹${localData.financials.savings}
             Stable Income: ${localData.financials.hasStableIncome ? "Yes" : "No"}
             
             OBJECTIVE:
@@ -254,7 +254,7 @@ const DiagnosisPage = () => {
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                                 <Input 
-                                    label="Monthly Living Expenses ($)"
+                                    label="Monthly Living Expenses (₹)"
                                     type="number"
                                     value={localData.financials.expenses}
                                     onChange={(e) => handleChange('financials', 'expenses', e.target.value)}
@@ -264,7 +264,7 @@ const DiagnosisPage = () => {
                                 />
 
                                 <Input 
-                                    label="Total Savings Available ($)"
+                                    label="Total Savings Available (₹)"
                                     type="number"
                                     value={localData.financials.savings}
                                     onChange={(e) => handleChange('financials', 'savings', e.target.value)}
@@ -377,7 +377,7 @@ const DiagnosisPage = () => {
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '12px', borderBottom: '1px solid var(--color-border)' }}>
                                     <span style={{ fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>Monthly Costs:</span>
-                                    <span style={{ fontSize: '14px', fontWeight: '800' }}>${localData.financials.expenses}/mo</span>
+                                    <span style={{ fontSize: '14px', fontWeight: '800' }}>₹{localData.financials.expenses}/mo</span>
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <span style={{ fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>Your Goal:</span>

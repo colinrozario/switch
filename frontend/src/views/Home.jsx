@@ -19,10 +19,10 @@ const Home = () => {
     const containerRef = useRef(null);
 
     const dashboardData = [
-        { month: 'Mo 1', val: 5000 }, { month: 'Mo 2', val: 5200 }, { month: 'Mo 3', val: 4800 }, 
-        { month: 'Mo 4', val: 5500 }, { month: 'Mo 5', val: 4200 }, { month: 'Mo 6', val: 7800 }, 
-        { month: 'Mo 7', val: 8400 }, { month: 'Mo 8', val: 9200 }, { month: 'Mo 9', val: 9800 }, 
-        { month: 'Mo 10', val: 10500 }, { month: 'Mo 11', val: 11200 }, { month: 'Mo 12', val: 12500 }
+        { month: 'Mo 1', val: 150000 }, { month: 'Mo 2', val: 155000 }, { month: 'Mo 3', val: 145000 }, 
+        { month: 'Mo 4', val: 162000 }, { month: 'Mo 5', val: 130000 }, { month: 'Mo 6', val: 245000 }, 
+        { month: 'Mo 7', val: 260000 }, { month: 'Mo 8', val: 285000 }, { month: 'Mo 9', val: 310000 }, 
+        { month: 'Mo 10', val: 335000 }, { month: 'Mo 11', val: 360000 }, { month: 'Mo 12', val: 410000 }
     ];
     
     return (
@@ -47,31 +47,29 @@ const Home = () => {
                     style={{ maxWidth: '900px' }}
                 >
                     <h1 style={{ 
-                        fontSize: 'clamp(48px, 8vw, 84px)', 
+                        fontSize: 'clamp(40px, 6vw, 72px)', 
                         lineHeight: 1.1, 
                         marginBottom: '24px',
                         letterSpacing: '-0.04em',
                         color: 'var(--color-text)'
                     }}>
-                        Switch careers without <span style={{ color: 'var(--color-accent)' }}>the stress.</span>
+                        Plan your career switch without the financial risk.
                     </h1>
                     
                     <p style={{ 
-                        fontSize: 'clamp(18px, 2.5vw, 24px)', 
+                        fontSize: 'clamp(18px, 2vw, 22px)', 
                         color: 'var(--color-text-secondary)', 
-                        maxWidth: '700px', 
+                        maxWidth: '750px', 
                         margin: '0 auto 48px',
-                        lineHeight: 1.5
+                        lineHeight: 1.5,
+                        fontWeight: '500'
                     }}>
-                        Stop guessing your next move. We use real data to help you plan your career transition with total confidence and zero blind spots.
+                        A conservative, step-by-step analysis built around your real constraints.
                     </p>
                     
                     <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
                         <Button size="lg" onClick={() => navigate('/diagnosis')}>
-                            Switch Now
-                        </Button>
-                        <Button size="lg" variant="outline">
-                            How it works
+                            Analyze My Profile
                         </Button>
                     </div>
                 </motion.div>
@@ -106,7 +104,7 @@ const Home = () => {
                         <div style={{ gridColumn: 'span 4', display: 'flex', flexDirection: 'column', gap: '20px' }}>
                             <Card padding="20px">
                                 <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)', marginBottom: '8px', fontWeight: '600' }}>Possible Salary Boost</div>
-                                <div style={{ fontSize: '32px', fontWeight: '800', color: 'var(--color-accent)' }}>+$42,500</div>
+                                <div style={{ fontSize: '32px', fontWeight: '800', color: 'var(--color-accent)' }}>+₹1,50,000</div>
                                 <div style={{ fontSize: '12px', color: '#10b981', marginTop: '4px', fontWeight: '600' }}>Payoff in 18 months</div>
                             </Card>
                             <Card padding="20px">
@@ -164,7 +162,7 @@ const Home = () => {
                                                                 fontWeight: '800',
                                                                 boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
                                                             }}>
-                                                                ${payload[0].value.toLocaleString()}
+                                                                ₹{payload[0].value.toLocaleString()}
                                                             </div>
                                                         );
                                                     }
@@ -172,7 +170,7 @@ const Home = () => {
                                                 }}
                                             />
                                             <ReferenceLine 
-                                                y={5000} 
+                                                y={150000} 
                                                 stroke="#E2E8F0" 
                                                 strokeDasharray="4 4" 
                                                 strokeWidth={2}
@@ -201,99 +199,66 @@ const Home = () => {
             </section>
 
             {/* Features / Bento Grid */}
+            {/* Features Columns */}
             <section style={{ padding: '120px 24px', maxWidth: '1200px', margin: '0 auto' }}>
-                <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-                    <h2 style={{ fontSize: 'clamp(32px, 5vw, 48px)', letterSpacing: '-0.03em', marginBottom: '16px' }}>
-                        Smarter tools for your next big move.
-                    </h2>
-                    <p style={{ color: 'var(--color-text-secondary)', fontSize: '18px' }}>
-                        All the analysis you need to make a confident career change.
-                    </p>
-                </div>
-
-                <div className="bento-grid">
-                    <div style={{ gridColumn: 'span 8' }}>
-                        <Card style={{ height: '100%', display: 'flex', gap: '32px', alignItems: 'center' }}>
-                            <div style={{ flex: 1 }}>
-                                <div style={{ width: '48px', height: '48px', background: '#F1F5F9', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', color: 'var(--color-text)' }}>
-                                    <BarChart3 size={24} />
-                                </div>
-                                <h3 style={{ fontSize: '24px', marginBottom: '16px' }}>Pay Gap Planner</h3>
-                                <p style={{ color: 'var(--color-text-secondary)', lineHeight: 1.6 }}>
-                                    See exactly when your new paycheck will cover your old expenses. We calculate your "payout date" so you can plan your savings perfectly.
-                                </p>
-                            </div>
-                            <div style={{ flex: 1, height: '200px', background: 'var(--color-surface)', borderRadius: '12px', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <TrendingUp size={64} style={{ color: 'var(--color-accent)', opacity: 0.1 }} />
-                            </div>
-                        </Card>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '40px' }}>
+                    <div>
+                        <div style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-text-secondary)', textTransform: 'uppercase', marginBottom: '24px', letterSpacing: '0.05em' }}>Intake</div>
+                        <p style={{ fontSize: '18px', color: 'var(--color-text)', lineHeight: 1.6, fontWeight: '500' }}>
+                            Record salary data and expenses.
+                        </p>
                     </div>
-
-                    <div style={{ gridColumn: 'span 4' }}>
-                        <Card style={{ height: '100%' }}>
-                            <div style={{ width: '48px', height: '48px', background: '#F1F5F9', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', color: 'var(--color-text)' }}>
-                                <Shield size={24} />
-                            </div>
-                            <h3 style={{ fontSize: '20px', marginBottom: '16px' }}>Keep it Private</h3>
-                            <p style={{ color: 'var(--color-text-secondary)', fontSize: '14px', lineHeight: 1.6 }}>
-                                Plan your exit quietly. No LinkedIn notifications or recruiter alerts. Your data stays safe and secure in your private dashboard.
-                            </p>
-                        </Card>
+                    <div>
+                        <div style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-text-secondary)', textTransform: 'uppercase', marginBottom: '24px', letterSpacing: '0.05em' }}>Bridge</div>
+                        <p style={{ fontSize: '18px', color: 'var(--color-text)', lineHeight: 1.6, fontWeight: '500' }}>
+                            Identify duration between paychecks.
+                        </p>
                     </div>
-
-                    <div style={{ gridColumn: 'span 4' }}>
-                        <Card style={{ height: '100%' }}>
-                            <div style={{ width: '48px', height: '48px', background: '#F1F5F9', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', color: 'var(--color-text)' }}>
-                                <Target size={24} />
-                            </div>
-                            <h3 style={{ fontSize: '20px', marginBottom: '16px' }}>Skill Checkup</h3>
-                            <p style={{ color: 'var(--color-text-secondary)', fontSize: '14px', lineHeight: 1.6 }}>
-                                We check your current skills against thousands of job listings. We'll show you the 2-3 specific things you need to learn to get hired.
-                            </p>
-                        </Card>
-                    </div>
-
-                    <div style={{ gridColumn: 'span 8' }}>
-                        <Card style={{ height: '100%', display: 'flex', gap: '32px', alignItems: 'center' }}>
-                            <div style={{ flex: 1, height: '200px', background: 'var(--color-surface)', borderRadius: '12px', border: '1px solid var(--color-border)', position: 'relative', overflow: 'hidden' }}>
-                                <div style={{ position: 'absolute', top: '20px', left: '20px', right: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                    {[1, 2, 3].map(i => (
-                                        <div key={i} style={{ height: '32px', background: '#FFFFFF', borderRadius: '6px', border: '1px solid var(--color-border)', width: i === 1 ? '90%' : (i === 2 ? '70%' : '80%') }} />
-                                    ))}
-                                </div>
-                            </div>
-                            <div style={{ flex: 1 }}>
-                                <div style={{ width: '48px', height: '48px', background: '#F1F5F9', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', color: 'var(--color-text)' }}>
-                                    <Map size={24} />
-                                </div>
-                                <h3 style={{ fontSize: '24px', marginBottom: '16px' }}>Your Step-by-Step Plan</h3>
-                                <p style={{ color: 'var(--color-text-secondary)', lineHeight: 1.6 }}>
-                                    No more learning for the sake of learning. Get a clear, weekly strategy based on your target salary and risk level.
-                                </p>
-                            </div>
-                        </Card>
+                    <div>
+                        <div style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-text-secondary)', textTransform: 'uppercase', marginBottom: '24px', letterSpacing: '0.05em' }}>Roadmap</div>
+                        <p style={{ fontSize: '18px', color: 'var(--color-text)', lineHeight: 1.6, fontWeight: '500' }}>
+                            Access steps for transition.
+                        </p>
                     </div>
                 </div>
             </section>
 
-            {/* CTA Section */}
-            <section style={{ 
-                padding: '120px 24px', 
-                background: '#F8FAFC', 
-                color: 'var(--color-text)', 
-                textAlign: 'center',
-                borderTop: '1px solid var(--color-border)'
-            }}>
-                <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-                    <h2 style={{ fontSize: 'clamp(32px, 5vw, 48px)', marginBottom: '24px', letterSpacing: '-0.02em' }}>
-                        Ready to plan your move?
-                    </h2>
-                    <p style={{ fontSize: '20px', color: 'var(--color-text-secondary)', marginBottom: '48px' }}>
-                        It takes just 2 minutes to start your first simulation. It's free while we're in early access.
-                    </p>
-                    <Button size="lg" onClick={() => navigate('/diagnosis')}>
-                        Assess My Profile
-                    </Button>
+            {/* How it Works */}
+            <section style={{ padding: '120px 24px', background: '#F8FAFC', borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)' }}>
+                <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+                    <h2 style={{ fontSize: '40px', letterSpacing: '-0.02em', marginBottom: '64px', textAlign: 'center' }}>How Switch Works</h2>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px 64px' }}>
+                        {[
+                            "Input role and financial data.",
+                            "Select path from analyzed options.",
+                            "Compare savings against transition costs.",
+                            "Follow schedule to complete move."
+                        ].map((step, i) => (
+                            <div key={i} style={{ display: 'flex', gap: '24px', alignItems: 'flex-start' }}>
+                                <div style={{ fontSize: '32px', fontWeight: '800', color: 'var(--color-accent)', opacity: 0.3, lineHeight: 1 }}>{i + 1}</div>
+                                <div style={{ fontSize: '18px', fontWeight: '600', paddingTop: '6px' }}>{step}</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Pricing Tiers */}
+            <section style={{ padding: '120px 24px', maxWidth: '1200px', margin: '0 auto' }}>
+                <h2 style={{ fontSize: '40px', letterSpacing: '-0.02em', marginBottom: '64px', textAlign: 'center' }}>Pricing</h2>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+                    {[
+                        { title: "Basic", price: "₹3,999", desc: "Profile analysis and bridge calculation." },
+                        { title: "Professional", price: "₹11,999", desc: "Dashboard access and simulations." },
+                        { title: "Advisory", price: "₹39,999", desc: "Advisor review and roadmap review." }
+                    ].map((tier, i) => (
+                        <Card key={i} padding="32px" style={{ background: i === 1 ? 'var(--color-surface)' : '#FFFFFF', border: i === 1 ? '2px solid var(--color-accent)' : '1px solid var(--color-border)' }}>
+                            <div style={{ fontSize: '14px', fontWeight: '800', textTransform: 'uppercase', color: 'var(--color-text-secondary)', marginBottom: '8px' }}>{tier.title}</div>
+                            <div style={{ fontSize: '36px', fontWeight: '800', marginBottom: '16px' }}>{tier.price}</div>
+                            <p style={{ fontSize: '15px', color: 'var(--color-text-secondary)', marginBottom: '32px', lineHeight: 1.5, fontWeight: '500' }}>{tier.desc}</p>
+                            <Button variant={i === 1 ? 'primary' : 'outline'} style={{ width: '100%' }} onClick={() => navigate('/diagnosis')}>Get Started</Button>
+                        </Card>
+                    ))}
                 </div>
             </section>
 

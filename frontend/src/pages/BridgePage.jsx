@@ -158,7 +158,7 @@ const BridgePage = () => {
                                         <YAxis 
                                             stroke="#94A3B8" 
                                             fontSize={11}
-                                            tickFormatter={(v) => `$${v}`}
+                                            tickFormatter={(v) => `₹${v}`}
                                             axisLine={false}
                                             tickLine={false}
                                             style={{ fontWeight: '600' }}

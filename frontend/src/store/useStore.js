@@ -30,8 +30,8 @@ const useStore = create((set) => ({
             dependents: 'None'
         },
         financials: {
-            expenses: 3000,
-            savings: 10000,
+            expenses: 45000,
+            savings: 300000,
             hasStableIncome: true
         },
         goal: {
