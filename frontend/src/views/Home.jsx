@@ -143,7 +143,7 @@ const Home = () => {
             <section style={{ padding: '120px 24px', maxWidth: '1200px', margin: '0 auto' }}>
                 <div style={{ textAlign: 'center', marginBottom: '80px' }}>
                     <h2 style={{ fontSize: 'clamp(32px, 5vw, 48px)', letterSpacing: '-0.03em', marginBottom: '16px' }}>
-                        Smater tools for your next big move.
+                        Smarter tools for your next big move.
                     </h2>
                     <p style={{ color: 'var(--color-text-secondary)', fontSize: '18px' }}>
                         All the analysis you need to make a confident career change.
