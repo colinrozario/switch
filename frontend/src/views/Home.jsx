@@ -248,9 +248,9 @@ const Home = () => {
                 <h2 style={{ fontSize: '40px', letterSpacing: '-0.02em', marginBottom: '64px', textAlign: 'center' }}>Pricing</h2>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
                     {[
-                        { title: "Basic", price: "₹3,999", desc: "Profile analysis and bridge calculation." },
-                        { title: "Professional", price: "₹11,999", desc: "Dashboard access and simulations." },
-                        { title: "Advisory", price: "₹39,999", desc: "Advisor review and roadmap review." }
+                        { title: "Basic", price: "₹599", desc: "Profile analysis and bridge calculation." },
+                        { title: "Professional", price: "₹699", desc: "Dashboard access and simulations." },
+                        { title: "Advisory", price: "₹1,999", desc: "Advisor review and roadmap review." }
                     ].map((tier, i) => (
                         <Card key={i} padding="32px" style={{ background: i === 1 ? 'var(--color-surface)' : '#FFFFFF', border: i === 1 ? '2px solid var(--color-accent)' : '1px solid var(--color-border)' }}>
                             <div style={{ fontSize: '14px', fontWeight: '800', textTransform: 'uppercase', color: 'var(--color-text-secondary)', marginBottom: '8px' }}>{tier.title}</div>
