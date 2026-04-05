@@ -97,8 +97,8 @@ const OptionsPage = () => {
                     </p>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px' }}>
-                    {pathSet?.paths?.map((path, index) => (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '32px' }}>
+                    {pathSet?.recommended_paths?.slice(0, 3).map((path, index) => (
                         <PathCard 
                             key={index} 
                             path={path} 
@@ -144,17 +144,18 @@ const OptionsPage = () => {
                                 >
                                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
                                         {pathSet.rejected_paths.map((r, i) => (
-                                            <Card key={i} padding="24px" style={{ background: '#FFFFFF', opacity: 0.7 }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                                                    <div style={{ padding: '6px', background: '#FEF2F2', borderRadius: '6px', color: '#DC2626' }}>
+                                            <Card key={i} padding="24px" style={{ background: '#FFFFFF', border: '1px solid var(--color-border)', opacity: 0.8 }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                                                    <div style={{ padding: '6px', background: '#F1F5F9', borderRadius: '6px', color: 'var(--color-text-secondary)' }}>
                                                         <AlertCircle size={16} />
                                                     </div>
-                                                    <h4 style={{ fontSize: '15px', fontWeight: '800', textTransform: 'capitalize' }}>
-                                                        {r.target_role_id.replace(/_/g, ' ')}
+                                                    <h4 style={{ fontSize: '15px', fontWeight: '800' }}>
+                                                        {r.target_role_label || r.target_role_id.replace(/_/g, ' ')}
                                                     </h4>
                                                 </div>
-                                                <p style={{ color: 'var(--color-text-secondary)', fontSize: '14px', lineHeight: 1.5 }}>
-                                                    Why this didn't fit: {r.rejection_reason}
+                                                <p style={{ color: 'var(--color-text-secondary)', fontSize: '13px', lineHeight: 1.6, fontWeight: '500' }}>
+                                                    <span style={{ fontWeight: '700', color: 'var(--color-text)' }}>REASON: </span>
+                                                    {r.rejection_reason}
                                                 </p>
                                             </Card>
                                         ))}
@@ -169,71 +170,108 @@ const OptionsPage = () => {
     );
 };
 
-const PathCard = ({ path, onSelect }) => (
-    <Card padding="32px" style={{ display: 'flex', flexDirection: 'column', background: '#FFFFFF' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
-            <h3 style={{ fontSize: '24px', letterSpacing: '-0.02em', textTransform: 'capitalize', fontWeight: '800', flex: 1 }}>
-                {path.target_role_id.replace(/_/g, ' ')}
-            </h3>
-            <div style={{ 
-                padding: '6px 12px', 
-                background: '#F1F5F9', 
-                borderRadius: '8px', 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '6px',
-                color: 'var(--color-text)',
-                fontSize: '13px',
-                fontWeight: '800'
-            }}>
-                <Clock size={14} />
-                {path.estimated_transition_months}mo
+const PathCard = ({ path, onSelect }) => {
+    const [expanded, setExpanded] = useState(false);
+
+    return (
+        <Card padding="32px" style={{ display: 'flex', flexDirection: 'column', background: '#FFFFFF', border: '1px solid var(--color-border)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
+                <h3 style={{ fontSize: '20px', letterSpacing: '-0.02em', fontWeight: '900', flex: 1, color: 'var(--color-text)' }}>
+                    {path.target_role_label || path.target_role_id.replace(/_/g, ' ')}
+                </h3>
+                <div style={{ 
+                    padding: '4px 10px', 
+                    background: 'var(--color-surface)', 
+                    borderRadius: '6px', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '4px',
+                    color: 'var(--color-text-secondary)',
+                    fontSize: '11px',
+                    fontWeight: '900'
+                }}>
+                    <Clock size={12} />
+                    {path.estimated_transition_months}MO
+                </div>
             </div>
-        </div>
 
-        <div style={{ marginBottom: '32px' }}>
-            <div style={labelStyle}><Target size={14} /> Why this works</div>
-            <p style={{ fontSize: '15px', lineHeight: 1.6, color: 'var(--color-text)' }}>
-                {path.feasibility_reasoning}
-            </p>
-        </div>
-
-        <div style={{ marginBottom: '32px' }}>
-            <div style={labelStyle}><TriangleAlert size={14} /> Challenges to watch</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {path.key_risks?.map((risk, i) => (
-                    <div key={i} style={{ display: 'flex', gap: '8px', fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '500' }}>
-                        <span style={{ color: 'var(--color-text-secondary)' }}>•</span>
-                        {risk}
-                    </div>
-                ))}
+            <div style={{ marginBottom: '24px' }}>
+                <p style={{ fontSize: '16px', lineHeight: 1.5, color: 'var(--color-text)', fontWeight: '600' }}>
+                    {path.feasibility_summary}
+                </p>
             </div>
-        </div>
 
-        <div style={{ marginBottom: '40px' }}>
-            <div style={labelStyle}><Shield size={14} /> Things to learn</div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {path.skill_gaps?.map((gap, i) => (
-                    <span key={i} style={{
-                        padding: '6px 14px',
-                        background: 'var(--color-surface)',
-                        border: '1px solid var(--color-border)',
-                        borderRadius: '99px',
-                        fontSize: '12px',
-                        fontWeight: '700',
-                        color: 'var(--color-text-secondary)'
-                    }}>{gap}</span>
-                ))}
+            <button 
+                onClick={() => setExpanded(!expanded)}
+                style={{ 
+                    background: 'none', 
+                    border: 'none', 
+                    padding: '0', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '6px', 
+                    color: 'var(--color-accent)', 
+                    fontSize: '13px', 
+                    fontWeight: '800', 
+                    cursor: 'pointer',
+                    marginBottom: '24px'
+                }}
+            >
+                {expanded ? 'Fewer Details' : 'Full Reasoning'}
+            </button>
+
+            <AnimatePresence>
+                {expanded && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        style={{ overflow: 'hidden' }}
+                    >
+                        <div style={{ marginBottom: '32px', color: 'var(--color-text-secondary)', fontSize: '14px', lineHeight: 1.7, fontWeight: '500' }}>
+                            {path.feasibility_details}
+                        </div>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '24px', paddingBottom: '24px' }}>
+                            <div>
+                                <div style={labelStyle}><TriangleAlert size={14} /> Risk Factors</div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                    {path.key_risks?.map((risk, i) => (
+                                        <div key={i} style={{ display: 'flex', gap: '8px', fontSize: '13px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>
+                                            <span>•</span> {risk}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div>
+                                <div style={labelStyle}><Shield size={14} /> Critical Gaps</div>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                                    {path.skill_gaps?.map((gap, i) => (
+                                        <span key={i} style={{
+                                            padding: '4px 12px',
+                                            background: '#F8FAFC',
+                                            border: '1px solid var(--color-border)',
+                                            borderRadius: '6px',
+                                            fontSize: '11px',
+                                            fontWeight: '800',
+                                            color: 'var(--color-text-secondary)'
+                                        }}>{gap}</span>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            <div style={{ marginTop: 'auto' }}>
+                <Button onClick={onSelect} style={{ width: '100%' }}>
+                    Select This Path <ArrowRight size={16} />
+                </Button>
             </div>
-        </div>
-
-        <div style={{ marginTop: 'auto' }}>
-            <Button onClick={onSelect} style={{ width: '100%' }} size="lg">
-                Choose This Path <ArrowRight size={18} style={{ marginLeft: '8px' }} />
-            </Button>
-        </div>
-    </Card>
-);
+        </Card>
+    );
+};
 
 const labelStyle = {
     display: 'flex',
