@@ -4,10 +4,26 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import Button from '../components/UI/Button';
 import Card from '../components/UI/Card';
 import { TrendingUp, Activity, Shield, CheckCircle, ArrowRight, Lock, Zap, PieChart, Map, User, ChevronRight, BarChart3, Target } from 'lucide-react';
+import { 
+    BarChart, 
+    Bar, 
+    XAxis, 
+    Tooltip, 
+    ResponsiveContainer, 
+    Cell, 
+    ReferenceLine 
+} from 'recharts';
 
 const Home = () => {
     const navigate = useNavigate();
     const containerRef = useRef(null);
+
+    const dashboardData = [
+        { month: 'Mo 1', val: 5000 }, { month: 'Mo 2', val: 5200 }, { month: 'Mo 3', val: 4800 }, 
+        { month: 'Mo 4', val: 5500 }, { month: 'Mo 5', val: 4200 }, { month: 'Mo 6', val: 7800 }, 
+        { month: 'Mo 7', val: 8400 }, { month: 'Mo 8', val: 9200 }, { month: 'Mo 9', val: 9800 }, 
+        { month: 'Mo 10', val: 10500 }, { month: 'Mo 11', val: 11200 }, { month: 'Mo 12', val: 12500 }
+    ];
     
     return (
         <div style={{ background: '#FFFFFF', minHeight: '100vh', color: 'var(--color-text)', overflowX: 'hidden' }}>
@@ -104,34 +120,79 @@ const Home = () => {
 
                         {/* Main Chart */}
                         <div style={{ gridColumn: 'span 8' }}>
-                            <Card padding="24px" style={{ height: '100%' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-                                    <div style={{ fontSize: '15px', fontWeight: '700' }}>Earnings Recovery Plan</div>
-                                    <div style={{ display: 'flex', gap: '8px' }}>
-                                        <div style={{ width: '12px', height: '12px', borderRadius: '3px', background: 'var(--color-accent)' }} />
-                                        <div style={{ width: '12px', height: '12px', borderRadius: '3px', background: '#DBEAFE' }} />
+                            <Card padding="24px" style={{ height: '100%', position: 'relative' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                                    <div>
+                                        <div style={{ fontSize: '15px', fontWeight: '800', letterSpacing: '-0.01em' }}>Earnings Recovery Plan</div>
+                                        <div style={{ fontSize: '12px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>Projected income growth after switch</div>
+                                    </div>
+                                    <div style={{ display: 'flex', gap: '16px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontWeight: '700', color: 'var(--color-text-secondary)' }}>
+                                            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--color-accent)' }} /> Future
+                                        </div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontWeight: '700', color: 'var(--color-text-secondary)' }}>
+                                            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#EFF6FF', border: '1px solid #BFDBFE' }} /> Gap
+                                        </div>
                                     </div>
                                 </div>
-                                <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', height: '200px', gap: '12px' }}>
-                                    {[40, 55, 45, 60, 35, 80, 95, 110, 125, 140, 155, 170].map((h, i) => (
-                                        <motion.div 
-                                            key={i}
-                                            initial={{ height: 0 }}
-                                            animate={{ height: `${h * 0.8}%` }}
-                                            transition={{ delay: 0.5 + (i * 0.05), duration: 1 }}
-                                            style={{ 
-                                                flex: 1, 
-                                                background: i > 4 ? 'var(--color-accent)' : '#DBEAFE',
-                                                borderRadius: '4px 4px 0 0'
-                                            }} 
-                                        />
-                                    ))}
-                                </div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', color: 'var(--color-text-secondary)', fontSize: '12px', fontWeight: '600' }}>
-                                    <span>Month 1</span>
-                                    <span>Month 6</span>
-                                    <span>Month 12</span>
-                                    <span>Month 18</span>
+                                
+                                <div style={{ height: '220px', width: '100%', position: 'relative' }}>
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <BarChart 
+                                            data={dashboardData} 
+                                            margin={{ top: 10, right: 0, left: -20, bottom: 0 }}
+                                            barGap={0}
+                                        >
+                                            <XAxis 
+                                                dataKey="month" 
+                                                axisLine={false} 
+                                                tickLine={false} 
+                                                tick={{ fill: 'var(--color-text-secondary)', fontSize: 10, fontWeight: 700 }}
+                                                interval={2}
+                                            />
+                                            <Tooltip 
+                                                cursor={{ fill: '#F8FAFC' }}
+                                                content={({ active, payload }) => {
+                                                    if (active && payload && payload.length) {
+                                                        return (
+                                                            <div style={{ 
+                                                                background: '#0F172A', 
+                                                                padding: '8px 12px', 
+                                                                borderRadius: '8px', 
+                                                                color: '#FFFFFF', 
+                                                                fontSize: '12px', 
+                                                                fontWeight: '800',
+                                                                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                                                            }}>
+                                                                ${payload[0].value.toLocaleString()}
+                                                            </div>
+                                                        );
+                                                    }
+                                                    return null;
+                                                }}
+                                            />
+                                            <ReferenceLine 
+                                                y={5000} 
+                                                stroke="#E2E8F0" 
+                                                strokeDasharray="4 4" 
+                                                strokeWidth={2}
+                                                label={{ position: 'right', value: 'Old Pay', fill: '#94A3B8', fontSize: 10, fontWeight: 700, offset: 10 }}
+                                            />
+                                            <Bar 
+                                                dataKey="val" 
+                                                radius={[4, 4, 0, 0]}
+                                                animationDuration={2000}
+                                            >
+                                                {dashboardData.map((entry, index) => (
+                                                    <Cell 
+                                                        key={`cell-${index}`} 
+                                                        fill={index > 4 ? 'var(--color-accent)' : '#DBEAFE'} 
+                                                        style={{ transition: 'all 0.3s ease' }}
+                                                    />
+                                                ))}
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
                                 </div>
                             </Card>
                         </div>
