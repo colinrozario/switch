@@ -1,19 +1,31 @@
 import React from 'react';
 
-const Input = ({ label, type = 'text', placeholder, value, onChange, name, icon: Icon, required = false, isTextArea = false }) => {
+const Input = ({ 
+    label, 
+    type = 'text', 
+    placeholder, 
+    value, 
+    onChange, 
+    name, 
+    icon: Icon, 
+    required = false, 
+    isTextArea = false,
+    status = null, // 'inferred', 'required'
+    statusLabel = null 
+}) => {
     const inputStyles = {
         width: '100%',
         padding: '12px 16px',
         paddingLeft: Icon ? '40px' : '16px',
         borderRadius: 'var(--radius-md)',
-        border: '1px solid var(--color-border)',
+        border: status === 'required' ? '2px solid #EF4444' : (status === 'inferred' ? '2px solid #F59E0B' : '1px solid var(--color-border)'),
         fontSize: '14px',
         outline: 'none',
         transition: 'all 0.2s ease',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: status === 'required' ? '#FEF2F2' : (status === 'inferred' ? '#FFFBEB' : '#FFFFFF'),
         color: 'var(--color-text)',
         caretColor: 'var(--color-primary)',
-        boxShadow: 'var(--shadow-sm)',
+        boxShadow: status ? 'none' : 'var(--shadow-sm)',
     };
 
     const handleFocus = (e) => {
@@ -27,12 +39,25 @@ const Input = ({ label, type = 'text', placeholder, value, onChange, name, icon:
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%' }}>
-            {label && (
-                <label style={{ fontSize: '13px', fontWeight: '500', color: 'var(--color-text-secondary)' }}>
-                    {label} {required && <span style={{ color: '#dc2626' }}>*</span>}
-                </label>
-            )}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%', position: 'relative' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', minHeight: '18px' }}>
+                {label && (
+                    <label style={{ fontSize: '13px', fontWeight: '800', color: status === 'required' ? '#B91C1C' : (status === 'inferred' ? '#92400E' : 'var(--color-text-secondary)') }}>
+                        {label} {required && <span style={{ color: '#dc2626' }}>*</span>}
+                    </label>
+                )}
+                {statusLabel && (
+                    <span style={{ 
+                        fontSize: '10px', 
+                        fontWeight: '900', 
+                        textTransform: 'uppercase', 
+                        letterSpacing: '0.05em',
+                        color: status === 'required' ? '#EF4444' : '#D97706'
+                    }}>
+                        {statusLabel}
+                    </span>
+                )}
+            </div>
             <div style={{ position: 'relative' }}>
                 {isTextArea ? (
                     <textarea
