@@ -96,10 +96,10 @@ const RoadmapPage = () => {
                         {opening_warning && (
                             <Card padding="24px" style={{ background: '#F8FAFC', border: '1px solid var(--color-border)' }}>
                                 <div style={{ display: 'flex', gap: '16px' }}>
-                                    <div style={{ color: 'var(--color-text)', marginTop: '2px' }}><AlertTriangle size={20} /></div>
+                                    <div style={{ color: 'var(--color-primary)', marginTop: '2px' }}><ShieldCheck size={20} /></div>
                                     <div>
-                                        <div style={{ fontSize: '14px', fontWeight: '800', color: 'var(--color-text)', textTransform: 'uppercase', marginBottom: '4px' }}>Safety Tips</div>
-                                        <div style={{ fontSize: '15px', color: 'var(--color-text)', lineHeight: 1.5, fontWeight: '500' }}>{opening_warning}</div>
+                                        <div style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-text)', textTransform: 'uppercase', marginBottom: '6px' }}>OUR GUIDELINE</div>
+                                        <div style={{ fontSize: '15px', color: 'var(--color-text)', lineHeight: 1.6, fontWeight: '500' }}>{opening_warning}</div>
                                     </div>
                                 </div>
                             </Card>
@@ -109,8 +109,8 @@ const RoadmapPage = () => {
                                 <div style={{ display: 'flex', gap: '16px' }}>
                                     <div style={{ color: '#DC2626', marginTop: '2px' }}><ShieldAlert size={20} /></div>
                                     <div>
-                                        <div style={{ fontSize: '14px', fontWeight: '800', color: '#991B1B', textTransform: 'uppercase', marginBottom: '4px' }}>Warning Signs</div>
-                                        <div style={{ fontSize: '15px', color: '#991B1B', lineHeight: 1.5, fontWeight: '500' }}>{go_no_go_signal}</div>
+                                        <div style={{ fontSize: '13px', fontWeight: '800', color: '#991B1B', textTransform: 'uppercase', marginBottom: '6px' }}>RED ZONE SIGNAL</div>
+                                        <div style={{ fontSize: '15px', color: '#991B1B', lineHeight: 1.6, fontWeight: '500' }}>{go_no_go_signal}</div>
                                     </div>
                                 </div>
                             </Card>
@@ -153,8 +153,16 @@ const RoadmapPage = () => {
                                             </div>
                                         </div>
                                         <div style={{ textAlign: 'right', background: 'var(--color-surface)', padding: '12px 24px', borderRadius: '12px', border: '1px solid var(--color-border)' }}>
-                                            <div style={{ fontSize: '11px', fontWeight: '800', color: 'var(--color-text-secondary)', textTransform: 'uppercase', marginBottom: '4px' }}>The Main Goal</div>
+                                            <div style={{ fontSize: '11px', fontWeight: '800', color: 'var(--color-text-secondary)', textTransform: 'uppercase', marginBottom: '4px' }}>PHASE OBJECTIVE</div>
                                             <div style={{ fontSize: '14px', fontWeight: '800', color: 'var(--color-text)' }}>{phase.goal}</div>
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Financial Context */}
+                                    <div style={{ marginBottom: '32px', display: 'flex', gap: '12px', padding: '12px 16px', background: '#F8FAFC', borderRadius: '8px', borderLeft: '3px solid var(--color-accent)' }}>
+                                        <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--color-text-secondary)' }}>
+                                            Estimated Total Savings Buffer Required for This Phase: 
+                                            <span style={{ color: 'var(--color-text)', marginLeft: '8px' }}>₹{Math.round(phase.duration_months * (75000)).toLocaleString()} / Capacity confirmed.</span>
                                         </div>
                                     </div>
 
