@@ -60,14 +60,16 @@ const SimulatorPage = () => {
                 const initialInputs = {
                     monthly_expenses: bridgeRes.data.inputs.monthly_expenses,
                     transition_months: bridgeRes.data.inputs.transition_months,
-                    liquid_savings: bridgeRes.data.inputs.liquid_savings,
+                    side_income: 0,
                     weekly_hours_available: bridgeRes.data.inputs.weekly_hours_available
                 };
                 setInputs(initialInputs);
                 
                 // Initial baseline simulation
                 const historyRes = await endpoints.runSimulator(roadmapId, {});
-                setPastRuns([historyRes.data]);
+                const baseRun = { ...historyRes.data, isBase: true, label: 'Base' };
+                setPastRuns([baseRun]);
+                setCurrentScenario(baseRun);
                 
             } catch (error) {
                 console.error("Failed to fetch simulator data", error);
@@ -84,15 +86,20 @@ const SimulatorPage = () => {
             setSimulating(true);
             try {
                 const response = await endpoints.runSimulator(roadmapId, newInputs);
-                setCurrentScenario(response.data);
-                setPastRuns(prev => [response.data, ...prev].slice(0, 5));
+                const scenario = { ...response.data, label: `Sim ${pastRuns.length}` };
+                setCurrentScenario(scenario);
+                setPastRuns(prev => {
+                    const exists = prev.find(p => JSON.stringify(p.modified_inputs) === JSON.stringify(newInputs));
+                    if (exists) return prev;
+                    return [...prev, scenario].slice(0, 5);
+                });
             } catch (error) {
                 console.error("Simulation failed", error);
             } finally {
                 setSimulating(false);
             }
         }, 500),
-        [roadmapId]
+        [roadmapId, pastRuns]
     );
 
     const handleSliderChange = (field, value) => {
@@ -164,44 +171,70 @@ const SimulatorPage = () => {
                                 <h3 style={{ fontSize: '18px', fontWeight: '800' }}>What if...</h3>
                             </div>
 
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
+                             <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', paddingBottom: '32px' }}>
                                 <SliderControl 
-                                    label="Monthly Costs" 
+                                    label="Monthly Overhead" 
                                     value={inputs.monthly_expenses} 
-                                    min={15000} 
-                                    max={300000} 
+                                    min={baseBridge.inputs.monthly_expenses * 0.5} 
+                                    max={baseBridge.inputs.monthly_expenses * 1.5} 
                                     step={5000}
                                     prefix="₹"
                                     onChange={(v) => handleSliderChange('monthly_expenses', v)}
                                 />
                                 <SliderControl 
-                                    label="How many months?" 
+                                    label="Transition Span" 
                                     value={inputs.transition_months} 
-                                    min={1} 
-                                    max={24} 
+                                    min={6} 
+                                    max={36} 
                                     step={1}
                                     suffix=" Months"
                                     onChange={(v) => handleSliderChange('transition_months', v)}
                                 />
                                 <SliderControl 
-                                    label="Total Savings" 
-                                    value={inputs.liquid_savings} 
-                                    min={50000} 
-                                    max={5000000} 
-                                    step={10000}
+                                    label="Side Income" 
+                                    value={inputs.side_income || 0} 
+                                    min={0} 
+                                    max={baseBridge.inputs.monthly_income} 
+                                    step={5000}
                                     prefix="₹"
-                                    onChange={(v) => handleSliderChange('liquid_savings', v)}
+                                    onChange={(v) => handleSliderChange('side_income', v)}
                                 />
                                 <SliderControl 
-                                    label="Hours per week" 
+                                    label="Weekly Available Hours" 
                                     value={inputs.weekly_hours_available} 
-                                    min={0} 
-                                    max={60} 
+                                    min={5} 
+                                    max={40} 
                                     step={1}
                                     suffix=" Hrs"
                                     onChange={(v) => handleSliderChange('weekly_hours_available', v)}
                                 />
                             </div>
+
+                            {/* NARRATIVE BLOCK (Below Sliders) */}
+                            <AnimatePresence mode="wait">
+                                {currentScenario?.narrative && (
+                                    <motion.div 
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: 'auto', opacity: 1 }}
+                                        style={{ 
+                                            padding: '24px', 
+                                            background: '#F8FAFC', 
+                                            borderRadius: '16px',
+                                            border: '1px solid var(--color-border)',
+                                            display: 'flex',
+                                            gap: '12px',
+                                            alignItems: 'flex-start'
+                                        }}
+                                    >
+                                        <div style={{ padding: '6px', background: '#FFFFFF', borderRadius: '50%', boxShadow: 'var(--shadow-sm)' }}>
+                                            <Info size={16} style={{ color: 'var(--color-accent)' }} />
+                                        </div>
+                                        <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: 1.6, fontWeight: '700' }}>
+                                            {currentScenario.narrative}
+                                        </p>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </Card>
 
                         {/* Analysis View */}
@@ -274,39 +307,65 @@ const SimulatorPage = () => {
                                 </AnimatePresence>
                             </Card>
 
-                            {/* Run History */}
-                            <Card padding="32px" style={{ background: '#FFFFFF' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+                            {/* Comparison Table */}
+                            <Card padding="40px" style={{ background: '#FFFFFF' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px' }}>
                                     <div style={{ padding: '8px', background: 'var(--color-surface)', borderRadius: '10px', color: 'var(--color-text-secondary)' }}>
-                                        <History size={18} />
+                                        <Scale size={20} />
                                     </div>
-                                    <h3 style={{ fontSize: '16px', fontWeight: '800' }}>Previous Scenarios</h3>
+                                    <h3 style={{ fontSize: '20px', fontWeight: '900' }}>Scenario Comparison</h3>
                                 </div>
                                 
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                    {pastRuns.length === 0 && <div style={{ color: 'var(--color-text-secondary)', fontSize: '14px', fontWeight: '500' }}>Try a few changes to see what happens.</div>}
-                                    {pastRuns.map((run, i) => {
-                                        const runRisk = getRiskConfig(run.deterministic_out.risk_score);
-                                        return (
-                                            <div key={i} style={{ 
-                                                display: 'flex', 
-                                                justifyContent: 'space-between', 
-                                                alignItems: 'center', 
-                                                padding: '12px 20px', 
-                                                background: 'var(--color-surface)', 
-                                                borderRadius: '12px', 
-                                                border: '1px solid var(--color-border)' 
-                                            }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                                    <div style={{ width: '12px', height: '12px', borderRadius: '3px', background: runRisk.color }} />
-                                                    <div style={{ fontSize: '14px', fontWeight: '700' }}>Safety Score: {run.deterministic_out.risk_score}</div>
-                                                </div>
-                                                <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>
-                                                    ₹{run.modified_inputs.monthly_expenses || inputs.monthly_expenses} Cost • {run.modified_inputs.transition_months || inputs.transition_months}mo Span
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
+                                <div style={{ overflowX: 'auto' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '800px' }}>
+                                        <thead>
+                                            <tr style={{ borderBottom: '2px solid var(--color-border)' }}>
+                                                <th style={{ textAlign: 'left', padding: '16px 20px', fontSize: '12px', fontWeight: '900', color: 'var(--color-text-secondary)', textTransform: 'uppercase' }}>Metric</th>
+                                                {pastRuns.map((run, i) => (
+                                                    <th key={i} style={{ 
+                                                        textAlign: 'center', 
+                                                        padding: '16px 20px', 
+                                                        fontSize: '12px', 
+                                                        fontWeight: '900', 
+                                                        color: run.isBase ? 'var(--color-accent)' : 'var(--color-text)', 
+                                                        textTransform: 'uppercase',
+                                                        background: run.isBase ? '#F0F9FF' : 'transparent',
+                                                        borderTopLeftRadius: run.isBase ? '12px' : '0',
+                                                        borderTopRightRadius: run.isBase ? '12px' : '0'
+                                                    }}>
+                                                        {run.label} {run.isBase && '(Safe)'}
+                                                    </th>
+                                                ))}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {[
+                                                { label: 'Risk Score', key: 'risk_score' },
+                                                { label: 'Bridge Required', key: 'total_bridge_required', prefix: '₹' },
+                                                { label: 'Runway Months', key: 'runway_months', suffix: ' Mo' },
+                                                { label: 'Weekly Effort', key: 'weekly_hours_available', suffix: ' Hrs' }
+                                            ].map((row, rowIndex) => (
+                                                <tr key={rowIndex} style={{ borderBottom: '1px solid var(--color-border)' }}>
+                                                    <td style={{ padding: '16px 20px', fontSize: '14px', fontWeight: '700', color: 'var(--color-text-secondary)' }}>{row.label}</td>
+                                                    {pastRuns.map((run, i) => {
+                                                        const val = row.key === 'weekly_hours_available' ? (run.modified_inputs.weekly_hours_available || baseBridge.inputs.weekly_hours_available) : run.deterministic_out[row.key];
+                                                        return (
+                                                            <td key={i} style={{ 
+                                                                textAlign: 'center', 
+                                                                padding: '16px 20px', 
+                                                                fontSize: '15px', 
+                                                                fontWeight: '800',
+                                                                background: run.isBase ? '#F0F9FF' : 'transparent',
+                                                                color: row.key === 'risk_score' ? getRiskConfig(val).color : 'inherit'
+                                                            }}>
+                                                                {row.prefix}{Math.round(val).toLocaleString()}{row.suffix}
+                                                            </td>
+                                                        );
+                                                    })}
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </Card>
                         </div>
