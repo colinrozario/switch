@@ -74,7 +74,30 @@ const ProfileReviewPage = () => {
     }
 
     const confidenceScores = profile?.confidence_scores || {};
-    const isLowConfidence = (field) => (confidenceScores[field] || 1) < 0.7;
+    
+    const financialFields = ['monthly_net_income', 'monthly_expenses', 'liquid_savings'];
+
+    const getFieldStatus = (field) => {
+        const val = formData[field];
+        const isFinancial = financialFields.includes(field);
+        
+        // Red state: Missing financial data
+        if (isFinancial && (val === 0 || val === '' || val === null || val === undefined)) {
+            return { status: 'required', label: 'Required — please fill this in' };
+        }
+        
+        // Yellow state: Inferred from AI with low confidence
+        if ((confidenceScores[field] || 1) < 0.7) {
+            return { status: 'inferred', label: 'We inferred this — please verify' };
+        }
+        
+        return { status: null, label: null };
+    };
+
+    const isFormInvalid = financialFields.some(f => {
+        const statusObj = getFieldStatus(f);
+        return statusObj.status === 'required';
+    });
 
     return (
         <div style={{ background: '#F8FAFC', minHeight: '100vh', paddingTop: '120px', paddingBottom: '120px' }}>
@@ -83,27 +106,26 @@ const ProfileReviewPage = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                 >
-                    <div style={{ marginBottom: '48px' }}>
                         <div style={{ 
                             display: 'inline-flex', 
                             alignItems: 'center', 
                             gap: '8px', 
                             background: '#FFFFFF', 
                             padding: '4px 12px', 
-                            borderRadius: '99px',
-                            border: '1px solid var(--color-border)',
-                            color: 'var(--color-text-secondary)',
-                            fontSize: '12px',
-                            fontWeight: '700',
-                            marginBottom: '24px'
+                            borderRadius: '99px', 
+                            border: '1px solid var(--color-border)', 
+                            color: 'var(--color-text-secondary)', 
+                            fontSize: '12px', 
+                            fontWeight: '700', 
+                            marginBottom: '24px' 
                         }}>
-                            YOUR PROFILE SUMMARY
+                            STEP 2: PROFILE REVIEW
                         </div>
                         <h1 style={{ fontSize: '40px', letterSpacing: '-0.03em', marginBottom: '16px' }}>
-                            Let's make sure we've got this right.
+                            Here's what we understood — correct anything that looks off.
                         </h1>
-                        <p style={{ color: 'var(--color-text-secondary)', fontSize: '18px', lineHeight: 1.5 }}>
-                            We've pulled these details from your checkup. Take a quick look and fix anything that doesn't seem quite right—especially the ones marked <span style={{ color: '#F59E0B', fontWeight: '700' }}>"Double Check"</span>.
+                        <p style={{ color: 'var(--color-text-secondary)', fontSize: '18px', lineHeight: 1.5, maxWidth: '700px' }}>
+                            This is the profile we built from your data. We've highlighted fields that we inferred or that still need your input before we can analyze your transition.
                         </p>
                     </div>
 
@@ -118,24 +140,20 @@ const ProfileReviewPage = () => {
                             </div>
                             
                             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
-                                <div style={{ position: 'relative' }}>
-                                    <Input 
-                                        label="Current Job Title"
-                                        value={formData.current_role}
-                                        onChange={(e) => handleInputChange('current_role', e.target.value)}
-                                        icon={FileEdit}
-                                    />
-                                    {isLowConfidence('current_role') && <ConfidenceAlert />}
-                                </div>
-                                <div style={{ position: 'relative' }}>
-                                    <Input 
-                                        label="Years of Exp."
-                                        type="number"
-                                        value={formData.years_experience}
-                                        onChange={(e) => handleInputChange('years_experience', parseFloat(e.target.value))}
-                                    />
-                                    {isLowConfidence('years_experience') && <ConfidenceAlert />}
-                                </div>
+                                <Input 
+                                    label="Current Job Title"
+                                    value={formData.current_role}
+                                    onChange={(e) => handleInputChange('current_role', e.target.value)}
+                                    icon={FileEdit}
+                                    {...getFieldStatus('current_role')}
+                                />
+                                <Input 
+                                    label="Years of Exp."
+                                    type="number"
+                                    value={formData.years_experience}
+                                    onChange={(e) => handleInputChange('years_experience', parseFloat(e.target.value) || 0)}
+                                    {...getFieldStatus('years_experience')}
+                                />
                             </div>
                         </Card>
 
@@ -189,23 +207,19 @@ const ProfileReviewPage = () => {
                             </div>
                             
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '24px' }}>
-                                <div style={{ position: 'relative' }}>
-                                    <Input 
-                                        label="Hours for Learning / Wk"
-                                        type="number"
-                                        value={formData.weekly_hours_available}
-                                        onChange={(e) => handleInputChange('weekly_hours_available', parseFloat(e.target.value))}
-                                    />
-                                    {isLowConfidence('weekly_hours_available') && <ConfidenceAlert />}
-                                </div>
-                                <div style={{ position: 'relative' }}>
-                                    <Input 
-                                        label="Other Constraints (like locations)"
-                                        value={formData.hard_constraints?.join(', ')}
-                                        onChange={(e) => handleInputChange('hard_constraints', e.target.value.split(',').map(s => s.trim()))}
-                                    />
-                                    {isLowConfidence('hard_constraints') && <ConfidenceAlert />}
-                                </div>
+                                <Input 
+                                    label="Hours for Learning / Wk"
+                                    type="number"
+                                    value={formData.weekly_hours_available}
+                                    onChange={(e) => handleInputChange('weekly_hours_available', parseFloat(e.target.value) || 0)}
+                                    {...getFieldStatus('weekly_hours_available')}
+                                />
+                                <Input 
+                                    label="Other Constraints (like locations)"
+                                    value={formData.hard_constraints?.join(', ')}
+                                    onChange={(e) => handleInputChange('hard_constraints', e.target.value.split(',').map(s => s.trim()))}
+                                    {...getFieldStatus('hard_constraints')}
+                                />
                             </div>
                         </Card>
                     </div>
@@ -214,8 +228,8 @@ const ProfileReviewPage = () => {
                         <Button 
                             size="lg" 
                             onClick={handleConfirm} 
-                            disabled={saving}
-                            style={{ width: '100%', maxWidth: '300px' }}
+                            disabled={saving || isFormInvalid}
+                            style={{ width: '100%', maxWidth: '300px', opacity: isFormInvalid ? 0.5 : 1 }}
                         >
                             {saving ? (
                                 <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -234,22 +248,6 @@ const ProfileReviewPage = () => {
     );
 };
 
-const ConfidenceAlert = () => (
-    <div style={{ 
-        position: 'absolute', 
-        right: '0', 
-        top: '0', 
-        display: 'flex', 
-        alignItems: 'center', 
-        gap: '4px',
-        color: '#F59E0B',
-        fontSize: '11px',
-        fontWeight: '800',
-        textTransform: 'uppercase',
-        letterSpacing: '0.02em'
-    }}>
-        <CircleAlert size={12} /> Double Check
-    </div>
-);
+
 
 export default ProfileReviewPage;
