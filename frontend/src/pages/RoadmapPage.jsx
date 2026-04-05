@@ -91,29 +91,41 @@ const RoadmapPage = () => {
                         </p>
                     </div>
 
-                    {/* Risk Indicators */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '80px' }}>
+                    {/* 1. STACKED WARNINGS & CONSTRAINTS */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '80px' }}>
                         {opening_warning && (
-                            <Card padding="24px" style={{ background: '#F8FAFC', border: '1px solid var(--color-border)' }}>
-                                <div style={{ display: 'flex', gap: '16px' }}>
-                                    <div style={{ color: 'var(--color-primary)', marginTop: '2px' }}><ShieldCheck size={20} /></div>
-                                    <div>
-                                        <div style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-text)', textTransform: 'uppercase', marginBottom: '6px' }}>OUR GUIDELINE</div>
-                                        <div style={{ fontSize: '15px', color: 'var(--color-text)', lineHeight: 1.6, fontWeight: '500' }}>{opening_warning}</div>
-                                    </div>
+                            <div style={{ 
+                                background: '#FFFBEB', 
+                                border: '1px solid #F59E0B', 
+                                borderRadius: '16px', 
+                                padding: '32px',
+                                display: 'flex',
+                                gap: '20px',
+                                alignItems: 'flex-start'
+                            }}>
+                                <AlertTriangle size={24} style={{ color: '#D97706', marginTop: '2px' }} />
+                                <div>
+                                    <div style={{ fontSize: '13px', fontWeight: '900', color: '#B45309', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.05em' }}>RISK ASSESSMENT</div>
+                                    <div style={{ fontSize: '17px', color: '#92400E', lineHeight: 1.5, fontWeight: '600' }}>{opening_warning}</div>
                                 </div>
-                            </Card>
+                            </div>
                         )}
                         {go_no_go_signal && (
-                            <Card padding="24px" style={{ background: '#FEF2F2', border: '1px solid #EF4444' }}>
-                                <div style={{ display: 'flex', gap: '16px' }}>
-                                    <div style={{ color: '#DC2626', marginTop: '2px' }}><ShieldAlert size={20} /></div>
-                                    <div>
-                                        <div style={{ fontSize: '13px', fontWeight: '800', color: '#991B1B', textTransform: 'uppercase', marginBottom: '6px' }}>RED ZONE SIGNAL</div>
-                                        <div style={{ fontSize: '15px', color: '#991B1B', lineHeight: 1.6, fontWeight: '500' }}>{go_no_go_signal}</div>
-                                    </div>
+                            <div style={{ 
+                                background: '#FFFFFF', 
+                                border: '2px solid #EF4444', 
+                                borderRadius: '16px', 
+                                padding: '32px',
+                                display: 'flex',
+                                gap: '20px',
+                                alignItems: 'flex-start'
+                            }}>
+                                <ShieldAlert size={24} style={{ color: '#DC2626', marginTop: '2px' }} />
+                                <div>
+                                    <div style={{ fontSize: '13px', fontWeight: '900', color: '#B91C1C', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.05em' }}>GO / NO-GO SIGNAL</div>
+                                    <div style={{ fontSize: '17px', color: '#B91C1C', lineHeight: 1.5, fontWeight: '700' }}>{go_no_go_signal}</div>
                                 </div>
-                            </Card>
+                            </div>
                         )}
                     </div>
 
@@ -159,36 +171,44 @@ const RoadmapPage = () => {
                                     </div>
                                     
                                     {/* Financial Context */}
-                                    <div style={{ marginBottom: '32px', display: 'flex', gap: '12px', padding: '12px 16px', background: '#F8FAFC', borderRadius: '8px', borderLeft: '3px solid var(--color-accent)' }}>
-                                        <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--color-text-secondary)' }}>
-                                            Estimated Total Savings Buffer Required for This Phase: 
-                                            <span style={{ color: 'var(--color-text)', marginLeft: '8px' }}>₹{Math.round(phase.duration_months * (75000)).toLocaleString()} / Capacity confirmed.</span>
+                                    <div style={{ marginBottom: '32px', display: 'flex', gap: '12px', padding: '16px 20px', background: '#F8FAFC', borderRadius: '12px', border: '1px solid var(--color-border)' }}>
+                                        <div style={{ fontSize: '14px', fontWeight: '700', color: 'var(--color-text-secondary)' }}>
+                                            Estimated capital buffer required for this phase: 
+                                            <span style={{ color: 'var(--color-text)', marginLeft: '8px' }}>₹{Math.round(phase.duration_months * (75000)).toLocaleString()}</span>
                                         </div>
                                     </div>
 
                                     <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '48px' }}>
                                         <div>
-                                            <div style={sectionTagStyle}><Flag size={14} /> Things to do</div>
-                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                            <div style={sectionTagStyle}><Flag size={14} /> Execution Checklist</div>
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                                                 {phase.milestones.map((m, i) => (
-                                                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '15px' }}>
-                                                        <CheckCircle2 size={18} style={{ color: '#10b981' }} />
-                                                        <span style={{ fontWeight: '500' }}>{m}</span>
+                                                    <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                                                        <div style={{ width: '20px', height: '20px', borderRadius: '6px', border: '2px solid #E2E8F0', background: '#F8FAFC', flexShrink: 0, marginTop: '2px' }} />
+                                                        <span style={{ fontSize: '15px', fontWeight: '600', color: 'var(--color-text)' }}>{m}</span>
                                                     </div>
                                                 ))}
                                             </div>
                                         </div>
 
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                                            <div>
-                                                <div style={{ ...sectionTagStyle, color: '#DC2626' }}><ShieldAlert size={14} /> Watch out for this</div>
-                                                <div style={{ fontSize: '14px', lineHeight: 1.6, padding: '12px', background: '#FEF2F2', borderLeft: '3px solid #EF4444', color: '#991B1B', borderRadius: '0 8px 8px 0', fontWeight: '600' }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+                                            {/* Failure & Fallback as First-Class Content */}
+                                            <div style={{ padding: '24px', background: '#FEF2F2', borderRadius: '16px', border: '1px solid #FEE2E2' }}>
+                                                <div style={{ display: 'flex', gap: '10px', alignItems: 'center', color: '#B91C1C', marginBottom: '12px' }}>
+                                                    <AlertCircle size={18} />
+                                                    <div style={{ fontSize: '12px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Failure Trigger</div>
+                                                </div>
+                                                <div style={{ fontSize: '15px', fontWeight: '700', color: '#991B1B', lineHeight: 1.5 }}>
                                                     {phase.failure_trigger}
                                                 </div>
                                             </div>
-                                            <div>
-                                                <div style={{ ...sectionTagStyle, color: 'var(--color-text-secondary)' }}><Navigation size={14} /> If things slow down</div>
-                                                <div style={{ fontSize: '14px', lineHeight: 1.6, padding: '12px', background: '#F8FAFC', borderLeft: '3px solid #CBD5E1', color: 'var(--color-text-secondary)', borderRadius: '0 8px 8px 0', fontWeight: '600' }}>
+
+                                            <div style={{ padding: '24px', background: '#FFFBEB', borderRadius: '16px', border: '1px solid #FEF3C7' }}>
+                                                <div style={{ display: 'flex', gap: '10px', alignItems: 'center', color: '#B45309', marginBottom: '12px' }}>
+                                                    <RefreshCcw size={18} />
+                                                    <div style={{ fontSize: '12px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Fallback Action</div>
+                                                </div>
+                                                <div style={{ fontSize: '15px', fontWeight: '700', color: '#92400E', lineHeight: 1.5 }}>
                                                     {phase.fallback_action}
                                                 </div>
                                             </div>
