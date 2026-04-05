@@ -106,6 +106,7 @@ const ProfileReviewPage = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                 >
+                    <div style={{ marginBottom: '48px' }}>
                         <div style={{ 
                             display: 'inline-flex', 
                             alignItems: 'center', 
@@ -167,32 +168,28 @@ const ProfileReviewPage = () => {
                             </div>
                             
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
-                                <div style={{ position: 'relative' }}>
-                                    <Input 
-                                        label="Monthly Take-Home Pay (₹)"
-                                        type="number"
-                                        value={formData.monthly_net_income}
-                                        onChange={(e) => handleInputChange('monthly_net_income', parseFloat(e.target.value))}
-                                    />
-                                    {isLowConfidence('monthly_net_income') && <ConfidenceAlert />}
-                                </div>
-                                <div style={{ position: 'relative' }}>
-                                    <Input 
-                                        label="Monthly Living Costs (₹)"
-                                        type="number"
-                                        value={formData.monthly_expenses}
-                                        onChange={(e) => handleInputChange('monthly_expenses', parseFloat(e.target.value))}
-                                    />
-                                    {isLowConfidence('monthly_expenses') && <ConfidenceAlert />}
-                                </div>
-                                <div style={{ gridColumn: 'span 2', position: 'relative' }}>
+                                <Input 
+                                    label="Monthly Take-Home Pay (₹)"
+                                    type="number"
+                                    value={formData.monthly_net_income}
+                                    onChange={(e) => handleInputChange('monthly_net_income', parseFloat(e.target.value) || 0)}
+                                    {...getFieldStatus('monthly_net_income')}
+                                />
+                                <Input 
+                                    label="Monthly Living Costs (₹)"
+                                    type="number"
+                                    value={formData.monthly_expenses}
+                                    onChange={(e) => handleInputChange('monthly_expenses', parseFloat(e.target.value) || 0)}
+                                    {...getFieldStatus('monthly_expenses')}
+                                />
+                                <div style={{ gridColumn: 'span 2' }}>
                                     <Input 
                                         label="Total Savings Available (₹)"
                                         type="number"
                                         value={formData.liquid_savings}
-                                        onChange={(e) => handleInputChange('liquid_savings', parseFloat(e.target.value))}
+                                        onChange={(e) => handleInputChange('liquid_savings', parseFloat(e.target.value) || 0)}
+                                        {...getFieldStatus('liquid_savings')}
                                     />
-                                    {isLowConfidence('liquid_savings') && <ConfidenceAlert />}
                                 </div>
                             </div>
                         </Card>

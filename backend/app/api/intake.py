@@ -48,9 +48,19 @@ def update_intake(profile_id: int, updates: dict, db: Session = Depends(get_db))
     if not profile:
         raise HTTPException(status_code=404, detail="Profile not found")
     
+    # Strict validation for financial fields
+    financial_fields = ['monthly_net_income', 'monthly_expenses', 'liquid_savings']
+    for field in financial_fields:
+        if field in updates:
+            val = updates[field]
+            if val is None or (isinstance(val, (int, float)) and val <= 0):
+                raise HTTPException(
+                    status_code=422, 
+                    detail=f"Field '{field}' is required and must be greater than zero for analysis."
+                )
+
     current_structured = profile.structured or {}
     current_structured.update(updates)
-    # Reassign to trigger SQLAlchemy JSON mutability if not tracked
     profile.structured = current_structured
     db.commit()
     return {"status": "success"}
