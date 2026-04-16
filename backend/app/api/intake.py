@@ -47,20 +47,34 @@ def update_intake(profile_id: int, updates: dict, db: Session = Depends(get_db))
     profile = db.query(Profile).filter(Profile.id == profile_id).first()
     if not profile:
         raise HTTPException(status_code=404, detail="Profile not found")
-    
-    # Strict validation for financial fields
+
+    # Strict validation only for financial fields — skip validation for enrichment fields
     financial_fields = ['monthly_net_income', 'monthly_expenses', 'liquid_savings']
     for field in financial_fields:
         if field in updates:
             val = updates[field]
             if val is None or (isinstance(val, (int, float)) and val <= 0):
                 raise HTTPException(
-                    status_code=422, 
+                    status_code=422,
                     detail=f"Field '{field}' is required and must be greater than zero for analysis."
                 )
 
-    current_structured = profile.structured or {}
-    current_structured.update(updates)
+    # Enrich fields go into a dedicated sub-dict to keep structured clean
+    enrichment_fields = {'linkedin_url', 'github_url', 'portfolio_url', 'other_links', 'resume_text'}
+    enrichment_data = {k: v for k, v in updates.items() if k in enrichment_fields}
+    profile_data = {k: v for k, v in updates.items() if k not in enrichment_fields}
+
+    current_structured = dict(profile.structured or {})
+
+    if profile_data:
+        current_structured.update(profile_data)
+
+    if enrichment_data:
+        current_enrichment = current_structured.get('enrichment', {})
+        current_enrichment.update(enrichment_data)
+        current_structured['enrichment'] = current_enrichment
+
     profile.structured = current_structured
     db.commit()
     return {"status": "success"}
+
