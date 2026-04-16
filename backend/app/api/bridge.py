@@ -8,7 +8,18 @@ from app.engines.salary_bridge import SalaryBridgeEngine
 
 router = APIRouter()
 
+
+@router.get("/by-id/{bridge_id}")
+def get_bridge_by_id(bridge_id: int, db: Session = Depends(get_db)):
+    """Fetch a SalaryBridge directly by its own primary key (used by SimulatorPage)."""
+    bridge = db.query(SalaryBridge).filter(SalaryBridge.id == bridge_id).first()
+    if not bridge:
+        raise HTTPException(status_code=404, detail="Bridge not found")
+    return bridge
+
+
 @router.get("/{path_set_id}")
+
 def get_or_create_bridge(path_set_id: int, db: Session = Depends(get_db)):
     existing = db.query(SalaryBridge).filter(SalaryBridge.career_path_set_id == path_set_id).first()
     if existing:

@@ -1,19 +1,30 @@
 import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { CheckCircle2, Lock } from 'lucide-react';
+import useStore from '../../store/useStore';
+
+const steps = [
+    { path: '/diagnosis', label: 'Diagnosis', storeKey: null },         // always accessible
+    { path: '/profile',   label: 'Profile',   storeKey: 'profileId' },
+    { path: '/options',   label: 'Options',   storeKey: 'profileId' },
+    { path: '/bridge',    label: 'Bridge',    storeKey: 'pathSetId' },
+    { path: '/roadmap',   label: 'Roadmap',   storeKey: 'bridgeId' },
+    { path: '/simulator', label: 'Simulator', storeKey: 'bridgeId' },
+];
 
 const Navbar = () => {
     const location = useLocation();
+    const navigate = useNavigate();
+    const store = useStore();
     const currentPath = location.pathname;
 
-    const steps = [
-        { path: '/diagnosis', label: 'Diagnosis' },
-        { path: '/options', label: 'Options' },
-        { path: '/bridge', label: 'Bridge' },
-        { path: '/roadmap', label: 'Roadmap' },
-        { path: '/simulator', label: 'Simulator' }
-    ];
-
     const isInternalPage = steps.some(step => step.path === currentPath);
+    const currentIndex = steps.findIndex(s => s.path === currentPath);
+
+    const isStepUnlocked = (step) => {
+        if (!step.storeKey) return true;
+        return !!store[step.storeKey];
+    };
 
     return (
         <div style={{
@@ -22,9 +33,9 @@ const Navbar = () => {
             left: '0',
             width: '100%',
             height: '72px',
-            background: 'rgba(255, 255, 255, 0.8)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
+            background: 'rgba(255, 255, 255, 0.92)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
             borderBottom: '1px solid var(--color-border)',
             display: 'flex',
             alignItems: 'center',
@@ -41,49 +52,67 @@ const Navbar = () => {
             }}>
                 {/* Brand */}
                 <NavLink to="/" style={{
-                    fontSize: '24px',
+                    fontSize: '22px',
                     fontWeight: '800',
                     color: 'var(--color-primary)',
                     letterSpacing: '-0.04em',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '8px'
+                    gap: '8px',
+                    textDecoration: 'none'
                 }}>
-                    <div style={{ width: '32px', height: '32px', background: 'var(--color-primary)', borderRadius: '8px' }} />
+                    <div style={{ width: '28px', height: '28px', background: 'var(--color-primary)', borderRadius: '7px' }} />
                     switch.
                 </NavLink>
 
-                {/* Step Navigation (Visible on internal pages) */}
+                {/* Step Navigation (visible on internal pages) */}
                 {isInternalPage && (
-                    <div style={{ display: 'flex', gap: '32px', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
                         {steps.map((step, index) => {
                             const isActive = step.path === currentPath;
-                            const isPast = steps.findIndex(s => s.path === currentPath) > index;
-                            
+                            const isPast = index < currentIndex;
+                            const unlocked = isStepUnlocked(step);
+
                             return (
-                                <div key={step.path} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{
-                                        fontSize: '13px',
-                                        fontWeight: isActive ? '700' : '500',
-                                        color: isActive ? 'var(--color-primary)' : 'var(--color-text-secondary)',
-                                        transition: 'all 0.2s ease',
-                                        position: 'relative'
-                                    }}>
-                                        {step.label}
-                                        {isActive && (
-                                            <div style={{
-                                                position: 'absolute',
-                                                bottom: '-12px',
-                                                left: 0,
-                                                width: '100%',
-                                                height: '2px',
-                                                background: 'var(--color-primary)',
-                                                borderRadius: '99px'
-                                            }} />
+                                <div key={step.path} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <button
+                                        onClick={() => {
+                                            if (unlocked) navigate(step.path);
+                                        }}
+                                        disabled={!unlocked}
+                                        title={!unlocked ? 'Complete earlier steps first' : step.label}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '6px',
+                                            padding: '6px 12px',
+                                            borderRadius: '99px',
+                                            border: isActive ? '2px solid var(--color-primary)' : '2px solid transparent',
+                                            background: isActive ? 'var(--color-primary)' : isPast ? '#F0FDF4' : 'transparent',
+                                            color: isActive ? '#FFFFFF' : isPast ? '#16A34A' : unlocked ? 'var(--color-text-secondary)' : '#CBD5E1',
+                                            fontSize: '13px',
+                                            fontWeight: isActive ? '800' : '600',
+                                            cursor: unlocked ? 'pointer' : 'not-allowed',
+                                            transition: 'all 0.2s ease',
+                                            opacity: unlocked ? 1 : 0.5
+                                        }}
+                                    >
+                                        {isPast && (
+                                            <CheckCircle2 size={14} style={{ color: '#16A34A' }} />
                                         )}
-                                    </div>
+                                        {!unlocked && !isPast && !isActive && (
+                                            <Lock size={12} />
+                                        )}
+                                        {step.label}
+                                    </button>
+
                                     {index < steps.length - 1 && (
-                                        <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--color-border-strong)' }} />
+                                        <div style={{
+                                            width: '16px',
+                                            height: '1px',
+                                            background: isPast ? '#BBF7D0' : 'var(--color-border)',
+                                            transition: 'all 0.3s ease'
+                                        }} />
                                     )}
                                 </div>
                             );
@@ -91,7 +120,7 @@ const Navbar = () => {
                     </div>
                 )}
 
-                {/* Left/Right Balance */}
+                {/* Right side */}
                 <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
                     {!isInternalPage && (
                         <div style={{ display: 'flex', gap: '32px', marginRight: '32px' }}>
@@ -99,22 +128,25 @@ const Navbar = () => {
                                 <a key={item} href="#" style={{
                                     fontSize: '14px',
                                     color: 'var(--color-text-secondary)',
-                                    fontWeight: '500'
+                                    fontWeight: '500',
+                                    textDecoration: 'none'
                                 }}>
                                     {item}
                                 </a>
                             ))}
                         </div>
                     )}
-                    <NavLink to="/diagnosis" style={{
-                        background: 'var(--color-primary)',
-                        color: '#fff',
-                        padding: '10px 24px',
+                    <NavLink to={isInternalPage ? '/' : '/diagnosis'} style={{
+                        background: isInternalPage ? 'transparent' : 'var(--color-primary)',
+                        color: isInternalPage ? 'var(--color-text-secondary)' : '#fff',
+                        border: isInternalPage ? '1px solid var(--color-border)' : 'none',
+                        padding: '9px 20px',
                         borderRadius: 'var(--radius-md)',
-                        fontSize: '14px',
+                        fontSize: '13px',
                         fontWeight: '600',
                         whiteSpace: 'nowrap',
-                        boxShadow: 'var(--shadow-sm)'
+                        boxShadow: isInternalPage ? 'none' : 'var(--shadow-sm)',
+                        textDecoration: 'none'
                     }}>
                         {isInternalPage ? 'Exit Flow' : 'Get Started'}
                     </NavLink>

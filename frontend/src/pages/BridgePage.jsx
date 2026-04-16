@@ -23,6 +23,7 @@ const BridgePage = () => {
     const { setBridgeId } = useStore();
     const [bridge, setBridge] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [selectedHorizon, setSelectedHorizon] = useState(9);
 
     const params = new URLSearchParams(location.search);
     const pathSetId = params.get('id');
@@ -49,8 +50,9 @@ const BridgePage = () => {
     }, [pathSetId, navigate, setBridgeId]);
 
     const handleUnlock = () => {
-        navigate(`/roadmap?id=${bridge.id}`);
+        navigate(`/roadmap?id=${bridge.id}&horizon=${selectedHorizon}`);
     };
+
 
     if (loading) {
         return (
@@ -246,12 +248,46 @@ const BridgePage = () => {
                                 Build Your Execution Roadmap
                             </h3>
                             <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.7)', marginBottom: '40px', lineHeight: 1.6, fontWeight: '500' }}>
-                                The analysis is the foundation. Now get the exact, day-by-day plan to navigate these risks and land your target role without compromising your security.
+                                The analysis is the foundation. Now get the exact plan to navigate these risks and land your target role without compromising your security.
                             </p>
+
+                            {/* Horizon Selector */}
+                            <div style={{ marginBottom: '40px' }}>
+                                <div style={{ fontSize: '13px', fontWeight: '700', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px' }}>
+                                    Choose your plan duration
+                                </div>
+                                <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+                                    {[
+                                        { months: 6, label: '6 Months', sub: 'Aggressive' },
+                                        { months: 9, label: '9 Months', sub: 'Balanced' },
+                                        { months: 12, label: '1 Year', sub: 'Conservative' }
+                                    ].map(({ months, label, sub }) => (
+                                        <div
+                                            key={months}
+                                            onClick={() => setSelectedHorizon(months)}
+                                            style={{
+                                                flex: 1,
+                                                padding: '16px 12px',
+                                                borderRadius: '16px',
+                                                border: `2px solid ${selectedHorizon === months ? '#FFFFFF' : 'rgba(255,255,255,0.2)'}`,
+                                                background: selectedHorizon === months ? 'rgba(255,255,255,0.15)' : 'transparent',
+                                                cursor: 'pointer',
+                                                textAlign: 'center',
+                                                transition: 'all 0.2s ease'
+                                            }}
+                                        >
+                                            <div style={{ fontSize: '18px', fontWeight: '900', color: '#FFFFFF', marginBottom: '4px' }}>{label}</div>
+                                            <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', fontWeight: '600' }}>{sub}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
                             <Button onClick={handleUnlock} size="lg" style={{ width: '100%', maxWidth: '360px', height: '60px', fontSize: '18px', fontWeight: '800' }}>
-                                Unlock Full Roadmap <ArrowRight size={20} style={{ marginLeft: '12px' }} />
+                                Build My {selectedHorizon === 12 ? '1-Year' : `${selectedHorizon}-Month`} Roadmap <ArrowRight size={20} style={{ marginLeft: '12px' }} />
                             </Button>
                         </div>
+
                     </Card>
 
                     {/* Disclaimer */}

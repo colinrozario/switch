@@ -12,9 +12,12 @@ export const endpoints = {
     
     // Stage 3: Bridge
     getSalaryBridge: (pathSetId) => client.get(`/api/bridge/${pathSetId}`),
+    getBridgeById: (bridgeId) => client.get(`/api/bridge/by-id/${bridgeId}`),
+
     
     // Stage 4: Roadmap
-    getRoadmap: (bridgeId) => client.get(`/api/roadmap/${bridgeId}`),
+    getRoadmap: (bridgeId, horizon = 9) => client.get(`/api/roadmap/${bridgeId}?horizon=${horizon}`),
+
     
     // Stage 5: Simulator
     runSimulator: (roadmapId, modifiedInputs) => client.post('/api/simulator/run', { roadmap_id: roadmapId, modified_inputs: modifiedInputs })

@@ -52,15 +52,18 @@ const SimulatorPage = () => {
 
         const fetchData = async () => {
             try {
-                // Fetch roadmap to get bridge ID if not in store
+                // Fetch roadmap first
                 const roadmapRes = await endpoints.getRoadmap(roadmapId);
-                const bridgeRes = await endpoints.getSalaryBridge(roadmapRes.data.salary_bridge_id);
+                const roadmapData = roadmapRes.data;
+
+                // Fetch the bridge by its actual ID (not path_set_id)
+                const bridgeRes = await endpoints.getBridgeById(roadmapData.salary_bridge_id);
                 
                 setBaseBridge(bridgeRes.data);
                 const initialInputs = {
                     monthly_expenses: bridgeRes.data.inputs.monthly_expenses,
                     transition_months: bridgeRes.data.inputs.transition_months,
-                    side_income: 0,
+                    side_income: bridgeRes.data.inputs.side_income || 0,
                     weekly_hours_available: bridgeRes.data.inputs.weekly_hours_available
                 };
                 setInputs(initialInputs);
@@ -80,6 +83,7 @@ const SimulatorPage = () => {
 
         fetchData();
     }, [roadmapId, navigate]);
+
 
     const triggerSimulation = useCallback(
         debounce(async (newInputs) => {
