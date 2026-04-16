@@ -39,8 +39,8 @@ const RoadmapPage = () => {
 
         const fetchRoadmap = async () => {
             try {
-                const response = await endpoints.getRoadmap(queryBridgeId, horizon);
-                setRoadmap(response.data);
+                const roadmapData = await endpoints.getRoadmap(queryBridgeId, horizon);
+                setRoadmap(roadmapData);
             } catch (err) {
                 console.error("Failed to fetch roadmap", err);
                 setError("We couldn't build your roadmap. Please go back and try again.");

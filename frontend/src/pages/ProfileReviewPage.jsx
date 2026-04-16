@@ -51,8 +51,9 @@ const ProfileReviewPage = () => {
 
         const fetchProfile = async () => {
             try {
-                const response = await endpoints.getIntake(profileId);
-                setProfile(response.data);
+                // axios client interceptor returns response.data directly (not wrapped)
+                const profileData = await endpoints.getIntake(profileId);
+                setProfile(profileData);
             } catch (error) {
                 console.error("Failed to fetch profile", error);
             } finally {

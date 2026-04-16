@@ -22,9 +22,10 @@ const OptionsPage = () => {
 
         const fetchPaths = async () => {
             try {
-                const response = await endpoints.getCareerPaths(profileId);
-                setPathSet(response.data);
-                setPathSetId(response.data.id);
+                // axios client interceptor returns data directly
+                const pathSetData = await endpoints.getCareerPaths(profileId);
+                setPathSet(pathSetData);
+                setPathSetId(pathSetData.id);
             } catch (error) {
                 console.error("Failed to fetch paths", error);
             } finally {
@@ -41,6 +42,7 @@ const OptionsPage = () => {
             navigate(`/bridge?id=${pathSet.id}`);
         } catch (error) {
             console.error("Failed to select path", error);
+            alert("Couldn't select that path — please try again.");
         }
     };
 
@@ -98,7 +100,7 @@ const OptionsPage = () => {
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '32px' }}>
-                    {pathSet?.recommended_paths?.slice(0, 3).map((path, index) => (
+                    {pathSet?.paths?.slice(0, 3).map((path, index) => (
                         <PathCard 
                             key={index} 
                             path={path} 

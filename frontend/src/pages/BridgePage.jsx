@@ -36,9 +36,9 @@ const BridgePage = () => {
 
         const fetchBridge = async () => {
             try {
-                const response = await endpoints.getSalaryBridge(pathSetId);
-                setBridge(response.data);
-                setBridgeId(response.data.id);
+                const bridgeData = await endpoints.getSalaryBridge(pathSetId);
+                setBridge(bridgeData);
+                setBridgeId(bridgeData.id);
             } catch (error) {
                 console.error("Failed to fetch bridge", error);
             } finally {

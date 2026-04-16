@@ -52,27 +52,26 @@ const SimulatorPage = () => {
 
         const fetchData = async () => {
             try {
-                // Fetch roadmap first
-                const roadmapRes = await endpoints.getRoadmap(roadmapId);
-                const roadmapData = roadmapRes.data;
+                // Fetch roadmap first (axios client returns data directly)
+                const roadmapData = await endpoints.getRoadmap(roadmapId);
 
                 // Fetch the bridge by its actual ID (not path_set_id)
-                const bridgeRes = await endpoints.getBridgeById(roadmapData.salary_bridge_id);
+                const bridgeData = await endpoints.getBridgeById(roadmapData.salary_bridge_id);
                 
-                setBaseBridge(bridgeRes.data);
+                setBaseBridge(bridgeData);
                 const initialInputs = {
-                    monthly_expenses: bridgeRes.data.inputs.monthly_expenses,
-                    transition_months: bridgeRes.data.inputs.transition_months,
-                    side_income: bridgeRes.data.inputs.side_income || 0,
-                    weekly_hours_available: bridgeRes.data.inputs.weekly_hours_available
+                    monthly_expenses: bridgeData.inputs.monthly_expenses,
+                    transition_months: bridgeData.inputs.transition_months,
+                    side_income: bridgeData.inputs.side_income || 0,
+                    weekly_hours_available: bridgeData.inputs.weekly_hours_available
                 };
                 setInputs(initialInputs);
                 
                 // Initial baseline simulation
-                const historyRes = await endpoints.runSimulator(roadmapId, {});
-                const baseRun = { ...historyRes.data, isBase: true, label: 'Base' };
-                setPastRuns([baseRun]);
-                setCurrentScenario(baseRun);
+                const baseRun = await endpoints.runSimulator(roadmapId, {});
+                const baseRunWithMeta = { ...baseRun, isBase: true, label: 'Base' };
+                setPastRuns([baseRunWithMeta]);
+                setCurrentScenario(baseRunWithMeta);
                 
             } catch (error) {
                 console.error("Failed to fetch simulator data", error);
@@ -89,13 +88,13 @@ const SimulatorPage = () => {
         debounce(async (newInputs) => {
             setSimulating(true);
             try {
-                const response = await endpoints.runSimulator(roadmapId, newInputs);
-                const scenario = { ...response.data, label: `Sim ${pastRuns.length}` };
-                setCurrentScenario(scenario);
+                const scenario = await endpoints.runSimulator(roadmapId, newInputs);
+                const scenarioWithMeta = { ...scenario, label: `Sim ${pastRuns.length}` };
+                setCurrentScenario(scenarioWithMeta);
                 setPastRuns(prev => {
                     const exists = prev.find(p => JSON.stringify(p.modified_inputs) === JSON.stringify(newInputs));
                     if (exists) return prev;
-                    return [...prev, scenario].slice(0, 5);
+                    return [...prev, scenarioWithMeta].slice(0, 5);
                 });
             } catch (error) {
                 console.error("Simulation failed", error);
@@ -198,7 +197,7 @@ const SimulatorPage = () => {
                                     label="Side Income" 
                                     value={inputs.side_income || 0} 
                                     min={0} 
-                                    max={baseBridge.inputs.monthly_income} 
+                                    max={baseBridge.inputs.current_monthly_net_income || 100000} 
                                     step={5000}
                                     prefix="₹"
                                     onChange={(v) => handleSliderChange('side_income', v)}

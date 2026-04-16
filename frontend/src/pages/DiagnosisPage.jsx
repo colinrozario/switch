@@ -21,7 +21,7 @@ const steps = [
 
 const DiagnosisPage = () => {
     const navigate = useNavigate();
-    const { diagnosis, updateDiagnosis, setProfileId } = useStore();
+    const { diagnosis, updateDiagnosis, setDiagnosis, setProfileId } = useStore();
     const [currentStep, setCurrentStep] = useState(0);
     const [localData, setLocalData] = useState(diagnosis);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -69,6 +69,8 @@ const DiagnosisPage = () => {
         try {
             const response = await endpoints.createIntake(rawText);
             setProfileId(response.result_ref);
+            // Persist full localData snapshot so ProfileReviewPage can read it from store
+            setDiagnosis(localData);
             
             setTimeout(() => {
                 navigate('/profile');
