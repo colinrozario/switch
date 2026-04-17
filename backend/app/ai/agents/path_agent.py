@@ -111,18 +111,28 @@ class PathAgent:
 
         prompt = f"""{SYSTEM_PROMPT}
 
-Assess this career transition:
+Assess this career transition. Converse naturally and directly with the user (use \"you/your\"). Do not awkwardly repeat \"Not Specified\" or \"Unknown\" — if a field is vague, just focus on the skills.
+
+        c_role = profile.get('current_role', '').strip()
+        c_role_clean = c_role if c_role and c_role.lower() not in ["professional", "software_career", "unknown"] else "your current role"
+        
+        c_ind = profile.get('industry', '').strip()
+        c_ind_clean = c_ind if c_ind and c_ind.lower() not in ["not specified", "unknown"] else "your industry"
+        
+        inferred = [s.replace("_", " ").title() for s in profile.get('inferred_skills', [])[:8]]
+
+        prompt = f"""{SYSTEM_PROMPT}
+
+Assess this career transition. Converse naturally and directly with the user (use \"you/your\"). Do not awkwardly repeat \"Not Specified\" or \"Unknown\" — if a field is vague, just focus on the skills.
 
 CURRENT PROFILE:
-- Current role: {profile.get('current_role', 'Unknown')}
-- Years experience: {profile.get('years_experience', 'Unknown')} years
-- Industry: {profile.get('industry', 'Unknown')}
-- Inferred skills: {', '.join(profile.get('inferred_skills', [])[:8])}
-- Available hours/week for upskilling: {profile.get('weekly_hours_available', 10)} hrs
+- Current role: {c_role_clean}
+- Years experience: {profile.get('years_experience', 'Some')}
+- Industry: {c_ind_clean}
+- Inferred skills: {', '.join(inferred) if inferred else 'General professional skills'}
 
 FINANCIAL CONSTRAINTS (IMMOVABLE — DO NOT CHANGE):
-- Monthly expenses: ₹{monthly_expenses:,.0f}
-- Liquid savings: ₹{liquid_savings:,.0f}
+- Monthly burn rate: ₹{monthly_expenses:,.0f}
 - Financial runway: {runway_months} months
 - {'⚠️ CRITICAL: Runway is SHORTER than estimated transition time!' if financial_pressure else 'Runway is adequate for this transition.'}
 
@@ -133,10 +143,8 @@ TARGET ROLE:
 - Estimated transition time: {transition_months} months
 - Market salary P25: ₹{role.get('annual_salary_p25_inr', 0):,}/year
 - Market salary P50: ₹{role.get('annual_salary_p50_inr', 0):,}/year
-- Hiring friction: {role.get('hiring_friction', 'medium')}
-- Remote friendly: {role.get('remote_friendly', True)}
 
-Generate a specific, honest assessment. Reference their actual role and industry. Name real tools and certifications."""
+Generate a highly specific, honest assessment tailored ONLY to this user's stated skills. Name real tools and certifications."""
 
         response = self._client.models.generate_content(
             model="gemini-2.0-flash",

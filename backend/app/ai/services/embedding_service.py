@@ -132,23 +132,25 @@ def semantic_top_n(
     # Compute similarities
     scores = _cosine_similarity_batch(query_vec, career_embeddings)
     
+    # Target role pinning: if explicitly requested, find the ONE closest matching career
+    best_target_idx = -1
+    if target_role_label:
+        target_vec = _get_embedding(target_role_label)
+        target_scores = _cosine_similarity_batch(target_vec, career_embeddings)
+        best_target_idx = int(np.argmax(target_scores))
+    
     # Attach scores to careers
     scored = []
     for i, career in enumerate(careers):
         sim = float(scores[i])
         
-        # Target role pinning: massive boost if career matches declared goal
-        target_boost = 0.0
-        if target_role_label:
-            label_lower = career.get("label", "").lower()
-            target_lower = target_role_label.lower()
-            if target_lower in label_lower or label_lower in target_lower:
-                target_boost = 1.5  # pushes it well above any other role
+        # Massive boost to the single best-matching role for their stated goal
+        target_boost = 1.5 if i == best_target_idx else 0.0
         
         scored.append({
             **career,
             "similarity_score": round(sim + target_boost, 4),
-            "target_role_match": target_boost > 0,
+            "target_role_match": i == best_target_idx,
         })
     
     # Sort by combined score
