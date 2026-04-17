@@ -50,10 +50,10 @@ def _career_to_text(career: dict) -> str:
 
 
 def _get_embedding(text: str) -> np.ndarray:
-    """Embed a single piece of text using Gemini text-embedding-004."""
+    """Embed a single piece of text using Gemini embedding model."""
     client = genai.Client(api_key=settings.GEMINI_API_KEY)
     result = client.models.embed_content(
-        model="text-embedding-004",   # no 'models/' prefix in new SDK
+        model="models/gemini-embedding-001",
         contents=text,
     )
     return np.array(result.embeddings[0].values, dtype=np.float32)
