@@ -48,14 +48,13 @@ async def get_paths(profile_id: int, db: Session = Depends(get_db)):
         constraints=constraints,
     )
 
-    # TARGET ROLE EXCLUSIVITY:
-    # If the user explicitly declared a target role, they do not want to see other random adjacency options.
-    # We clip the candidates to just the #1 pinned role.
+    # TARGET ROLE PRIORITY + SMART ADJACENCY:
+    # If the user declared a target role: lock it to slot #1, then pick the 2 next-best
+    # semantically-matched roles (that aren't the target) as intelligent adjacent suggestions.
     if target_role_label and len(candidate_roles) > 0:
-        # Check if the first one is actually the pinned match
-        if candidate_roles[0].get("target_role_match"):
-            candidate_roles = [candidate_roles[0]]
-            
+        pinned = [r for r in candidate_roles if r.get("target_role_match")]
+        others = [r for r in candidate_roles if not r.get("target_role_match")]
+        candidate_roles = pinned[:1] + others[:2]  # target + 2 best adjacencies
     # Attach runway to profile for PathAgent financial flag generation
     structured_with_runway = {**structured, "runway_months": runway_months}
 
