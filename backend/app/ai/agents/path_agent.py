@@ -164,41 +164,132 @@ Generate a highly specific, honest assessment tailored ONLY to this user's state
         return result
 
     def _fallback_assessment(self, profile: dict, role: dict) -> dict:
-        """Deterministic fallback when Gemini is unavailable."""
+        """Deeply personalized deterministic fallback when Gemini is unavailable."""
         t_months = role.get("avg_transition_months", 9)
         monthly_expenses = profile.get("monthly_expenses") or 45000
         liquid_savings = profile.get("liquid_savings") or 0
         runway_months = round(liquid_savings / monthly_expenses, 1) if monthly_expenses else 0
 
-        # Sanitize fallback strings
+        # --- Build personalized context ---
         c_role = profile.get('current_role', '').strip()
-        c_role_clean = c_role if c_role and c_role.lower() not in ["professional", "software_career", "not specified", "unknown"] else "professional"
+        c_role_clean = c_role if c_role and c_role.lower() not in ["professional", "software_career", "not specified", "unknown"] else "your current role"
         
         c_ind = profile.get('industry', '').strip()
-        c_ind_clean = f" in {c_ind}" if c_ind and c_ind.lower() not in ["not specified", "unknown"] else ""
+        c_ind_str = f" in the {c_ind} industry" if c_ind and c_ind.lower() not in ["not specified", "unknown"] else ""
         
-        # Keep inferred skills clean
-        inferred = [s.replace("_", " ").title() for s in profile.get('inferred_skills', [])[:3]]
-        inferred_str = ", ".join(inferred) if inferred else "your primary field"
+        years = profile.get('years_experience', '')
+        years_str = f"With {years} years of experience, " if years else ""
+
+        target_label = role.get('label', 'this role')
+        
+        # Compute ACTUAL skill overlap
+        user_skills = set(s.lower().replace("_", " ") for s in profile.get('inferred_skills', []))
+        role_skills = set(s.lower().replace("_", " ") for s in role.get('skills', []))
+        
+        overlap = user_skills & role_skills
+        gaps = role_skills - user_skills
+        
+        overlap_list = [s.title() for s in sorted(overlap)][:4]
+        gap_list = [s.title() for s in sorted(gaps)][:5]
+        
+        overlap_str = ", ".join(overlap_list) if overlap_list else "general problem-solving"
+        gap_str = ", ".join(gap_list) if gap_list else "domain-specific tooling"
+        
+        # Determine match strength
+        if len(overlap) >= 4:
+            match_tone = "strong"
+            summary = (
+                f"{years_str}your background as a {c_role_clean}{c_ind_str} gives you a "
+                f"significant head start for {target_label}. You already have {overlap_str} — "
+                f"the core foundation is there."
+            )
+        elif len(overlap) >= 2:
+            match_tone = "moderate"
+            summary = (
+                f"{years_str}your experience as a {c_role_clean}{c_ind_str} provides some "
+                f"transferable ground for {target_label} through {overlap_str}, but there are "
+                f"critical gaps that will require focused effort."
+            )
+        else:
+            match_tone = "stretch"
+            summary = (
+                f"This is a stretch transition. Your role as a {c_role_clean}{c_ind_str} has "
+                f"limited direct overlap with {target_label}. This will require serious commitment "
+                f"and structured upskilling across multiple areas."
+            )
+
+        # Build specific details
+        if match_tone == "strong":
+            details = (
+                f"A transition to {target_label} typically takes {t_months} months. "
+                f"Your existing skills in {overlap_str} translate directly — the biggest lift is "
+                f"building proficiency in {gap_str}. "
+                f"Focus on hands-on projects that demonstrate these specific skills to hiring managers."
+            )
+        elif match_tone == "moderate":
+            details = (
+                f"The {t_months}-month timeline for {target_label} is realistic but tight. "
+                f"While {overlap_str} carry over from your current work, you're missing {gap_str} "
+                f"which are non-negotiable for this role. "
+                f"You'll need structured learning and at least one portfolio project proving competence."
+            )
+        else:
+            details = (
+                f"At {t_months} months, this is one of the longer transitions. "
+                f"The core skill set for {target_label} — {gap_str} — is substantially different "
+                f"from your current toolkit. Consider whether a stepping-stone role might be a safer "
+                f"intermediate step before making this leap."
+            )
+
+        # Risk based on match strength
+        risk_map = {
+            "strong": f"Competition from candidates with direct {target_label} experience who won't need the same ramp-up time.",
+            "moderate": f"The {len(gaps)}-skill gap means you'll be competing against candidates who already have production experience with {gap_list[0] if gap_list else 'core tools'}.",
+            "stretch": f"High probability of extended job search — most hiring managers for {target_label} expect direct domain experience that your background doesn't demonstrate yet.",
+        }
 
         return {
-            "feasibility_summary": (
-                f"Your background as a {c_role_clean}{c_ind_clean} shows transferable competencies for "
-                f"transitioning into a {role.get('label', 'this role')}."
-            ),
-            "feasibility_details": (
-                f"A transition to {role.get('label', 'this role')} typically takes {t_months} months. "
-                f"Your core skills in {inferred_str} "
-                f"are highly relevant. The main gaps are domain-specific tooling and portfolio evidence."
-            ),
-            "top_risk": "Market competition for entry-level positions in this domain.",
-            "skill_gaps": role.get("skills", [])[:4],
-            "recommended_certifications": ["Google Career Certificate (relevant track)", "LinkedIn Learning path"],
-            "first_30_day_action": (
-                f"Enroll in a structured {role.get('label', '')} course and complete one portfolio project."
-            ),
+            "feasibility_summary": summary,
+            "feasibility_details": details,
+            "top_risk": risk_map[match_tone],
+            "skill_gaps": gap_list,
+            "recommended_certifications": self._suggest_certs(role.get('role_id', ''), gap_list),
+            "first_30_day_action": self._suggest_action(role.get('role_id', ''), target_label, gap_list),
             "financial_flag": (
-                f"⚠️ Runway ({runway_months} months) is shorter than estimated transition ({t_months} months)."
+                f"⚠️ Your {runway_months}-month runway is shorter than the {t_months}-month estimated transition. "
+                f"Consider part-time freelancing or contract work to extend your runway before going all-in."
                 if runway_months < t_months else None
             ),
         }
+
+    def _suggest_certs(self, role_id: str, gaps: list) -> list:
+        """Map role IDs to real-world certifications."""
+        cert_map = {
+            "ai_ml_engineer": ["Google Professional Machine Learning Engineer", "DeepLearning.AI TensorFlow Developer Certificate"],
+            "data_scientist": ["IBM Data Science Professional Certificate", "Google Advanced Data Analytics"],
+            "backend_software_engineer": ["AWS Certified Developer – Associate", "Meta Back-End Developer Certificate"],
+            "devops_engineer": ["AWS Solutions Architect – Associate", "Certified Kubernetes Administrator (CKA)"],
+            "cloud_solutions_architect": ["AWS Solutions Architect – Professional", "Google Cloud Professional Cloud Architect"],
+            "product_manager": ["Product School Certification (PSC)", "Google Project Management Certificate"],
+            "cybersecurity_analyst": ["CompTIA Security+", "Google Cybersecurity Professional Certificate"],
+            "data_analyst": ["Google Data Analytics Professional Certificate", "Tableau Desktop Specialist"],
+            "ux_designer": ["Google UX Design Professional Certificate", "Interaction Design Foundation Certificate"],
+            "digital_marketing_manager": ["Google Digital Marketing Certificate", "HubSpot Content Marketing Certification"],
+            "frontend_software_engineer": ["Meta Front-End Developer Certificate", "freeCodeCamp Responsive Web Design"],
+            "project_manager": ["Google Project Management Certificate", "PMI Certified Associate (CAPM)"],
+        }
+        return cert_map.get(role_id, ["Google Career Certificate (relevant track)", "Coursera Professional Certificate"])
+
+    def _suggest_action(self, role_id: str, label: str, gaps: list) -> str:
+        """Generate a hyper-specific 30-day action instead of generic 'take a course'."""
+        action_map = {
+            "ai_ml_engineer": "Complete Andrej Karpathy's 'Neural Networks: Zero to Hero' series and deploy a fine-tuned model to HuggingFace Spaces.",
+            "data_scientist": "Build an end-to-end ML project on Kaggle (data cleaning → EDA → model → submission) and publish the notebook.",
+            "backend_software_engineer": "Build a REST API with authentication using FastAPI or Django, deploy it to Railway/Render, and document the architecture.",
+            "devops_engineer": "Containerize an existing project with Docker, set up a GitHub Actions CI/CD pipeline, and deploy to AWS EC2.",
+            "cloud_solutions_architect": "Complete the AWS Cloud Practitioner training and deploy a 3-tier architecture (ALB → EC2 → RDS) in your personal AWS account.",
+            "product_manager": "Pick a product you use daily, write a 2-page PRD for a feature improvement, and conduct 5 user interviews to validate it.",
+            "cybersecurity_analyst": "Set up a home lab with VirtualBox, install Kali Linux, and complete 10 TryHackMe beginner rooms.",
+            "ux_designer": "Redesign one screen of an app you use daily in Figma — research, wireframe, hi-fi mockup, and write a case study.",
+        }
+        return action_map.get(role_id, f"Identify the top skill gap for {label} and complete one hands-on project demonstrating it within 30 days.")
