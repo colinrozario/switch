@@ -13,7 +13,8 @@ import json
 import logging
 import re
 from typing import Optional
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
@@ -51,7 +52,7 @@ class IntakeAgent:
     def __init__(self):
         self._gemini_ready = bool(settings.GEMINI_API_KEY)
         if self._gemini_ready:
-            genai.configure(api_key=settings.GEMINI_API_KEY)
+            self._client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
     async def run(self, raw_text: str, linkedin_url: Optional[str] = None) -> dict:
         """
@@ -67,24 +68,14 @@ class IntakeAgent:
         return self._regex_fallback(raw_text)
 
     async def _gemini_extract(self, raw_text: str) -> dict:
-        model = genai.GenerativeModel(
-            model_name="gemini-2.0-flash",
-            generation_config=genai.GenerationConfig(
+        response = self._client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=f"{SYSTEM_PROMPT}\n\nExtract the structured profile from this user input:\n\n---\n{raw_text}\n---\n\nReturn JSON only.",
+            config=types.GenerateContentConfig(
                 response_mime_type="application/json",
-                temperature=0.1,  # Low temperature for factual extraction
+                temperature=0.1,
             ),
-            system_instruction=SYSTEM_PROMPT,
         )
-
-        prompt = f"""Extract the structured profile from this user input:
-
----
-{raw_text}
----
-
-Return JSON only."""
-
-        response = model.generate_content(prompt)
         extracted = json.loads(response.text)
 
         # Validate: block invented financial fields
