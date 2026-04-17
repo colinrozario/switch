@@ -20,12 +20,19 @@ async def get_paths(profile_id: int, db: Session = Depends(get_db)):
     if not profile:
         raise HTTPException(status_code=404, detail="Profile not found")
         
+    # Combine all profile context to scan for skill keywords
+    user_text = f"{profile.structured.get('current_role', '')} {profile.structured.get('industry', '')}"
+    if 'enrichment' in profile.structured:
+        user_text += f" {profile.structured['enrichment'].get('resume_text', '')}"
+        
+    # Get target role if user specified one in the 'Goals' step
+    target_role_label = ""
+    if profile.structured.get("target_roles") and len(profile.structured["target_roles"]) > 0:
+        target_role_label = profile.structured["target_roles"][0]
+
     # Get top 20 candidate roles
     filter_engine = CareerFilter()
-    skills = profile.structured.get("target_roles", []) # MVP fallback if skills not asked explicitly 
-    # Let's say we pass down current_role + target_roles + target_industries as a proxy for skills
-    proxy_skills = [profile.structured.get("current_role", "")]
-    candidate_roles = filter_engine.top_n(proxy_skills, n=20)
+    candidate_roles = filter_engine.top_n(user_text, target_role_label=target_role_label, n=20)
     
     # Run PathAgent
     agent = PathAgent()

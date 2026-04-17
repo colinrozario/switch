@@ -23,11 +23,12 @@ class PathAgent:
         for i, role in enumerate(candidate_roles):
             role_id = role["role_id"]
             if i < 3:
-                # Use mock details if available, otherwise fallback
-                details = mock_details.get(role_id, {
-                    "summary": f"Your career history provides a strong base for success as a {role['label']}.",
-                    "details": f"Transitioning to {role['label']} is achievable within 6-9 months. Your existing professional network and core competencies match the majority of the requirements for this role. We recommend focusing on the specific skill gaps identified below."
-                })
+                # Dynamically construct details using the actual candidate_role stats
+                t_months = role.get('avg_transition_months', 9)
+                details = {
+                    "summary": f"Your background shows overlapping skills for a transition to {role['label']}.",
+                    "details": f"Transitioning to {role['label']} typically takes {t_months} to {t_months + 3} months. The primary gap is in domain-specific technical skills, which can be acquired through targeted certification."
+                }
                 
                 recommended.append({
                     "target_role_id": role_id,
@@ -36,7 +37,7 @@ class PathAgent:
                     "feasibility_details": details["details"],
                     "key_risks": ["Potential for initial vertical move instead of promotion.", "Higher competition for entry-level roles in this domain."],
                     "skill_gaps": ["Domain-specific tool proficiency", "Advanced stakeholder communication"],
-                    "estimated_transition_months": role.get("avg_transition_months", 12)
+                    "estimated_transition_months": t_months
                 })
             else:
                 # Specific honest reasons
