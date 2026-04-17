@@ -8,7 +8,7 @@ import os
 import logging
 import numpy as np
 from typing import Optional
-import google.generativeai as genai
+from google import genai
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
@@ -21,7 +21,7 @@ _careers_list: Optional[list] = None
 def _configure_gemini():
     if not settings.GEMINI_API_KEY:
         raise RuntimeError("GEMINI_API_KEY not set in environment")
-    genai.configure(api_key=settings.GEMINI_API_KEY)
+    # Client is created per-call; configuration is stateless in the new SDK
 
 
 def _load_careers() -> list:
@@ -51,12 +51,12 @@ def _career_to_text(career: dict) -> str:
 
 def _get_embedding(text: str) -> np.ndarray:
     """Embed a single piece of text using Gemini text-embedding-004."""
-    result = genai.embed_content(
+    client = genai.Client(api_key=settings.GEMINI_API_KEY)
+    result = client.models.embed_content(
         model="models/text-embedding-004",
-        content=text,
-        task_type="SEMANTIC_SIMILARITY"
+        contents=text,
     )
-    return np.array(result["embedding"], dtype=np.float32)
+    return np.array(result.embeddings[0].values, dtype=np.float32)
 
 
 def _precompute_career_embeddings() -> np.ndarray:
