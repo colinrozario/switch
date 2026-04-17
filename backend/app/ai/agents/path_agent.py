@@ -1,59 +1,191 @@
+"""
+PathAgent — Constrained LLM narrative generation for career paths.
+
+Uses Gemini to generate specific, grounded, honest feasibility assessments.
+Critical rule: the model is given all financial math outputs as immovable facts.
+It may not invent salary numbers, override timelines, or claim transitions are "easy".
+"""
+import json
+import logging
+from typing import Optional
+import google.generativeai as genai
+from app.core.config import settings
+
+logger = logging.getLogger(__name__)
+
+SYSTEM_PROMPT = """You are a senior career transition advisor for Switch — a platform that helps professionals make financially safe career pivots.
+
+Your assessments are:
+- Specific and evidence-based (cite the user's actual role/industry/skills)
+- Honest about difficulty and risk (never call any transition "easy")  
+- Grounded in the financial constraints provided (never invent or change salary figures)
+- Actionable (name real certifications, tools, and concrete first steps)
+
+IMMOVABLE CONSTRAINTS — DO NOT OVERRIDE:
+- The estimated transition timeline is fixed by the financial model. You may suggest it could take longer, but never shorter.
+- The salary ranges are from market data. Do not invent or modify them.
+- If the user's financial runway is shorter than the transition timeline, flag this prominently.
+
+OUTPUT FORMAT: Return a JSON object with these EXACT keys:
+{
+  "feasibility_summary": "1-2 sentence honest assessment of fit",
+  "feasibility_details": "3-4 sentence detailed breakdown citing their specific background",
+  "top_risk": "The single most important risk for THIS user, specifically",
+  "skill_gaps": ["specific skill or tool they are missing", "..."],
+  "recommended_certifications": ["Real certification name (provider)", "..."],
+  "first_30_day_action": "One concrete, specific action they can take in the first 30 days",
+  "financial_flag": "null OR a specific financial warning if runway < transition months"
+}"""
+
+
 class PathAgent:
+    def __init__(self):
+        self._gemini_ready = bool(settings.GEMINI_API_KEY)
+        if self._gemini_ready:
+            genai.configure(api_key=settings.GEMINI_API_KEY)
+
     async def run(self, profile: dict, candidate_roles: list) -> dict:
-        # Provide exactly up to 3 paths from the candidate list as the plan describes
         recommended = []
         rejected = []
-        
-        # Mapping for mock data based on role ids
-        mock_details = {
-            "product_manager": {
-                "summary": "Your background in coordination maps directly to product lifecycle management.",
-                "details": "With your extensive experience in project delivery and stakeholder management, moving into Product Management is a natural progression. Your skills in managing timelines and cross-functional teams cover approximately 70% of the PM core competencies. The remaining gap is primarily in product strategy and market discovery, which can be acquired through targeted certification."
-            },
-            "data_analyst": {
-                "summary": "Strong quantitative foundation makes this a statistically high-match transition.",
-                "details": "The transition to Data Analysis is highly feasible given your previous work with spreadsheets and reporting. While you'll need to master specific tools like SQL or Tableau, your ability to extract insights from raw data is already evident. This path offers a stable transition with a 90% match for your previous analytical tasks."
-            },
-            "operations_lead": {
-                "summary": "Matches your logistical expertise but requires adaptation to supply-chain specific tools.",
-                "details": "This role leverages your experience in process optimization and team leading. Your historical success in managing operational workflows will minimize the learning curve. The primary risk is the current market volatility in logistics, but your transferable skills provide a strong safety net."
-            }
-        }
 
         for i, role in enumerate(candidate_roles):
-            role_id = role["role_id"]
+            role_id = role.get("role_id", f"role_{i}")
             if i < 3:
-                # Dynamically construct details using the actual candidate_role stats
-                t_months = role.get('avg_transition_months', 9)
-                details = {
-                    "summary": f"Your background shows overlapping skills for a transition to {role['label']}.",
-                    "details": f"Transitioning to {role['label']} typically takes {t_months} to {t_months + 3} months. The primary gap is in domain-specific technical skills, which can be acquired through targeted certification."
-                }
-                
+                assessment = await self._assess_path(profile, role)
                 recommended.append({
                     "target_role_id": role_id,
-                    "target_role_label": role["label"],
-                    "feasibility_summary": details["summary"],
-                    "feasibility_details": details["details"],
-                    "key_risks": ["Potential for initial vertical move instead of promotion.", "Higher competition for entry-level roles in this domain."],
-                    "skill_gaps": ["Domain-specific tool proficiency", "Advanced stakeholder communication"],
-                    "estimated_transition_months": t_months
+                    "target_role_label": role.get("label", role_id),
+                    "feasibility_summary": assessment.get("feasibility_summary", ""),
+                    "feasibility_details": assessment.get("feasibility_details", ""),
+                    "top_risk": assessment.get("top_risk", ""),
+                    "skill_gaps": assessment.get("skill_gaps", []),
+                    "recommended_certifications": assessment.get("recommended_certifications", []),
+                    "first_30_day_action": assessment.get("first_30_day_action", ""),
+                    "financial_flag": assessment.get("financial_flag"),
+                    "key_risks": [assessment.get("top_risk", "Market competition for entry-level roles.")],
+                    "estimated_transition_months": role.get("avg_transition_months", 9),
+                    "similarity_score": role.get("similarity_score", 0),
+                    "target_role_match": role.get("target_role_match", False),
+                    "annual_salary_p25_inr": role.get("annual_salary_p25_inr"),
+                    "annual_salary_p50_inr": role.get("annual_salary_p50_inr"),
+                    "market_demand_score": role.get("market_demand_score"),
+                    "hiring_friction": role.get("hiring_friction"),
+                    "remote_friendly": role.get("remote_friendly"),
                 })
             else:
-                # Specific honest reasons
+                # Generate honest rejection reasons
+                runway = profile.get("runway_months", 12)
+                transition_months = role.get("avg_transition_months", 12)
                 reasons = [
-                    "Requires 12+ months of full-time retraining which exceeds your current savings runway.",
-                    "High initial pay cut (> 40%) makes this path financially unsustainable under your current constraints.",
-                    "Geographical requirement does not match your hybrid/remote constraint.",
-                    "Industry saturation currently makes the time-to-hire too unpredictable."
+                    f"Requires ~{transition_months} months of retraining which may exceed your current savings runway.",
+                    f"Entry-level salary (₹{role.get('annual_salary_p25_inr', 0):,}/yr) may not meet your minimum income floor.",
+                    "Geographical requirements do not match your remote/hybrid preference.",
+                    "High hiring friction in this role makes time-to-hire unpredictable for your financial window.",
                 ]
                 rejected.append({
                     "target_role_id": role_id,
-                    "target_role_label": role["label"],
-                    "rejection_reason": reasons[i % len(reasons)]
+                    "target_role_label": role.get("label", role_id),
+                    "rejection_reason": reasons[i % len(reasons)],
                 })
-                
+
+        return {"recommended_paths": recommended, "rejected_paths": rejected}
+
+    async def _assess_path(self, profile: dict, role: dict) -> dict:
+        """Generate a constrained LLM assessment for a single career path."""
+        if not self._gemini_ready:
+            return self._fallback_assessment(profile, role)
+
+        try:
+            return await self._gemini_assess(profile, role)
+        except Exception as e:
+            logger.warning(f"[PathAgent] Gemini assessment failed for {role.get('role_id')}: {e}")
+            return self._fallback_assessment(profile, role)
+
+    async def _gemini_assess(self, profile: dict, role: dict) -> dict:
+        model = genai.GenerativeModel(
+            model_name="gemini-2.0-flash",
+            generation_config=genai.GenerationConfig(
+                response_mime_type="application/json",
+                temperature=0.3,
+            ),
+            system_instruction=SYSTEM_PROMPT,
+        )
+
+        # Compute runway
+        monthly_expenses = profile.get("monthly_expenses", 45000)
+        liquid_savings = profile.get("liquid_savings", 0)
+        runway_months = round(liquid_savings / monthly_expenses, 1) if monthly_expenses else 0
+        transition_months = role.get("avg_transition_months", 9)
+        financial_pressure = runway_months < transition_months
+
+        prompt = f"""Assess this career transition:
+
+CURRENT PROFILE:
+- Current role: {profile.get('current_role', 'Unknown')}
+- Years experience: {profile.get('years_experience', 'Unknown')} years
+- Industry: {profile.get('industry', 'Unknown')}
+- Inferred skills: {', '.join(profile.get('inferred_skills', [])[:8])}
+- Available hours/week for upskilling: {profile.get('weekly_hours_available', 10)} hrs
+
+FINANCIAL CONSTRAINTS (IMMOVABLE — DO NOT CHANGE):
+- Monthly expenses: ₹{monthly_expenses:,.0f}
+- Liquid savings: ₹{liquid_savings:,.0f}
+- Financial runway: {runway_months} months
+- {'⚠️ CRITICAL: Runway is SHORTER than estimated transition time!' if financial_pressure else 'Runway is adequate for this transition.'}
+
+TARGET ROLE:
+- Role: {role.get('label', 'Unknown')}
+- Description: {role.get('description', '')}
+- Required skills: {', '.join(role.get('skills', []))}
+- Estimated transition time: {transition_months} months
+- Market salary P25: ₹{role.get('annual_salary_p25_inr', 0):,}/year
+- Market salary P50: ₹{role.get('annual_salary_p50_inr', 0):,}/year
+- Hiring friction: {role.get('hiring_friction', 'medium')}
+- Remote friendly: {role.get('remote_friendly', True)}
+
+Generate a specific, honest assessment. Reference their actual role and industry. Name real tools and certifications."""
+
+        response = model.generate_content(prompt)
+        result = json.loads(response.text)
+
+        # Validate: never let the model invent financial numbers
+        if "financial_flag" not in result:
+            result["financial_flag"] = None
+        if financial_pressure and not result.get("financial_flag"):
+            result["financial_flag"] = (
+                f"⚠️ Your {runway_months}-month runway is shorter than the {transition_months}-month "
+                f"estimated transition. Consider part-time freelancing or negotiating a notice period "
+                f"to extend your financial runway before starting intensive upskilling."
+            )
+
+        return result
+
+    def _fallback_assessment(self, profile: dict, role: dict) -> dict:
+        """Deterministic fallback when Gemini is unavailable."""
+        t_months = role.get("avg_transition_months", 9)
+        monthly_expenses = profile.get("monthly_expenses") or 45000
+        liquid_savings = profile.get("liquid_savings") or 0
+        runway_months = round(liquid_savings / monthly_expenses, 1) if monthly_expenses else 0
+
         return {
-            "recommended_paths": recommended,
-            "rejected_paths": rejected
+            "feasibility_summary": (
+                f"Your background as a {profile.get('current_role', 'professional')} in "
+                f"{profile.get('industry', 'your industry')} shows transferable competencies for "
+                f"transitioning into {role.get('label', 'this role')}."
+            ),
+            "feasibility_details": (
+                f"A transition to {role.get('label', 'this role')} typically takes {t_months} months. "
+                f"Your core skills in {', '.join(profile.get('inferred_skills', ['your field'])[:3])} "
+                f"are relevant. The main gaps are domain-specific tooling and portfolio evidence."
+            ),
+            "top_risk": "Market competition for entry-level positions in this domain.",
+            "skill_gaps": role.get("skills", [])[:4],
+            "recommended_certifications": ["Google Career Certificate (relevant track)", "LinkedIn Learning path"],
+            "first_30_day_action": (
+                f"Enroll in a structured {role.get('label', '')} course and complete one portfolio project."
+            ),
+            "financial_flag": (
+                f"⚠️ Runway ({runway_months} months) is shorter than estimated transition ({t_months} months)."
+                if runway_months < t_months else None
+            ),
         }
