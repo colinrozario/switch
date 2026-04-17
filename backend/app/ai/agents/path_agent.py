@@ -170,16 +170,26 @@ Generate a highly specific, honest assessment tailored ONLY to this user's state
         liquid_savings = profile.get("liquid_savings") or 0
         runway_months = round(liquid_savings / monthly_expenses, 1) if monthly_expenses else 0
 
+        # Sanitize fallback strings
+        c_role = profile.get('current_role', '').strip()
+        c_role_clean = c_role if c_role and c_role.lower() not in ["professional", "software_career", "not specified", "unknown"] else "professional"
+        
+        c_ind = profile.get('industry', '').strip()
+        c_ind_clean = f" in {c_ind}" if c_ind and c_ind.lower() not in ["not specified", "unknown"] else ""
+        
+        # Keep inferred skills clean
+        inferred = [s.replace("_", " ").title() for s in profile.get('inferred_skills', [])[:3]]
+        inferred_str = ", ".join(inferred) if inferred else "your primary field"
+
         return {
             "feasibility_summary": (
-                f"Your background as a {profile.get('current_role', 'professional')} in "
-                f"{profile.get('industry', 'your industry')} shows transferable competencies for "
-                f"transitioning into {role.get('label', 'this role')}."
+                f"Your background as a {c_role_clean}{c_ind_clean} shows transferable competencies for "
+                f"transitioning into a {role.get('label', 'this role')}."
             ),
             "feasibility_details": (
                 f"A transition to {role.get('label', 'this role')} typically takes {t_months} months. "
-                f"Your core skills in {', '.join(profile.get('inferred_skills', ['your field'])[:3])} "
-                f"are relevant. The main gaps are domain-specific tooling and portfolio evidence."
+                f"Your core skills in {inferred_str} "
+                f"are highly relevant. The main gaps are domain-specific tooling and portfolio evidence."
             ),
             "top_risk": "Market competition for entry-level positions in this domain.",
             "skill_gaps": role.get("skills", [])[:4],
