@@ -8,7 +8,8 @@ It may not invent salary numbers, override timelines, or claim transitions are "
 import json
 import logging
 from typing import Optional
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
@@ -42,7 +43,7 @@ class PathAgent:
     def __init__(self):
         self._gemini_ready = bool(settings.GEMINI_API_KEY)
         if self._gemini_ready:
-            genai.configure(api_key=settings.GEMINI_API_KEY)
+            self._client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
     async def run(self, profile: dict, candidate_roles: list) -> dict:
         recommended = []
@@ -102,23 +103,15 @@ class PathAgent:
             return self._fallback_assessment(profile, role)
 
     async def _gemini_assess(self, profile: dict, role: dict) -> dict:
-        model = genai.GenerativeModel(
-            model_name="gemini-2.0-flash",
-            generation_config=genai.GenerationConfig(
-                response_mime_type="application/json",
-                temperature=0.3,
-            ),
-            system_instruction=SYSTEM_PROMPT,
-        )
-
-        # Compute runway
         monthly_expenses = profile.get("monthly_expenses", 45000)
         liquid_savings = profile.get("liquid_savings", 0)
         runway_months = round(liquid_savings / monthly_expenses, 1) if monthly_expenses else 0
         transition_months = role.get("avg_transition_months", 9)
         financial_pressure = runway_months < transition_months
 
-        prompt = f"""Assess this career transition:
+        prompt = f"""{SYSTEM_PROMPT}
+
+Assess this career transition:
 
 CURRENT PROFILE:
 - Current role: {profile.get('current_role', 'Unknown')}
@@ -145,10 +138,16 @@ TARGET ROLE:
 
 Generate a specific, honest assessment. Reference their actual role and industry. Name real tools and certifications."""
 
-        response = model.generate_content(prompt)
+        response = self._client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+                temperature=0.3,
+            ),
+        )
         result = json.loads(response.text)
 
-        # Validate: never let the model invent financial numbers
         if "financial_flag" not in result:
             result["financial_flag"] = None
         if financial_pressure and not result.get("financial_flag"):
@@ -157,7 +156,6 @@ Generate a specific, honest assessment. Reference their actual role and industry
                 f"estimated transition. Consider part-time freelancing or negotiating a notice period "
                 f"to extend your financial runway before starting intensive upskilling."
             )
-
         return result
 
     def _fallback_assessment(self, profile: dict, role: dict) -> dict:
