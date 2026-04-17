@@ -60,6 +60,36 @@
     "typical_backgrounds": ["statistics", "mathematics", "computer science", "physics", "engineering"]
   },
   {
+    "role_id": "ai_ml_engineer",
+    "label": "AI / Machine Learning Engineer",
+    "description": "Designs, builds, and deploys production machine learning systems. Works with model training pipelines, feature engineering, MLOps, and serving infrastructure. Bridges the gap between data science research and production-grade AI products.",
+    "skills": ["python", "pytorch", "tensorflow", "mlops", "docker", "cloud_ml", "data_pipelines", "model_deployment", "experiment_tracking", "deep_learning", "llm_fine_tuning", "vector_databases"],
+    "industries": ["tech", "fintech", "healthcare", "autonomous_systems", "saas"],
+    "annual_salary_p25_inr": 1200000,
+    "annual_salary_p50_inr": 2200000,
+    "market_demand_score": 95,
+    "hiring_friction": "high",
+    "remote_friendly": true,
+    "avg_transition_months": 15,
+    "adjacent_roles": ["data_scientist", "backend_software_engineer", "data_engineer"],
+    "typical_backgrounds": ["computer science", "software engineering", "mathematics", "physics", "data science", "electrical engineering"]
+  },
+  {
+    "role_id": "cloud_solutions_architect",
+    "label": "Cloud Solutions Architect",
+    "description": "Designs and oversees cloud infrastructure strategy across AWS, GCP, or Azure. Leads migration projects, optimizes costs, and ensures security and scalability of cloud-native systems.",
+    "skills": ["aws", "gcp", "azure", "infrastructure_as_code", "networking", "security", "cost_optimization", "system_design", "kubernetes", "serverless"],
+    "industries": ["tech", "consulting", "fintech", "enterprise", "government"],
+    "annual_salary_p25_inr": 1500000,
+    "annual_salary_p50_inr": 2800000,
+    "market_demand_score": 91,
+    "hiring_friction": "high",
+    "remote_friendly": true,
+    "avg_transition_months": 18,
+    "adjacent_roles": ["devops_engineer", "backend_software_engineer", "cybersecurity_analyst"],
+    "typical_backgrounds": ["computer science", "information technology", "systems engineering", "networking", "software engineering"]
+  },
+  {
     "role_id": "product_manager",
     "label": "Product Manager",
     "description": "Owns the vision, strategy, and roadmap of a product. Works cross-functionally with engineering, design, and business to ship products users love.",
