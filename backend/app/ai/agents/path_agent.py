@@ -109,12 +109,9 @@ class PathAgent:
         transition_months = role.get("avg_transition_months", 9)
         financial_pressure = runway_months < transition_months
 
-        prompt = f"""{SYSTEM_PROMPT}
-
-Assess this career transition. Converse naturally and directly with the user (use \"you/your\"). Do not awkwardly repeat \"Not Specified\" or \"Unknown\" — if a field is vague, just focus on the skills.
-
+        # Format inputs nicely
         c_role = profile.get('current_role', '').strip()
-        c_role_clean = c_role if c_role and c_role.lower() not in ["professional", "software_career", "unknown"] else "your current role"
+        c_role_clean = c_role if c_role and c_role.lower() not in ["professional", "software_career", "not specified", "unknown"] else "your current role"
         
         c_ind = profile.get('industry', '').strip()
         c_ind_clean = c_ind if c_ind and c_ind.lower() not in ["not specified", "unknown"] else "your industry"
