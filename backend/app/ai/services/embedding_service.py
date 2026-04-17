@@ -53,10 +53,11 @@ def _get_embedding(text: str) -> np.ndarray:
     """Embed a single piece of text using Gemini text-embedding-004."""
     client = genai.Client(api_key=settings.GEMINI_API_KEY)
     result = client.models.embed_content(
-        model="models/text-embedding-004",
+        model="text-embedding-004",   # no 'models/' prefix in new SDK
         contents=text,
     )
     return np.array(result.embeddings[0].values, dtype=np.float32)
+
 
 
 def _precompute_career_embeddings() -> np.ndarray:
