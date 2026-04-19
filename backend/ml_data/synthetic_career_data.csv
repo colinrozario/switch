@@ -1,0 +1,1001 @@
+current_salary,skills,recommended_role,success_score
+509902,"Marketing, Customer Service, CSS, Agile, HTML",Frontend Developer,0.78
+538130,"Figma, JavaScript",UX/UI Designer,0.92
+518472,"React, Excel",Frontend Developer,0.87
+361323,"AWS, Project Management, Python, Machine Learning, CSS",Frontend Developer,0.99
+595824,"React, Python, JavaScript, Statistics, Sales",Frontend Developer,0.92
+653441,"Docker, Sales, AWS",DevOps Engineer,0.86
+656946,"Agile, JavaScript, Sales, Figma, Tableau",Data Analyst,0.85
+544210,"Marketing, Node.js, Statistics",Backend Developer,0.81
+321697,"SQL, HTML, CSS, Machine Learning, Customer Service",Frontend Developer,0.78
+337538,"AWS, JavaScript, Agile, Figma, Project Management",Product Manager,0.82
+344779,"SQL, Machine Learning, Project Management",Data Analyst,0.87
+875090,"Agile, CSS, React, Node.js, JavaScript",Frontend Developer,0.76
+304411,"Project Management, React, Sales",Frontend Developer,0.92
+315728,"Excel, Figma, CSS, Machine Learning",Frontend Developer,0.8
+334612,"SQL, Marketing, Project Management, Python",Data Analyst,0.83
+244270,"Machine Learning, Customer Service, AWS",DevOps Engineer,0.91
+695299,"Project Management, Sales, Customer Service, Excel",Data Analyst,0.77
+753472,"Sales, Excel",Data Analyst,0.95
+624167,"AWS, Agile",Product Manager,0.83
+200000,"React, Node.js, Marketing, Python",Frontend Developer,0.9
+317765,"Excel, SQL, Customer Service, Project Management",Data Analyst,0.75
+391907,"React, Sales, CSS, AWS",Frontend Developer,0.82
+814553,"Python, React",Frontend Developer,0.73
+578277,"Agile, Docker, React",Frontend Developer,0.9
+341349,"SQL, Tableau, Docker",Data Analyst,0.86
+333377,"AWS, Python, Project Management",Product Manager,0.86
+649003,"React, SQL, Docker",Frontend Developer,0.72
+608248,"CSS, Python, Figma, React",Frontend Developer,0.84
+568710,"Machine Learning, Node.js, React",Frontend Developer,0.76
+432935,"Machine Learning, AWS, Excel, React",Frontend Developer,0.94
+489599,"Figma, CSS",Frontend Developer,0.88
+645478,"Figma, Excel, Python, AWS, Customer Service",Data Analyst,0.74
+593813,"Docker, Statistics, Customer Service, CSS, Agile",Frontend Developer,0.96
+200000,"Agile, CSS, Excel, Project Management",Frontend Developer,0.72
+660995,"SQL, React, Python, AWS, HTML",Frontend Developer,0.77
+200000,"Sales, Machine Learning, Excel, CSS, HTML",Frontend Developer,0.9
+200000,"Node.js, Tableau, Machine Learning, Figma, Project Management",Data Analyst,0.96
+537993,"Project Management, SQL",Data Analyst,0.71
+604569,"Sales, Excel",Data Analyst,0.73
+200000,"Tableau, SQL, AWS, Excel, Customer Service",Data Analyst,0.99
+565891,"AWS, Figma, Statistics, Sales, Customer Service",UX/UI Designer,0.85
+480335,"JavaScript, Statistics, Customer Service, Project Management, HTML",Frontend Developer,0.94
+499544,"Tableau, Node.js, Customer Service, AWS, HTML",Frontend Developer,0.8
+746741,"Machine Learning, Node.js, Sales, HTML, Docker",Frontend Developer,0.75
+515600,"AWS, Customer Service, Python, Excel",Data Analyst,0.87
+394414,"Customer Service, Tableau, JavaScript",Data Analyst,0.7
+321937,"Marketing, Tableau",Data Analyst,0.99
+368193,"Python, CSS, Excel, React, Node.js",Frontend Developer,0.89
+786384,"SQL, JavaScript, Excel, Sales, Machine Learning",Data Analyst,0.77
+309059,"Excel, AWS, Project Management, Machine Learning",Data Analyst,0.75
+527575,"Tableau, Machine Learning, Statistics, Marketing",Data Analyst,0.88
+915619,"Machine Learning, React, Docker",Frontend Developer,0.86
+481794,"AWS, Docker, Project Management, SQL, Tableau",Data Analyst,0.84
+524046,"AWS, Figma",UX/UI Designer,0.8
+372256,"React, Project Management, Node.js, Agile, Tableau",Frontend Developer,0.72
+309678,"Docker, Tableau",Data Analyst,0.84
+447785,"HTML, Project Management, Node.js, Agile, React",Frontend Developer,0.79
+457023,"Docker, Sales, Excel, Figma",Data Analyst,0.93
+239302,"Python, Statistics, Agile",Product Manager,0.83
+584791,"React, Marketing",Frontend Developer,0.99
+376153,"Excel, SQL",Data Analyst,0.96
+545974,"Sales, Machine Learning, HTML",Frontend Developer,0.8
+473962,"Project Management, JavaScript",Product Manager,0.76
+519661,"Machine Learning, Project Management, Statistics, Python",Product Manager,0.74
+436137,"React, CSS, SQL, Machine Learning, Agile",Frontend Developer,0.75
+654375,"CSS, React, HTML, Statistics",Frontend Developer,0.9
+354574,"Statistics, Tableau",Data Analyst,0.71
+443573,"Project Management, Figma, Python",Product Manager,0.84
+386814,"Excel, Tableau, Sales",Data Analyst,0.74
+534454,"JavaScript, Sales, Figma, Agile, Marketing",Product Manager,0.88
+360553,"Node.js, Excel, Tableau",Data Analyst,0.9
+679841,"Node.js, Agile, Excel, SQL",Data Analyst,0.98
+818886,"Docker, CSS, Agile, Figma",Frontend Developer,0.91
+478648,"Figma, Project Management, Python, Sales, React",Frontend Developer,0.74
+366904,"Statistics, Excel, Sales, React, Marketing",Frontend Developer,0.78
+484718,"Machine Learning, Figma",UX/UI Designer,0.85
+287022,"AWS, Node.js, Tableau, Agile",Data Analyst,0.8
+465997,"Node.js, Statistics, Figma, Sales, Tableau",Data Analyst,0.73
+463044,"Node.js, Agile, Project Management, Docker, React",Frontend Developer,0.9
+411515,"Tableau, Excel, Machine Learning, Sales",Data Analyst,0.79
+541926,"React, Node.js, Project Management, Python, Docker",Frontend Developer,0.78
+575100,"HTML, Project Management, AWS, Agile",Frontend Developer,0.99
+520767,"Statistics, Customer Service, Excel, HTML",Frontend Developer,0.88
+268397,"JavaScript, Tableau, CSS, Docker",Frontend Developer,0.8
+360675,"Sales, Customer Service, Machine Learning, Project Management, JavaScript",Product Manager,0.9
+315167,"CSS, HTML, Customer Service, AWS",Frontend Developer,0.87
+277007,"Agile, HTML, SQL, Figma, Excel",Frontend Developer,0.81
+355590,"JavaScript, AWS, Statistics",DevOps Engineer,0.7
+575633,"JavaScript, Python, Tableau, CSS, Figma",Frontend Developer,0.84
+250190,"Agile, Figma",Product Manager,0.87
+200000,"Docker, HTML, Machine Learning, Excel",Frontend Developer,0.99
+1011020,"Agile, Node.js, HTML, Sales, CSS",Frontend Developer,0.71
+531163,"Agile, AWS, Docker",Product Manager,0.77
+843726,"Machine Learning, Statistics, AWS",DevOps Engineer,0.9
+478532,"HTML, Figma",Frontend Developer,0.81
+200000,"Statistics, Docker, JavaScript",DevOps Engineer,0.82
+544885,"Project Management, Marketing, SQL",Data Analyst,0.92
+200000,"Node.js, Figma, Python, HTML, SQL",Frontend Developer,0.81
+592370,"Python, Agile, Customer Service, Docker, SQL",Data Analyst,0.83
+618917,"Project Management, Statistics, Node.js, Python",Product Manager,0.74
+374759,"Machine Learning, Agile, Node.js, Excel",Data Analyst,0.76
+264939,"SQL, Machine Learning, Node.js",Data Analyst,0.93
+678094,"Docker, HTML, Customer Service, JavaScript, SQL",Frontend Developer,0.94
+575102,"Python, Project Management, Agile",Product Manager,0.87
+375864,"AWS, Python, Tableau, Sales, HTML",Frontend Developer,0.89
+510280,"Docker, AWS, Excel, Statistics",Data Analyst,0.89
+419790,"Customer Service, Tableau, CSS, Agile",Frontend Developer,1.0
+441738,"Node.js, Marketing",Backend Developer,0.8
+360338,"Excel, Python, AWS, CSS, Project Management",Frontend Developer,0.79
+577320,"Tableau, SQL, Marketing, Statistics",Data Analyst,0.93
+558702,"Figma, Customer Service, Node.js, Statistics",UX/UI Designer,0.78
+505051,"Agile, Docker, Machine Learning",Product Manager,0.81
+478463,"Statistics, Agile",Product Manager,0.71
+307382,"Project Management, CSS, Agile",Frontend Developer,0.76
+915776,"Figma, CSS, SQL, Statistics, Python",Frontend Developer,0.76
+200000,"SQL, Docker",Data Analyst,0.97
+332486,"SQL, Project Management, JavaScript, Docker",Data Analyst,0.82
+708515,"Node.js, Tableau",Data Analyst,0.77
+622656,"Tableau, React, JavaScript, Agile",Frontend Developer,0.89
+407627,"Agile, Node.js, AWS, Project Management",Product Manager,0.97
+717178,"Sales, React, Python, Customer Service, Machine Learning",Frontend Developer,0.97
+752950,"Project Management, Python",Product Manager,0.82
+476875,"Figma, CSS",Frontend Developer,0.83
+449397,"React, SQL, HTML, Marketing",Frontend Developer,0.76
+207625,"Tableau, Project Management",Data Analyst,0.83
+672824,"CSS, Python, Figma, JavaScript",Frontend Developer,0.77
+562186,"Python, AWS, Tableau, Project Management",Data Analyst,0.81
+757618,"Machine Learning, Agile, CSS, Python, Figma",Frontend Developer,0.86
+472091,"Python, AWS",DevOps Engineer,0.81
+298763,"Excel, AWS, Statistics, Docker, CSS",Frontend Developer,0.75
+712501,"Customer Service, Docker",DevOps Engineer,0.71
+200000,"Figma, Python",UX/UI Designer,0.74
+200000,"CSS, Excel, Project Management, Docker",Frontend Developer,0.79
+440092,"Tableau, SQL, Python, Customer Service, Statistics",Data Scientist,0.84
+698398,"Python, HTML, Sales",Frontend Developer,0.73
+540043,"SQL, Project Management",Data Analyst,0.81
+365070,"Node.js, Project Management",Product Manager,0.92
+510302,"Customer Service, Tableau",Data Analyst,0.86
+816405,"HTML, Node.js",Frontend Developer,0.88
+660008,"JavaScript, Customer Service, Marketing",Frontend Developer,0.81
+346512,"Docker, Sales, Tableau, HTML",Frontend Developer,0.89
+200000,"AWS, Sales",DevOps Engineer,0.74
+685876,"HTML, SQL, Python",Frontend Developer,0.77
+200000,"Agile, Docker, Figma, Project Management",Product Manager,0.96
+719173,"Excel, JavaScript, Figma, Python",Data Analyst,0.89
+445601,"Statistics, Docker, AWS, HTML",Frontend Developer,0.73
+489064,"Agile, Statistics",Product Manager,0.72
+575020,"Docker, Machine Learning",DevOps Engineer,1.0
+307794,"Project Management, Python, JavaScript, AWS, Machine Learning",Product Manager,0.88
+396797,"Tableau, Figma",Data Analyst,0.87
+327963,"Excel, AWS",Data Analyst,0.76
+378829,"Python, Docker, Agile, SQL",Data Analyst,0.81
+267914,"Sales, Tableau, Customer Service",Data Analyst,0.85
+200000,"Customer Service, HTML, Project Management, Statistics",Frontend Developer,0.74
+440479,"Node.js, Statistics, Excel",Data Analyst,0.73
+735513,"SQL, Tableau",Data Analyst,0.71
+557988,"AWS, Machine Learning, Statistics, Node.js, Figma",UX/UI Designer,0.95
+488300,"Tableau, Sales",Data Analyst,0.87
+426542,"Sales, Docker, Node.js, Excel, Marketing",Data Analyst,0.91
+729289,"Tableau, Marketing",Data Analyst,0.99
+438868,"Python, Machine Learning, HTML, Marketing, Statistics",Frontend Developer,0.84
+299280,"Sales, HTML, React, Figma",Frontend Developer,0.97
+529512,"JavaScript, AWS, Statistics",DevOps Engineer,0.82
+679773,"React, Docker, Statistics, Python",Frontend Developer,0.99
+366374,"Docker, Agile, Figma",Product Manager,0.86
+402737,"Docker, Marketing, Project Management, Agile, Customer Service",Product Manager,0.86
+600066,"CSS, Machine Learning, HTML",Frontend Developer,0.82
+352053,"Project Management, Agile, Statistics, JavaScript, Tableau",Data Analyst,0.81
+750843,"Docker, Python, Sales",DevOps Engineer,1.0
+383563,"Tableau, CSS, SQL, Agile",Frontend Developer,0.89
+729610,"AWS, Tableau, Project Management",Data Analyst,0.9
+274402,"Statistics, Excel, Marketing, Customer Service, Tableau",Data Analyst,0.89
+594773,"Sales, Project Management",Product Manager,0.99
+731694,"Sales, AWS, React, JavaScript, Statistics",Frontend Developer,0.99
+200000,"AWS, SQL, Project Management, Machine Learning",Data Analyst,0.89
+288189,"Statistics, SQL, Marketing, Customer Service",Data Analyst,0.95
+480541,"Excel, SQL, AWS, Tableau, Figma",Data Analyst,0.79
+586991,"Tableau, Customer Service, Project Management",Data Analyst,1.0
+662900,"Python, JavaScript",UX/UI Designer,0.75
+404517,"CSS, Node.js",Frontend Developer,0.74
+733047,"SQL, Node.js, React, Statistics",Frontend Developer,0.91
+530795,"Agile, Figma, Docker, Project Management, JavaScript",Product Manager,0.76
+803184,"Excel, HTML",Frontend Developer,0.84
+592580,"SQL, Excel, AWS, Statistics, Sales",Data Analyst,0.99
+442640,"Docker, Machine Learning, Excel",Data Analyst,0.9
+489719,"Customer Service, React, Figma, Excel",Frontend Developer,0.77
+623834,"CSS, Marketing, HTML, React, Customer Service",Frontend Developer,0.84
+422196,"React, HTML, Customer Service, SQL, Figma",Frontend Developer,0.81
+921278,"CSS, AWS, Marketing, Python",Frontend Developer,0.91
+624798,"Docker, AWS, SQL, Agile",Data Analyst,0.7
+372284,"Sales, Marketing, Tableau",Data Analyst,0.87
+200000,"Customer Service, Machine Learning, Sales, Marketing",Frontend Developer,0.71
+282772,"Node.js, Sales, Python, Project Management, SQL",Data Analyst,0.97
+668593,"Node.js, React, Statistics, AWS, HTML",Frontend Developer,0.78
+431532,"Python, Agile, HTML, React",Frontend Developer,0.86
+219723,"Project Management, HTML, React, Python, Agile",Frontend Developer,0.71
+528557,"Sales, Agile",Product Manager,0.8
+270695,"Node.js, HTML, CSS, Figma",Frontend Developer,0.82
+544363,"CSS, Project Management",Frontend Developer,0.85
+618088,"Marketing, Agile, Customer Service, Docker, React",Frontend Developer,0.82
+531241,"Agile, Excel",Data Analyst,0.76
+723326,"CSS, Marketing, React",Frontend Developer,0.8
+200000,"Python, Marketing, Figma, CSS",Frontend Developer,0.9
+230067,"JavaScript, Machine Learning, Excel, Customer Service",Data Analyst,0.79
+289134,"Excel, Marketing",Data Analyst,0.77
+507692,"Marketing, Excel, AWS, HTML, CSS",Frontend Developer,0.84
+662403,"Node.js, JavaScript, CSS, Agile",Frontend Developer,0.99
+354712,"Project Management, Docker, CSS",Frontend Developer,0.73
+531852,"Excel, Customer Service, JavaScript, Sales, Agile",Data Analyst,0.76
+642823,"AWS, HTML",Frontend Developer,0.85
+301577,"CSS, Marketing",Frontend Developer,0.99
+649206,"Node.js, Sales, Python, Docker, Statistics",DevOps Engineer,0.76
+620617,"Tableau, Customer Service",Data Analyst,0.92
+366872,"Machine Learning, React, Project Management, Agile, JavaScript",Frontend Developer,0.75
+594199,"Customer Service, Tableau, Python, SQL, AWS",Data Analyst,0.93
+619795,"Node.js, JavaScript",Backend Developer,0.8
+525638,"Figma, SQL, React, Marketing, Customer Service",Frontend Developer,0.77
+376763,"JavaScript, CSS, Docker, Tableau",Frontend Developer,0.93
+361075,"Figma, Docker, Project Management, Excel, Node.js",Data Analyst,0.71
+200000,"CSS, Node.js, Marketing, Excel",Frontend Developer,0.79
+495452,"Node.js, Python, CSS, Sales",Frontend Developer,0.87
+438123,"Sales, Tableau",Data Analyst,0.89
+823930,"Machine Learning, React, AWS, HTML, JavaScript",Frontend Developer,0.8
+541461,"Agile, Python, Customer Service, JavaScript, Statistics",Product Manager,0.99
+486753,"Agile, Marketing, Project Management, JavaScript",Product Manager,0.97
+485531,"CSS, Project Management, Python, Machine Learning, Agile",Frontend Developer,0.93
+612035,"HTML, Docker, JavaScript",Frontend Developer,0.81
+300728,"Docker, AWS",DevOps Engineer,0.97
+293578,"Machine Learning, Statistics, Figma",UX/UI Designer,0.87
+501311,"Sales, Customer Service, Node.js",Backend Developer,0.85
+590064,"React, HTML, Sales, Node.js",Frontend Developer,0.94
+570731,"HTML, JavaScript",Frontend Developer,0.95
+347979,"Customer Service, Figma, SQL, React, Statistics",Frontend Developer,0.73
+316347,"Docker, JavaScript",DevOps Engineer,0.77
+767993,"Marketing, HTML, Machine Learning",Frontend Developer,0.87
+1018404,"AWS, Marketing, Agile",Product Manager,0.89
+451908,"Machine Learning, Excel",Data Analyst,0.83
+422400,"JavaScript, Customer Service",Product Manager,0.88
+652756,"Machine Learning, Sales, Node.js, Python",Backend Developer,0.72
+372112,"Sales, Agile, HTML, AWS, Node.js",Frontend Developer,0.91
+200000,"Marketing, Statistics",Product Manager,0.97
+321286,"SQL, Figma, CSS, Docker",Frontend Developer,0.92
+380192,"HTML, Sales",Frontend Developer,0.82
+293931,"Statistics, Marketing, Machine Learning",Frontend Developer,0.7
+640078,"Statistics, AWS",DevOps Engineer,0.93
+456690,"Customer Service, Marketing, Project Management, Statistics, Node.js",Product Manager,0.77
+606039,"Figma, React, Docker, JavaScript, Python",Frontend Developer,0.77
+634132,"React, Tableau, CSS",Frontend Developer,0.73
+528215,"Tableau, Figma",Data Analyst,0.95
+534980,"Tableau, Marketing, Node.js, React, Figma",Frontend Developer,0.97
+586035,"Tableau, Excel",Data Analyst,0.91
+372936,"AWS, CSS",Frontend Developer,0.72
+602240,"Python, Sales, Figma",UX/UI Designer,0.82
+381920,"Statistics, Python, Node.js",Backend Developer,0.71
+369627,"React, Node.js, Python, HTML",Frontend Developer,0.76
+538259,"CSS, Node.js, Python",Frontend Developer,0.94
+647000,"Figma, Statistics",UX/UI Designer,0.81
+200000,"Sales, Marketing, Node.js, Docker, Python",DevOps Engineer,1.0
+556969,"Agile, HTML",Frontend Developer,0.74
+444368,"Project Management, Docker, JavaScript, Sales, Figma",Product Manager,0.74
+877396,"Agile, AWS, Project Management, React, Sales",Frontend Developer,0.87
+411807,"Node.js, Excel",Data Analyst,0.84
+865375,"Figma, Sales, Marketing, Customer Service",UX/UI Designer,0.88
+555974,"Customer Service, Agile, Python, Marketing, Node.js",Product Manager,0.8
+508801,"Python, Machine Learning",Data Analyst,0.95
+200000,"Marketing, Docker, JavaScript, HTML, Figma",Frontend Developer,0.73
+200000,"HTML, Python, Customer Service, JavaScript",Frontend Developer,0.83
+596279,"CSS, Tableau, SQL, JavaScript",Frontend Developer,0.74
+559538,"JavaScript, Machine Learning",Backend Developer,0.93
+482625,"AWS, Docker, Excel, HTML",Frontend Developer,1.0
+286344,"JavaScript, Tableau, Statistics, Sales",Data Analyst,0.91
+443071,"Statistics, SQL, Python, JavaScript",Data Scientist,0.98
+869079,"Tableau, Customer Service, Machine Learning, AWS",Data Analyst,0.75
+493629,"CSS, Figma, Machine Learning, Agile",Frontend Developer,0.76
+423225,"JavaScript, Machine Learning, Agile, HTML",Frontend Developer,0.79
+653520,"SQL, Customer Service, Tableau, AWS",Data Analyst,0.87
+536029,"Figma, Python, Agile, Node.js, CSS",Frontend Developer,0.99
+334061,"Figma, JavaScript",UX/UI Designer,0.88
+549149,"Excel, JavaScript",Data Analyst,0.79
+399926,"Excel, JavaScript, Docker",Data Analyst,0.73
+279463,"Machine Learning, Node.js, Agile",Product Manager,0.83
+215829,"Sales, Customer Service, Node.js, Docker, SQL",Data Analyst,0.85
+438271,"SQL, Customer Service, CSS",Frontend Developer,0.72
+794338,"SQL, Excel",Data Analyst,0.78
+293543,"Agile, Sales, Machine Learning, Marketing, Statistics",Product Manager,0.91
+553132,"Docker, React",Frontend Developer,0.82
+693895,"SQL, Project Management, Figma",Data Analyst,0.71
+576728,"Statistics, AWS, Docker, Customer Service, JavaScript",DevOps Engineer,0.95
+541181,"Docker, Excel",Data Analyst,0.83
+287762,"React, SQL, JavaScript, Customer Service",Frontend Developer,0.95
+333621,"CSS, Machine Learning",Frontend Developer,0.74
+483669,"Excel, Figma",Data Analyst,0.93
+603168,"Tableau, SQL, Node.js",Data Analyst,0.7
+352748,"Tableau, Customer Service, Node.js, Figma",Data Analyst,0.73
+671317,"JavaScript, CSS, Statistics, Docker, Agile",Frontend Developer,0.88
+594435,"CSS, JavaScript, AWS, Docker",Frontend Developer,0.9
+736887,"React, Node.js, Machine Learning, Figma, HTML",Frontend Developer,0.87
+499807,"CSS, Sales",Frontend Developer,0.82
+592924,"Docker, Sales, Excel",Data Analyst,1.0
+586268,"Sales, AWS, Excel, Python",Data Analyst,0.84
+774117,"Figma, Customer Service",UX/UI Designer,0.79
+465375,"AWS, Docker",DevOps Engineer,0.77
+494841,"Project Management, CSS, Statistics, SQL",Frontend Developer,0.78
+449661,"Sales, Statistics, HTML, Node.js, Customer Service",Frontend Developer,0.74
+230946,"Figma, Customer Service, Agile",Product Manager,0.93
+666854,"HTML, Machine Learning, Customer Service",Frontend Developer,0.83
+311777,"Marketing, JavaScript, Statistics, Customer Service",Data Scientist,0.94
+277337,"Tableau, Node.js",Data Analyst,0.96
+638906,"JavaScript, SQL, Marketing",Data Analyst,0.79
+533454,"Marketing, Python, Node.js",Backend Developer,0.87
+495095,"Sales, Marketing, Figma, Node.js, Machine Learning",UX/UI Designer,0.83
+769531,"Project Management, AWS, Python, JavaScript, Agile",Product Manager,0.94
+641091,"React, CSS, JavaScript, Sales, Python",Frontend Developer,0.77
+583991,"Python, Excel, HTML",Frontend Developer,0.89
+517258,"SQL, JavaScript, Figma",Data Analyst,0.72
+771067,"Agile, Python, Customer Service, React, SQL",Frontend Developer,0.83
+739734,"Node.js, Excel",Data Analyst,0.73
+899161,"React, AWS, Excel, Sales",Frontend Developer,0.88
+931619,"Statistics, Sales, Node.js",Backend Developer,0.95
+368074,"Node.js, JavaScript, Docker, Excel, CSS",Frontend Developer,0.74
+654767,"Tableau, Python, Machine Learning, Marketing, Customer Service",Data Analyst,0.7
+850109,"Statistics, AWS, Node.js, Docker, Tableau",Data Analyst,0.97
+526128,"HTML, Marketing, Agile",Frontend Developer,0.73
+861420,"Machine Learning, Docker, Excel, CSS, React",Frontend Developer,0.96
+671781,"Figma, Excel",Data Analyst,0.85
+558198,"CSS, Python, Machine Learning",Frontend Developer,0.81
+200000,"Excel, JavaScript",Data Analyst,0.8
+424256,"HTML, JavaScript, Marketing, Statistics",Frontend Developer,0.83
+671473,"Agile, Node.js",Product Manager,0.88
+311291,"CSS, Excel",Frontend Developer,0.73
+320788,"Python, Node.js, CSS, Agile, Tableau",Frontend Developer,0.75
+566160,"Figma, Project Management, React",Frontend Developer,0.84
+497826,"Marketing, Tableau, React, Statistics",Frontend Developer,0.72
+246269,"JavaScript, Agile, Figma",Product Manager,0.82
+627985,"Machine Learning, Project Management",Product Manager,0.88
+291753,"Node.js, SQL, AWS, JavaScript",Data Analyst,0.75
+470233,"Agile, CSS, Marketing",Frontend Developer,0.72
+602715,"Sales, AWS",DevOps Engineer,0.78
+318444,"Node.js, JavaScript",Backend Developer,0.8
+561244,"Machine Learning, CSS, Excel",Frontend Developer,0.78
+622998,"Tableau, SQL, Figma, React",Frontend Developer,0.96
+340916,"Customer Service, Machine Learning, Python",Product Manager,0.93
+767735,"SQL, JavaScript, Figma, Agile, HTML",Frontend Developer,0.88
+303981,"Agile, Statistics",Product Manager,0.96
+589656,"Excel, Statistics",Data Analyst,0.82
+413286,"HTML, Machine Learning, Tableau, Marketing, SQL",Frontend Developer,0.81
+476367,"Customer Service, Node.js",Backend Developer,0.97
+776670,"Docker, Customer Service, Marketing, HTML",Frontend Developer,0.96
+200000,"Agile, Tableau, Statistics",Data Analyst,0.72
+540112,"Marketing, SQL, Tableau, Statistics, Node.js",Data Analyst,0.97
+320001,"Marketing, Sales, Docker, SQL, AWS",Data Analyst,0.8
+751480,"Figma, Marketing, Node.js",UX/UI Designer,0.98
+538787,"Docker, Excel",Data Analyst,0.74
+200000,"Statistics, Node.js",Backend Developer,0.82
+874734,"Marketing, Figma, HTML",Frontend Developer,0.85
+200000,"Project Management, SQL, JavaScript",Data Analyst,0.92
+932946,"SQL, Machine Learning, CSS, Tableau, Sales",Frontend Developer,0.71
+986337,"Figma, Statistics, Customer Service",UX/UI Designer,0.89
+586613,"Customer Service, JavaScript",Backend Developer,0.87
+374689,"Docker, Sales, JavaScript, React",Frontend Developer,0.77
+522837,"React, Agile, Sales, Marketing, AWS",Frontend Developer,0.78
+639667,"Tableau, Customer Service, Statistics, Agile",Data Analyst,0.81
+634091,"Marketing, Project Management, Customer Service",Product Manager,0.71
+240629,"HTML, JavaScript, Node.js",Frontend Developer,0.74
+773283,"Customer Service, Docker, Python, Excel, Machine Learning",Data Analyst,0.97
+238511,"Machine Learning, AWS, Tableau, Excel",Data Analyst,0.87
+425698,"CSS, JavaScript, Tableau, Sales",Frontend Developer,0.77
+596519,"Excel, Node.js, SQL, Sales, Statistics",Data Analyst,0.97
+710385,"Machine Learning, Excel, React, AWS, Project Management",Frontend Developer,0.82
+404183,"Node.js, Docker, JavaScript, HTML",Frontend Developer,0.77
+327841,"HTML, React",Frontend Developer,0.9
+705191,"Figma, HTML, Machine Learning, Node.js, Excel",Frontend Developer,0.72
+488137,"Docker, SQL, Marketing, AWS",Data Analyst,0.74
+745273,"Node.js, Agile, Project Management, Sales, Machine Learning",Product Manager,0.8
+893467,"AWS, Statistics",DevOps Engineer,0.77
+761815,"Sales, Marketing, JavaScript, Node.js, Customer Service",Backend Developer,0.71
+200000,"Machine Learning, Python, Agile, Excel",Data Analyst,0.93
+312758,"React, Sales, CSS, Statistics, Excel",Frontend Developer,0.87
+604137,"Project Management, Excel, Tableau",Data Analyst,0.77
+596867,"Marketing, React, Excel",Frontend Developer,0.87
+694529,"HTML, Excel, CSS, Figma",Frontend Developer,0.89
+612117,"Tableau, Python",Data Analyst,0.77
+484927,"Customer Service, Machine Learning, Marketing",Product Manager,0.91
+490440,"Figma, Statistics",UX/UI Designer,0.72
+620624,"AWS, Node.js, Machine Learning",DevOps Engineer,0.73
+378185,"CSS, Machine Learning",Frontend Developer,0.92
+235284,"Figma, React",Frontend Developer,0.93
+720721,"HTML, React, CSS, Marketing",Frontend Developer,0.88
+602536,"React, JavaScript, Project Management",Frontend Developer,0.92
+549913,"Figma, AWS, Python, Sales",UX/UI Designer,0.77
+601842,"Node.js, SQL",Data Analyst,0.86
+422720,"CSS, Python",Frontend Developer,0.79
+457034,"Tableau, Customer Service, CSS, Sales",Frontend Developer,0.78
+798078,"React, Machine Learning, Excel, Marketing, AWS",Frontend Developer,0.81
+705903,"SQL, HTML, CSS",Frontend Developer,0.82
+200000,"SQL, Customer Service, React",Frontend Developer,0.75
+436902,"CSS, Tableau, Machine Learning",Frontend Developer,0.76
+200000,"React, Agile",Frontend Developer,0.87
+399575,"Excel, Marketing, Tableau, Sales, Docker",Data Analyst,0.88
+630817,"Excel, React, CSS, Statistics",Frontend Developer,0.85
+613418,"Node.js, Docker, Marketing, Tableau, JavaScript",Data Analyst,0.94
+367807,"Tableau, Agile",Data Analyst,0.78
+207218,"React, CSS",Frontend Developer,0.74
+443130,"React, SQL, AWS",Frontend Developer,0.8
+363733,"Tableau, Machine Learning, Project Management, Sales, AWS",Data Analyst,0.71
+573773,"Sales, Project Management, SQL, Agile, CSS",Frontend Developer,0.94
+563851,"Marketing, Customer Service, Docker",DevOps Engineer,0.98
+437723,"Customer Service, Statistics",Full Stack Developer,0.72
+377354,"SQL, Sales, React, CSS, Marketing",Frontend Developer,0.74
+472657,"Statistics, Node.js, Figma",UX/UI Designer,0.99
+443594,"Project Management, Machine Learning, Node.js, React",Frontend Developer,0.86
+481070,"Docker, Machine Learning, Customer Service, HTML",Frontend Developer,0.91
+368796,"Sales, Docker",DevOps Engineer,0.85
+937105,"JavaScript, SQL, Tableau, Excel",Data Analyst,0.76
+674976,"Docker, Marketing, Sales",DevOps Engineer,0.84
+969726,"Project Management, Customer Service, Statistics, SQL, Docker",Data Analyst,0.93
+351587,"Marketing, Project Management, Statistics",Product Manager,0.72
+406621,"Tableau, CSS",Frontend Developer,0.85
+688877,"Project Management, Marketing, JavaScript",Product Manager,0.98
+554438,"HTML, Customer Service, Agile, JavaScript",Frontend Developer,0.78
+591138,"Agile, Excel, HTML, Docker",Frontend Developer,0.97
+362679,"Statistics, Project Management",Product Manager,0.95
+564139,"Excel, CSS, Machine Learning",Frontend Developer,0.81
+589789,"Statistics, Tableau, Agile",Data Analyst,0.77
+567694,"Customer Service, CSS, Figma",Frontend Developer,0.92
+368675,"Excel, Figma, Machine Learning, Project Management, HTML",Frontend Developer,1.0
+446983,"Project Management, SQL, Machine Learning, Statistics, Marketing",Data Analyst,0.82
+293365,"Tableau, Machine Learning, Figma, JavaScript, SQL",Data Analyst,0.95
+285879,"Docker, Figma, Customer Service, Statistics",UX/UI Designer,0.75
+674216,"Marketing, Python, React, Docker, AWS",Frontend Developer,0.97
+645760,"Statistics, Tableau, Agile, AWS, Node.js",Data Analyst,0.8
+292115,"Machine Learning, Marketing, React, Agile, Figma",Frontend Developer,0.84
+448033,"Project Management, Agile, Docker, Node.js, Tableau",Data Analyst,0.81
+452645,"Docker, Customer Service, React, Tableau, HTML",Frontend Developer,0.85
+200000,"Sales, AWS, Machine Learning",DevOps Engineer,0.71
+590963,"Customer Service, Agile, Node.js",Product Manager,0.9
+375927,"Customer Service, Docker",DevOps Engineer,0.85
+547894,"React, SQL",Frontend Developer,0.96
+305750,"Docker, Marketing, Excel, Customer Service",Data Analyst,0.84
+300965,"Sales, Python, Tableau, Figma, HTML",Frontend Developer,0.73
+553973,"Docker, Figma, JavaScript",UX/UI Designer,0.95
+519182,"Figma, Excel, Machine Learning, Sales, HTML",Frontend Developer,0.93
+569428,"Agile, CSS, Customer Service, Machine Learning, Statistics",Frontend Developer,0.85
+598616,"Excel, Docker, Machine Learning, AWS",Data Analyst,0.85
+401859,"JavaScript, Node.js, Tableau",Data Analyst,0.77
+324605,"React, SQL, Machine Learning",Frontend Developer,0.93
+508326,"React, Excel, Sales, Customer Service, Machine Learning",Frontend Developer,0.93
+399236,"Marketing, HTML, React, Tableau, Node.js",Frontend Developer,0.91
+481225,"Sales, HTML, Marketing, Agile, Node.js",Frontend Developer,0.97
+629757,"Project Management, Customer Service, Tableau, Agile",Data Analyst,0.76
+743856,"SQL, Python",Data Analyst,1.0
+914465,"JavaScript, Customer Service, Docker, Figma, AWS",UX/UI Designer,0.94
+385039,"HTML, Figma, Python",Frontend Developer,0.9
+387386,"React, Sales, SQL, AWS",Frontend Developer,0.97
+855019,"Project Management, Customer Service, Tableau, Sales, Machine Learning",Data Analyst,0.81
+505393,"Figma, React, CSS, Docker, Node.js",Frontend Developer,0.85
+752620,"Sales, Node.js, Python, CSS",Frontend Developer,0.94
+631354,"Machine Learning, Agile, React",Frontend Developer,0.93
+375784,"Excel, HTML, Node.js, Tableau, Figma",Frontend Developer,0.83
+409355,"Customer Service, Tableau, CSS, Figma, Marketing",Frontend Developer,0.8
+617727,"Excel, Docker, Project Management, Tableau",Data Analyst,0.87
+796450,"Sales, JavaScript",Data Scientist,0.71
+678272,"Marketing, Python, Machine Learning, Tableau",Data Analyst,0.86
+375315,"Excel, Sales, Marketing",Data Analyst,0.94
+930125,"JavaScript, Sales, CSS",Frontend Developer,0.89
+725910,"Sales, Project Management, Excel, React, Agile",Frontend Developer,0.89
+469033,"Node.js, Docker, CSS",Frontend Developer,0.75
+455219,"Figma, Docker, HTML, React",Frontend Developer,0.91
+421789,"Marketing, SQL",Data Analyst,0.75
+247575,"Node.js, Docker",DevOps Engineer,0.79
+511758,"Agile, Sales, React, Statistics, CSS",Frontend Developer,0.76
+452041,"Machine Learning, Agile",Product Manager,0.79
+439915,"Sales, HTML, Docker, React",Frontend Developer,0.86
+760118,"Tableau, HTML, Agile, Machine Learning",Frontend Developer,0.83
+251222,"CSS, Agile",Frontend Developer,0.9
+535115,"Customer Service, React, HTML, Docker",Frontend Developer,0.79
+200000,"Node.js, Figma, Docker, SQL",Data Analyst,0.87
+399759,"CSS, Sales",Frontend Developer,0.84
+460073,"Docker, AWS, React",Frontend Developer,0.92
+396116,"Docker, Figma, HTML, Node.js",Frontend Developer,0.84
+513865,"JavaScript, Sales, Customer Service, Excel, CSS",Frontend Developer,0.71
+797747,"SQL, Sales, HTML",Frontend Developer,0.97
+428341,"HTML, Marketing",Frontend Developer,0.79
+575693,"Project Management, Node.js, CSS",Frontend Developer,0.94
+294498,"Machine Learning, Figma, Node.js, SQL",Data Analyst,0.77
+467524,"AWS, HTML, Customer Service, Docker",Frontend Developer,0.74
+759559,"SQL, Python, Sales, Excel, Agile",Data Analyst,0.78
+509540,"AWS, Agile, Docker, Excel",Data Analyst,0.96
+371755,"Figma, CSS, HTML",Frontend Developer,0.98
+616184,"Machine Learning, SQL, JavaScript, Python",Data Analyst,0.82
+1112090,"Python, Customer Service, Figma, SQL, Docker",Data Analyst,0.73
+551195,"Figma, CSS, SQL, JavaScript",Frontend Developer,0.8
+456414,"Node.js, Machine Learning",Backend Developer,0.98
+575062,"Excel, AWS",Data Analyst,0.88
+701590,"Tableau, HTML",Frontend Developer,0.74
+360262,"Sales, Statistics, Customer Service, Agile",Product Manager,0.72
+441349,"Sales, Node.js, CSS, Marketing, Statistics",Frontend Developer,0.86
+352036,"JavaScript, HTML, Customer Service, SQL, Agile",Frontend Developer,0.71
+321009,"Tableau, Project Management, JavaScript",Data Analyst,0.74
+611758,"SQL, Machine Learning",Data Analyst,0.87
+412959,"Statistics, Agile",Product Manager,0.87
+567166,"Agile, Python",Product Manager,0.75
+664228,"Node.js, SQL, Agile, Project Management",Data Analyst,0.95
+617617,"Node.js, CSS, Agile",Frontend Developer,0.96
+306032,"Customer Service, Machine Learning, Statistics, Python, Tableau",Data Analyst,0.98
+930153,"Customer Service, Excel, Agile",Data Analyst,0.76
+448969,"Machine Learning, Project Management",Product Manager,0.77
+290499,"AWS, Node.js",DevOps Engineer,0.8
+200000,"Figma, AWS, Sales",UX/UI Designer,0.84
+427392,"JavaScript, Node.js",Backend Developer,0.76
+317731,"Statistics, Docker",DevOps Engineer,0.82
+301012,"Python, SQL, Agile",Data Analyst,0.89
+201826,"Machine Learning, JavaScript",Frontend Developer,0.79
+731876,"Agile, Sales",Product Manager,0.8
+320449,"Marketing, Python, JavaScript",DevOps Engineer,0.79
+497866,"Excel, Project Management",Data Analyst,0.8
+678181,"Marketing, React, CSS",Frontend Developer,0.87
+200000,"Docker, Statistics",DevOps Engineer,0.82
+640485,"React, Project Management, Tableau, Machine Learning, AWS",Frontend Developer,0.74
+659934,"JavaScript, Marketing, Project Management, Docker",Product Manager,0.96
+517455,"AWS, Sales, Machine Learning, Figma",UX/UI Designer,0.81
+881431,"Tableau, Statistics, Machine Learning",Data Analyst,0.79
+217663,"SQL, Excel, Customer Service, Figma, Statistics",Data Analyst,0.85
+460988,"Customer Service, Figma, HTML",Frontend Developer,0.97
+612103,"Figma, HTML, Node.js, Machine Learning",Frontend Developer,0.91
+396524,"Machine Learning, Marketing, Tableau, HTML",Frontend Developer,0.7
+494545,"Sales, SQL, Agile, HTML, Python",Frontend Developer,0.89
+580741,"HTML, Machine Learning, Figma, Docker",Frontend Developer,0.85
+526602,"CSS, Sales, HTML",Frontend Developer,0.82
+504902,"Sales, Docker, Customer Service, Node.js, Statistics",DevOps Engineer,0.84
+251556,"Statistics, JavaScript, Marketing, HTML, CSS",Frontend Developer,0.85
+521187,"Excel, Agile, HTML, JavaScript",Frontend Developer,0.88
+460169,"Statistics, React",Frontend Developer,0.75
+330158,"HTML, Marketing, CSS, React, JavaScript",Frontend Developer,0.97
+394841,"JavaScript, React, Sales",Frontend Developer,0.86
+604871,"Sales, Excel, CSS, Marketing",Frontend Developer,0.89
+427543,"Statistics, Project Management, Python",Product Manager,0.97
+760678,"Marketing, Statistics, React, Node.js, Agile",Frontend Developer,0.93
+697342,"Node.js, CSS, Agile, Project Management",Frontend Developer,0.89
+358565,"Excel, Tableau, Machine Learning",Data Analyst,0.86
+200000,"Docker, SQL, Agile, HTML, React",Frontend Developer,0.92
+525446,"Excel, Agile, React, SQL, Node.js",Frontend Developer,0.91
+383919,"CSS, Tableau, Project Management, HTML",Frontend Developer,0.74
+387336,"Project Management, Agile, Excel",Data Analyst,0.89
+779729,"Marketing, Customer Service, Machine Learning",Data Analyst,0.77
+659803,"Excel, Node.js, SQL",Data Analyst,0.93
+756743,"Docker, CSS, Project Management, Figma, JavaScript",Frontend Developer,0.75
+323833,"Python, Excel, Agile",Data Analyst,0.98
+636902,"React, Node.js, AWS, Tableau, Python",Frontend Developer,0.93
+447047,"Customer Service, AWS, Excel, Statistics",Data Analyst,0.72
+531528,"React, Customer Service, HTML",Frontend Developer,0.91
+291817,"HTML, Figma, Machine Learning, Agile, Marketing",Frontend Developer,0.96
+593096,"HTML, Figma, JavaScript",Frontend Developer,0.92
+462617,"Statistics, CSS",Frontend Developer,0.8
+200000,"JavaScript, CSS",Frontend Developer,0.98
+393957,"CSS, Excel, Agile, Statistics, Project Management",Frontend Developer,0.97
+235356,"Python, CSS, Marketing, HTML, Excel",Frontend Developer,0.78
+389169,"Excel, CSS, React, Marketing, Python",Frontend Developer,0.99
+949065,"CSS, React, HTML, Excel, Sales",Frontend Developer,0.95
+518086,"HTML, Tableau",Frontend Developer,0.74
+296638,"Docker, HTML, Customer Service, SQL",Frontend Developer,0.72
+461952,"HTML, Python",Frontend Developer,0.71
+407322,"Python, CSS, SQL, Agile, AWS",Frontend Developer,0.94
+307037,"HTML, Figma",Frontend Developer,0.71
+634969,"Statistics, CSS, Machine Learning, Customer Service",Frontend Developer,0.87
+244461,"Agile, Node.js, Project Management, Tableau",Data Analyst,0.73
+624832,"HTML, SQL, Figma, Machine Learning",Frontend Developer,0.96
+604149,"Tableau, JavaScript, Figma, Node.js, CSS",Frontend Developer,0.74
+434205,"Agile, Statistics, Tableau, Figma",Data Analyst,0.89
+697017,"Project Management, Node.js, Customer Service",Product Manager,0.73
+554947,"Node.js, Sales",Backend Developer,0.78
+200000,"React, Figma",Frontend Developer,0.98
+827635,"Tableau, JavaScript, HTML, Customer Service, Figma",Frontend Developer,0.75
+499809,"Customer Service, Marketing, Node.js, SQL",Data Analyst,0.92
+327978,"Agile, Excel",Data Analyst,0.87
+669334,"Agile, Statistics",Product Manager,0.85
+200000,"HTML, AWS, Excel, CSS",Frontend Developer,0.76
+741565,"Statistics, HTML",Frontend Developer,0.99
+261648,"Figma, Project Management, Agile, Sales, Marketing",Product Manager,0.82
+358485,"Project Management, Marketing",Product Manager,0.85
+491262,"Machine Learning, Agile, Tableau, Excel",Data Analyst,0.89
+437291,"HTML, Tableau",Frontend Developer,0.86
+840196,"Figma, Node.js",UX/UI Designer,0.77
+399814,"CSS, Marketing, Sales, SQL, Node.js",Frontend Developer,0.8
+530234,"Docker, Tableau, Excel, Machine Learning",Data Analyst,0.92
+454203,"JavaScript, CSS, Marketing, React, Excel",Frontend Developer,0.73
+674233,"Sales, SQL",Data Analyst,0.92
+803824,"HTML, Agile, SQL",Frontend Developer,0.98
+405578,"Statistics, SQL, AWS",Data Analyst,0.97
+760113,"Customer Service, Python, Tableau, Node.js, Project Management",Data Analyst,0.8
+291902,"AWS, Machine Learning, Agile",Product Manager,0.95
+677015,"CSS, Marketing, Excel",Frontend Developer,0.79
+482147,"CSS, Agile, AWS, Tableau, Node.js",Frontend Developer,0.81
+200000,"JavaScript, AWS, SQL, Node.js, Tableau",Data Analyst,0.9
+696265,"Machine Learning, Marketing, Sales, Node.js, HTML",Frontend Developer,0.96
+684967,"AWS, Excel, Agile",Data Analyst,0.7
+200000,"Machine Learning, Agile, Tableau, HTML, Project Management",Frontend Developer,0.94
+567599,"Project Management, Tableau, Marketing",Data Analyst,0.96
+619843,"Project Management, Marketing, Python",Product Manager,0.76
+639771,"Docker, Machine Learning, CSS, Marketing",Frontend Developer,0.9
+598725,"AWS, HTML, CSS, Docker, Customer Service",Frontend Developer,0.95
+379394,"Project Management, Marketing",Product Manager,0.79
+486899,"Marketing, Customer Service",Frontend Developer,0.87
+703119,"Machine Learning, React",Frontend Developer,0.76
+397043,"Excel, AWS, Python, Agile, React",Frontend Developer,0.73
+283151,"Figma, Marketing, Excel, HTML, Agile",Frontend Developer,0.72
+422990,"JavaScript, Statistics, Project Management",Product Manager,0.7
+386929,"Sales, Docker, Customer Service",DevOps Engineer,0.74
+484375,"Agile, JavaScript, React, SQL",Frontend Developer,0.91
+658618,"Figma, Sales",UX/UI Designer,0.79
+234857,"Docker, Excel, Agile, Statistics, React",Frontend Developer,0.85
+573900,"Agile, Excel",Data Analyst,0.72
+546191,"Tableau, CSS, Docker, React, Statistics",Frontend Developer,0.73
+509633,"Figma, SQL, AWS, Statistics, Marketing",Data Analyst,0.89
+818023,"Sales, Docker, HTML",Frontend Developer,0.78
+345870,"Sales, Project Management, Agile, Tableau",Data Analyst,0.74
+200000,"Project Management, Docker, Figma, Customer Service",Product Manager,0.77
+844437,"Excel, Statistics, HTML, Project Management",Frontend Developer,0.89
+501517,"AWS, HTML, Project Management, Python, Agile",Frontend Developer,0.71
+521459,"Statistics, Figma, Python",UX/UI Designer,0.94
+282887,"Statistics, Agile, Marketing, Excel, Project Management",Data Analyst,0.95
+296832,"AWS, Statistics, Docker, Sales",DevOps Engineer,0.96
+823431,"SQL, JavaScript",Data Analyst,0.9
+763557,"Docker, React",Frontend Developer,0.88
+753744,"JavaScript, Excel, SQL",Data Analyst,0.99
+388951,"Project Management, Sales",Product Manager,0.93
+1055918,"Statistics, Marketing, SQL",Data Analyst,0.93
+514012,"Excel, SQL, Project Management, HTML, Agile",Frontend Developer,0.8
+573759,"Docker, AWS, HTML, SQL, Agile",Frontend Developer,0.97
+360132,"Machine Learning, Agile",Product Manager,0.91
+446939,"Agile, Project Management, Machine Learning",Product Manager,0.95
+285204,"HTML, Machine Learning, Customer Service, AWS",Frontend Developer,0.91
+457456,"SQL, Tableau",Data Analyst,0.97
+434135,"JavaScript, Marketing",Data Scientist,0.95
+396509,"Figma, HTML, Sales, React",Frontend Developer,0.85
+723481,"AWS, Customer Service, Machine Learning",DevOps Engineer,0.9
+455315,"Sales, Marketing",Data Scientist,0.83
+402045,"Python, Tableau, SQL, AWS, Docker",Data Analyst,0.75
+415395,"AWS, Agile",Product Manager,0.88
+550629,"React, Figma, Tableau",Frontend Developer,0.92
+200000,"Figma, SQL",Data Analyst,0.91
+699403,"CSS, Agile, AWS",Frontend Developer,0.94
+503911,"Figma, Machine Learning",UX/UI Designer,0.86
+653270,"Customer Service, JavaScript, Machine Learning",UX/UI Designer,0.95
+729790,"CSS, Machine Learning",Frontend Developer,0.79
+367700,"SQL, Tableau",Data Analyst,0.91
+379909,"Docker, React, Statistics, AWS, Project Management",Frontend Developer,0.8
+309240,"Project Management, CSS, Marketing",Frontend Developer,0.87
+735038,"Marketing, Python, Machine Learning, SQL",Data Analyst,0.92
+337340,"Machine Learning, Excel",Data Analyst,0.85
+419983,"Docker, Node.js",DevOps Engineer,0.82
+426506,"Docker, Node.js, Customer Service, Python, HTML",Frontend Developer,0.89
+809254,"Customer Service, Marketing, Agile",Product Manager,0.81
+606162,"Excel, Machine Learning, Marketing, HTML, SQL",Frontend Developer,0.77
+829485,"Docker, Node.js, React, AWS",Frontend Developer,0.81
+806144,"Project Management, Excel, Statistics, Docker",Data Analyst,0.86
+380468,"Python, HTML, AWS, SQL, Marketing",Frontend Developer,0.82
+435720,"JavaScript, Project Management, Machine Learning, Python, AWS",Product Manager,0.77
+402754,"Agile, HTML, Python",Frontend Developer,0.93
+816039,"React, Node.js, Machine Learning",Frontend Developer,0.81
+671211,"Agile, CSS, Node.js, Excel, Machine Learning",Frontend Developer,0.88
+452105,"Python, CSS, Agile",Frontend Developer,0.92
+241913,"HTML, Project Management, Machine Learning",Frontend Developer,0.98
+460803,"Customer Service, Docker, Node.js",DevOps Engineer,0.77
+676011,"Docker, Excel, CSS, React",Frontend Developer,0.92
+579306,"CSS, Project Management, AWS, Sales, Node.js",Frontend Developer,0.96
+385909,"Node.js, AWS, Sales, JavaScript, Marketing",DevOps Engineer,0.91
+573241,"Python, Project Management, Statistics",Product Manager,0.91
+629685,"Tableau, Marketing",Data Analyst,0.84
+496934,"Excel, Tableau, Docker, Agile, Python",Data Analyst,0.71
+352880,"Excel, Python, Statistics, Project Management",Data Analyst,0.9
+468739,"React, SQL",Frontend Developer,0.81
+316672,"Python, Marketing, Docker",DevOps Engineer,0.97
+684536,"AWS, HTML, Python",Frontend Developer,0.91
+400077,"Statistics, Node.js, Excel, CSS",Frontend Developer,0.78
+515368,"Sales, React",Frontend Developer,0.82
+629984,"Tableau, React",Frontend Developer,0.83
+703551,"HTML, Machine Learning, Customer Service, Sales, SQL",Frontend Developer,0.74
+722840,"Agile, Python, SQL, HTML, CSS",Frontend Developer,0.7
+561095,"Sales, Excel, React, Docker",Frontend Developer,0.86
+653113,"Python, Figma, JavaScript, AWS, Excel",Data Analyst,0.99
+604879,"Excel, AWS",Data Analyst,0.79
+502168,"Statistics, Docker, Tableau, HTML",Frontend Developer,0.89
+663090,"Agile, HTML, Project Management, JavaScript, Docker",Frontend Developer,0.95
+633026,"Docker, Customer Service, Sales",DevOps Engineer,0.96
+468358,"Node.js, Excel, AWS, HTML",Frontend Developer,0.78
+883380,"React, HTML, CSS, Python, Agile",Frontend Developer,0.71
+289788,"Node.js, Excel, HTML",Frontend Developer,0.8
+691231,"SQL, CSS, Sales",Frontend Developer,0.93
+515378,"Agile, CSS",Frontend Developer,0.84
+333268,"Node.js, Agile, Excel, Figma, Customer Service",Data Analyst,0.76
+406679,"JavaScript, Statistics",Frontend Developer,0.94
+557426,"Figma, Excel",Data Analyst,0.79
+291975,"SQL, Machine Learning, Project Management, Sales",Data Analyst,0.83
+408804,"CSS, Statistics, Python",Frontend Developer,0.83
+337564,"Excel, Node.js, Statistics, AWS",Data Analyst,0.96
+334225,"CSS, Marketing",Frontend Developer,0.77
+204480,"Node.js, Marketing, Machine Learning, HTML",Frontend Developer,1.0
+498109,"JavaScript, Node.js, Sales, CSS",Frontend Developer,0.82
+485000,"Figma, Customer Service, AWS, Agile",Product Manager,0.84
+586845,"Statistics, Docker, Customer Service",DevOps Engineer,0.87
+517220,"Agile, Machine Learning, React, HTML",Frontend Developer,0.81
+384130,"Figma, AWS",UX/UI Designer,0.87
+498218,"React, Excel, Marketing, HTML",Frontend Developer,1.0
+507957,"Docker, SQL, Node.js, Sales",Data Analyst,0.84
+763268,"Sales, AWS, HTML, Agile",Frontend Developer,0.94
+383212,"Figma, Tableau, Python",Data Analyst,0.75
+212958,"Customer Service, Tableau, AWS",Data Analyst,1.0
+609690,"Node.js, Python",Backend Developer,0.93
+786563,"Machine Learning, Statistics, SQL, Sales, Customer Service",Data Analyst,0.8
+399120,"Customer Service, CSS, JavaScript",Frontend Developer,0.96
+605781,"Figma, Docker, CSS",Frontend Developer,0.76
+343280,"JavaScript, Statistics, Sales, CSS, Node.js",Frontend Developer,0.85
+372943,"SQL, Tableau, AWS",Data Analyst,0.96
+403327,"Marketing, Tableau",Data Analyst,0.9
+609775,"JavaScript, Customer Service, Agile, Project Management, Python",Product Manager,0.86
+488597,"Marketing, Project Management, Excel, Figma, Docker",Data Analyst,0.83
+215779,"CSS, Machine Learning, Python, Sales",Frontend Developer,0.97
+388074,"Tableau, SQL",Data Analyst,0.83
+358578,"Statistics, Customer Service",UX/UI Designer,0.87
+200000,"Agile, Excel",Data Analyst,0.88
+243903,"SQL, Docker, Marketing",Data Analyst,0.82
+363464,"Excel, Docker",Data Analyst,0.87
+200000,"Agile, Docker, Machine Learning",Product Manager,0.8
+471310,"Sales, Agile, Customer Service, Marketing, AWS",Product Manager,0.8
+370640,"HTML, SQL, Agile",Frontend Developer,0.87
+511455,"AWS, JavaScript, Tableau, Sales",Data Analyst,0.94
+310442,"Sales, Figma, Tableau, Machine Learning, AWS",Data Analyst,0.74
+620343,"SQL, AWS, Tableau, Node.js, Agile",Data Analyst,0.93
+419159,"SQL, HTML, Figma, Customer Service, Marketing",Frontend Developer,0.79
+344849,"Docker, Machine Learning, CSS",Frontend Developer,0.89
+410455,"AWS, CSS",Frontend Developer,0.85
+859899,"Customer Service, Tableau",Data Analyst,0.89
+793082,"Machine Learning, Agile, React, HTML",Frontend Developer,0.7
+288832,"Figma, Agile, AWS, Marketing, Python",Product Manager,0.81
+535659,"Docker, Project Management, Customer Service, Statistics",Product Manager,0.78
+529100,"Node.js, AWS",DevOps Engineer,0.93
+796299,"CSS, Customer Service, Excel, SQL, Project Management",Frontend Developer,0.99
+441133,"Machine Learning, Statistics, Marketing",Product Manager,0.97
+555927,"HTML, Machine Learning, Docker, Python",Frontend Developer,0.96
+326327,"Excel, React, Node.js, CSS",Frontend Developer,0.95
+520212,"CSS, Docker, Customer Service, Statistics",Frontend Developer,0.79
+506703,"Tableau, AWS",Data Analyst,0.93
+734021,"Node.js, HTML, Marketing",Frontend Developer,0.81
+398793,"Marketing, Machine Learning",DevOps Engineer,0.7
+265488,"CSS, HTML, Docker",Frontend Developer,0.92
+924007,"Node.js, Customer Service, Docker, Marketing",DevOps Engineer,0.72
+207795,"Excel, Tableau",Data Analyst,0.96
+436318,"Node.js, React, Marketing, Customer Service",Frontend Developer,0.85
+450193,"Node.js, Marketing, React",Frontend Developer,0.83
+502244,"React, SQL, CSS, JavaScript",Frontend Developer,0.81
+319115,"Docker, Tableau, Machine Learning, AWS",Data Analyst,0.74
+386621,"JavaScript, Marketing, Python",Backend Developer,0.7
+759928,"Python, Marketing, Statistics",Data Scientist,0.77
+200000,"Statistics, AWS, Project Management, HTML",Frontend Developer,0.74
+448274,"Sales, React, CSS, SQL, Project Management",Frontend Developer,0.99
+498976,"Project Management, Machine Learning, Marketing, CSS, SQL",Frontend Developer,0.84
+477430,"JavaScript, Statistics",Product Manager,0.96
+934909,"CSS, React, Excel, JavaScript",Frontend Developer,0.71
+362994,"Machine Learning, React",Frontend Developer,0.75
+247039,"Agile, Excel, Customer Service, SQL",Data Analyst,0.85
+635525,"Figma, Customer Service, Python",UX/UI Designer,0.86
+763392,"Node.js, Agile, Docker, HTML, Customer Service",Frontend Developer,0.77
+657938,"SQL, Sales, Marketing",Data Analyst,0.91
+475121,"Statistics, Tableau, Node.js",Data Analyst,0.88
+706366,"Customer Service, CSS, Docker",Frontend Developer,0.88
+200000,"Python, Node.js, React, Agile",Frontend Developer,0.76
+509837,"Python, Tableau, CSS, Statistics",Frontend Developer,0.98
+572003,"Sales, CSS",Frontend Developer,0.91
+755629,"Sales, Machine Learning",UX/UI Designer,0.79
+581716,"Sales, Agile",Product Manager,0.87
+980029,"Node.js, Sales, Docker, Statistics, React",Frontend Developer,1.0
+466986,"CSS, Node.js, Agile, Customer Service, HTML",Frontend Developer,0.85
+200000,"Excel, React",Frontend Developer,0.89
+220354,"Node.js, JavaScript, Project Management",Product Manager,0.84
+200000,"Docker, Node.js, Agile, HTML",Frontend Developer,0.82
+415833,"React, Figma, Machine Learning, Docker, Python",Frontend Developer,0.73
+645667,"HTML, AWS, Sales",Frontend Developer,0.98
+229557,"Machine Learning, Tableau, HTML, Figma, Docker",Frontend Developer,0.94
+332401,"Node.js, Machine Learning",Backend Developer,0.95
+622572,"Figma, Project Management, Excel, Statistics, Agile",Data Analyst,0.77
+507988,"Docker, Agile",Product Manager,0.78
+507621,"Docker, HTML, SQL",Frontend Developer,0.72
+787156,"Node.js, Figma, HTML, Statistics",Frontend Developer,0.87
+480567,"AWS, JavaScript",DevOps Engineer,1.0
+691634,"Tableau, Project Management, Sales, Docker",Data Analyst,0.77
+672387,"Statistics, Node.js, Tableau, Excel, AWS",Data Analyst,0.78
+550371,"Agile, CSS, Docker",Frontend Developer,0.94
+570821,"SQL, CSS, Tableau, Customer Service, Machine Learning",Frontend Developer,0.87
+411053,"Python, Excel, AWS",Data Analyst,1.0
+542578,"JavaScript, Customer Service, Machine Learning, Agile",Product Manager,0.87
+420547,"Tableau, Docker, Sales, HTML",Frontend Developer,0.76
+312446,"CSS, Project Management, Machine Learning, Python, HTML",Frontend Developer,0.79
+343871,"Machine Learning, Sales, CSS, AWS, React",Frontend Developer,0.83
+714736,"Customer Service, HTML",Frontend Developer,0.88
+595029,"Machine Learning, Project Management, Node.js",Product Manager,0.71
+422091,"Sales, Statistics",Backend Developer,0.71
+500600,"Tableau, Node.js",Data Analyst,0.97
+373627,"Excel, Customer Service, SQL, Node.js, JavaScript",Data Analyst,0.78
+833077,"Tableau, Excel, React, Figma",Frontend Developer,0.73
+349015,"SQL, Excel, Docker, React",Frontend Developer,0.79
+497204,"React, Tableau",Frontend Developer,0.86
+870062,"Agile, Customer Service",Product Manager,0.79
+719535,"Customer Service, Figma",UX/UI Designer,0.97
+231885,"Node.js, React, JavaScript, Excel, HTML",Frontend Developer,0.85
+440340,"Agile, Sales, Tableau, Figma",Data Analyst,0.8
+406951,"React, Customer Service, Machine Learning",Frontend Developer,0.88
+739089,"JavaScript, Figma, Marketing",UX/UI Designer,0.89
+281194,"Project Management, Marketing, Customer Service, Excel",Data Analyst,0.8
+731274,"Excel, Statistics",Data Analyst,0.8
+573912,"Agile, Node.js, JavaScript, AWS",Product Manager,0.9
+400006,"Agile, Tableau, React, Figma",Frontend Developer,0.91
+546665,"Customer Service, Docker",DevOps Engineer,0.88
+592561,"Statistics, SQL, HTML, Customer Service",Frontend Developer,0.89
+552508,"Tableau, Marketing, Python, Customer Service, Machine Learning",Data Analyst,0.89
+539475,"Excel, HTML",Frontend Developer,0.74
+355263,"Node.js, Excel, Project Management",Data Analyst,0.88
+876904,"Excel, Statistics, AWS, Docker, React",Frontend Developer,0.83
+200000,"Project Management, Figma",Product Manager,0.93
+274404,"Sales, Machine Learning, Statistics",UX/UI Designer,0.84
+467185,"Docker, Python, Marketing, HTML",Frontend Developer,0.94
+200000,"Machine Learning, Figma",UX/UI Designer,0.8
+568780,"SQL, Machine Learning, React",Frontend Developer,0.91
+210102,"Python, Figma, Docker",UX/UI Designer,0.88
+524651,"AWS, CSS, Sales, Agile, Marketing",Frontend Developer,0.74
+674647,"SQL, Python, Excel",Data Analyst,0.75
+629893,"Statistics, Tableau",Data Analyst,0.95
+679349,"Figma, Tableau, Machine Learning, JavaScript, Sales",Data Analyst,0.94
+454871,"JavaScript, Node.js, HTML, React, Python",Frontend Developer,0.94
+234735,"React, Project Management",Frontend Developer,0.76
+201333,"SQL, Python, HTML",Frontend Developer,0.9
+700939,"Tableau, Statistics, JavaScript, React, Machine Learning",Frontend Developer,0.78
+425711,"Project Management, SQL",Data Analyst,0.87
+507834,"Excel, Docker, Machine Learning",Data Analyst,0.9
+638235,"Project Management, Agile, AWS, JavaScript",Product Manager,0.8
+315903,"Machine Learning, JavaScript, Node.js, Figma",UX/UI Designer,0.8
+558810,"Tableau, Python, AWS",Data Analyst,0.86
+350275,"Docker, Machine Learning, Node.js",DevOps Engineer,0.93
+657420,"Agile, Tableau",Data Analyst,0.88
+200000,"React, Node.js",Frontend Developer,0.83
+200000,"JavaScript, Project Management, CSS, Machine Learning",Frontend Developer,0.83
+777142,"Customer Service, HTML, React",Frontend Developer,0.95
+241517,"Excel, SQL, Statistics, JavaScript",Data Analyst,0.92
+779285,"HTML, Agile, AWS, Project Management",Frontend Developer,0.75
+571808,"AWS, Node.js, Tableau, Machine Learning, Excel",Data Analyst,0.78
+589503,"React, Sales, JavaScript, SQL",Frontend Developer,0.97
+516345,"Tableau, Figma",Data Analyst,0.8
+458109,"AWS, SQL, Node.js, React",Frontend Developer,0.92
+536929,"Excel, Node.js, Marketing, CSS",Frontend Developer,0.86
+513189,"Docker, AWS, Tableau, Statistics, HTML",Frontend Developer,0.99
+218561,"Sales, Marketing, Tableau",Data Analyst,0.72
+597409,"JavaScript, Tableau, React, Python",Frontend Developer,0.8
+858501,"SQL, Docker, Machine Learning",Data Analyst,0.87
+428530,"Figma, Python, Project Management, React, Customer Service",Frontend Developer,0.86
+470333,"Tableau, Docker, Python, Figma",Data Analyst,0.8
+200000,"HTML, React, SQL",Frontend Developer,0.95
+501412,"Node.js, Excel",Data Analyst,0.87
+609359,"Statistics, Docker, HTML, Node.js",Frontend Developer,0.9
+364058,"Marketing, Machine Learning",Data Scientist,0.94
+528103,"Figma, Tableau, Customer Service, Project Management, CSS",Frontend Developer,0.8
+293513,"Tableau, SQL, Machine Learning, Sales, Agile",Data Analyst,0.98
+424330,"SQL, HTML, Docker, JavaScript, Customer Service",Frontend Developer,0.75
+649109,"Node.js, Agile, HTML, Docker",Frontend Developer,0.89
+483802,"HTML, Marketing, JavaScript, Figma, SQL",Frontend Developer,0.85
+595709,"Agile, SQL, Machine Learning",Data Analyst,0.98
+441445,"JavaScript, CSS, Project Management",Frontend Developer,0.84
+487637,"AWS, Statistics, Project Management, CSS",Frontend Developer,0.72
+622648,"Sales, React",Frontend Developer,0.78
+670795,"Docker, SQL",Data Analyst,0.85
+332914,"Project Management, Node.js, Customer Service, React",Frontend Developer,0.86
+473887,"Statistics, HTML",Frontend Developer,0.77
+949164,"JavaScript, Docker, Sales, SQL",Data Analyst,0.95
+412593,"JavaScript, Statistics, Agile",Product Manager,0.98
+835030,"Tableau, Project Management, React",Frontend Developer,0.78
+811552,"Tableau, CSS",Frontend Developer,0.77
+302221,"CSS, Project Management, Marketing",Frontend Developer,0.98
+798500,"Excel, Sales",Data Analyst,0.96
+881033,"AWS, Figma, Tableau",Data Analyst,0.91
+320315,"Docker, CSS",Frontend Developer,0.73
+369293,"React, AWS, Statistics, CSS, Python",Frontend Developer,0.75
+839995,"Figma, Project Management, Agile, CSS",Frontend Developer,0.76
+695847,"Machine Learning, Agile, SQL",Data Analyst,0.9
+435930,"Excel, Sales, AWS",Data Analyst,0.71
+819642,"Figma, Machine Learning, Tableau",Data Analyst,0.77
+372533,"Project Management, Customer Service, Excel, Node.js, Python",Data Analyst,0.78
+780204,"Excel, HTML, Figma, Customer Service, Statistics",Frontend Developer,0.81
+363154,"Tableau, Statistics, HTML, CSS",Frontend Developer,0.72
+488765,"HTML, AWS, Customer Service",Frontend Developer,0.84
+471367,"React, CSS, Sales, Node.js, HTML",Frontend Developer,0.79
+335123,"CSS, Customer Service, HTML, Tableau",Frontend Developer,0.8
+396170,"Sales, HTML, Project Management, Agile, Statistics",Frontend Developer,0.89
+607457,"CSS, Figma, Node.js",Frontend Developer,0.88
+680696,"Node.js, AWS",DevOps Engineer,0.79
+496254,"Docker, Tableau, HTML, Project Management, Agile",Frontend Developer,0.97
+466187,"CSS, Customer Service, React, Sales",Frontend Developer,0.85
+302336,"Project Management, Node.js, Marketing",Product Manager,0.74
+200000,"Python, Marketing, Customer Service, Machine Learning, JavaScript",DevOps Engineer,0.72
+489552,"Docker, HTML",Frontend Developer,0.8
+200000,"Excel, Docker",Data Analyst,0.75
+427874,"Node.js, Statistics",Backend Developer,0.84
+330681,"HTML, AWS",Frontend Developer,0.96
+655201,"CSS, Figma, Agile, Sales, Marketing",Frontend Developer,0.97
+680911,"Customer Service, Tableau, Marketing",Data Analyst,0.98
+253971,"JavaScript, Docker, Project Management, Sales",Product Manager,0.98
+605400,"CSS, HTML",Frontend Developer,0.88
+517563,"HTML, Agile, JavaScript",Frontend Developer,0.78
+544354,"Node.js, Python, Figma",UX/UI Designer,0.79
+905236,"Customer Service, Agile, Excel, React, Statistics",Frontend Developer,0.71
+692489,"Project Management, AWS, Sales, JavaScript, SQL",Data Analyst,0.81
+530422,"HTML, Statistics, Agile",Frontend Developer,0.94
+453899,"Node.js, Docker, Agile, Figma",Product Manager,0.73
+200000,"Customer Service, SQL, Project Management, HTML",Frontend Developer,0.93
+791036,"JavaScript, HTML",Frontend Developer,0.85
+946354,"Project Management, Customer Service, Python, Node.js, Agile",Product Manager,0.98
+837091,"Marketing, Python",Data Analyst,0.95
+625970,"Figma, Machine Learning, CSS, Docker",Frontend Developer,0.9
+380193,"HTML, Statistics, Excel, Machine Learning",Frontend Developer,0.93
+527254,"React, Machine Learning",Frontend Developer,0.87
+263371,"Figma, AWS, Agile, Statistics, Python",Product Manager,0.94
+707711,"Tableau, Excel, JavaScript, SQL",Data Analyst,0.88
+500749,"Project Management, Figma, CSS, Node.js",Frontend Developer,0.98
+864571,"SQL, Agile, Tableau",Data Analyst,0.93
+703763,"Statistics, Python, Machine Learning, SQL",Data Scientist,0.91
+639361,"Agile, Excel, Tableau, Figma",Data Analyst,1.0
+640516,"Sales, HTML, Marketing, Project Management",Frontend Developer,0.91
+554545,"Statistics, Agile, AWS, Customer Service, Tableau",Data Analyst,0.91
+649954,"Marketing, Machine Learning, Customer Service, CSS, Tableau",Frontend Developer,0.8
+416635,"Python, Project Management, Node.js",Product Manager,0.94
+611766,"Node.js, Excel, CSS, JavaScript",Frontend Developer,0.81
+476723,"React, HTML, Machine Learning, Node.js",Frontend Developer,0.85
+419549,"Project Management, HTML, Agile, Tableau",Frontend Developer,0.81
+554111,"React, Sales, Python, Excel, Customer Service",Frontend Developer,0.83
+719649,"React, HTML, Customer Service",Frontend Developer,0.98
+553690,"Tableau, Docker, Python, SQL",Data Analyst,0.92
+520479,"CSS, Python",Frontend Developer,0.9
+290767,"AWS, Machine Learning",DevOps Engineer,0.89
+504769,"JavaScript, Project Management, Machine Learning, Docker",Product Manager,0.83
+578460,"JavaScript, Statistics, React",Frontend Developer,0.71
+200000,"Node.js, AWS, Project Management, Customer Service, Marketing",Product Manager,0.89
+541090,"JavaScript, AWS, Tableau, Node.js",Data Analyst,0.84
+367298,"SQL, Figma, Tableau, Excel",Data Analyst,0.84
+822287,"Figma, Statistics",UX/UI Designer,0.99
+647134,"Python, React",Frontend Developer,0.92
+541222,"AWS, Tableau",Data Analyst,0.9
+268178,"React, Statistics, Sales, Customer Service",Frontend Developer,0.88
+548613,"Sales, HTML, SQL",Frontend Developer,0.81
+549964,"Docker, Project Management",Product Manager,0.71
+538591,"CSS, Statistics, JavaScript, AWS, SQL",Frontend Developer,0.9
+200000,"AWS, Marketing, HTML, Node.js",Frontend Developer,0.92
+438626,"Agile, CSS, Marketing, Node.js, Sales",Frontend Developer,0.86
+200000,"Docker, Machine Learning, Sales, Customer Service, Marketing",DevOps Engineer,0.85
+321650,"Marketing, Agile, SQL",Data Analyst,0.8
+836651,"Tableau, Machine Learning, Docker, Node.js, Agile",Data Analyst,0.98
+692689,"Figma, Marketing, Python",UX/UI Designer,0.84
+409747,"Python, Customer Service, SQL, Excel, React",Frontend Developer,0.9
+680018,"Agile, CSS, SQL",Frontend Developer,0.85
+625709,"CSS, AWS",Frontend Developer,0.73
+428350,"Marketing, JavaScript",Full Stack Developer,0.83
+719751,"React, Sales",Frontend Developer,0.81
+423845,"JavaScript, Marketing",DevOps Engineer,0.72
+445872,"React, Statistics, Figma, Sales, Node.js",Frontend Developer,0.97
+395900,"JavaScript, CSS",Frontend Developer,0.78
+200000,"Python, React, Agile, Project Management, AWS",Frontend Developer,0.76
+507434,"React, Project Management",Frontend Developer,0.73
+509808,"CSS, SQL",Frontend Developer,0.84
+993026,"SQL, AWS, React, Excel, Project Management",Frontend Developer,0.86
+561833,"Node.js, Agile, Customer Service",Product Manager,0.87
+393934,"Project Management, HTML",Frontend Developer,0.76
+200000,"Tableau, Statistics, AWS, JavaScript",Data Analyst,0.88
+500941,"Docker, AWS, Machine Learning",DevOps Engineer,0.93
+657836,"Sales, JavaScript, Excel",Data Analyst,0.86
+632228,"Marketing, Node.js, HTML",Frontend Developer,0.78
+478541,"Figma, Excel, Sales, Marketing",Data Analyst,0.96
+666964,"Tableau, Project Management, JavaScript, Marketing, SQL",Data Analyst,0.92
+222850,"Statistics, CSS, Agile, Marketing",Frontend Developer,0.87
+442767,"Node.js, SQL",Data Analyst,0.8
+552805,"Project Management, Tableau, AWS, Marketing",Data Analyst,0.72
+392860,"Agile, React, HTML, AWS",Frontend Developer,0.74
+663359,"Docker, Marketing, JavaScript",DevOps Engineer,0.83
+459439,"Machine Learning, SQL, HTML, AWS, Marketing",Frontend Developer,0.91
+708106,"Docker, Statistics, Excel",Data Analyst,0.95
+200000,"Machine Learning, SQL, AWS",Data Analyst,0.79
+514657,"CSS, SQL, Excel",Frontend Developer,0.94
+731501,"Agile, React, Marketing",Frontend Developer,0.74
+317620,"Figma, Sales, Docker",UX/UI Designer,0.8
+503124,"Figma, AWS, Project Management, Customer Service",Product Manager,0.8
+602646,"Customer Service, Python, Tableau",Data Analyst,0.86
+517767,"Figma, Sales, CSS, Tableau, AWS",Frontend Developer,0.98
+544494,"Customer Service, Python, HTML, Agile, Figma",Frontend Developer,0.96
+306860,"Python, Node.js",Backend Developer,0.99
+455026,"Python, Node.js",Backend Developer,0.99
+504258,"Python, SQL",Data Analyst,0.77
+745079,"Figma, Node.js, Customer Service, Docker",UX/UI Designer,0.98
+492153,"AWS, HTML, Docker, Project Management, Tableau",Frontend Developer,0.92
+787401,"Statistics, Python, Machine Learning",Full Stack Developer,0.84
+391024,"Customer Service, Machine Learning, Figma, Node.js, Tableau",Data Analyst,0.97
+626895,"Node.js, HTML, Machine Learning, Docker",Frontend Developer,0.99
+516486,"Agile, React, Customer Service",Frontend Developer,0.86
+571862,"Python, Excel, React, Agile",Frontend Developer,0.85
+338650,"Node.js, Project Management, Python",Product Manager,0.99
