@@ -10,3 +10,6 @@ pytest
 httpx
 numpy
 google-generativeai
+torch
+transformers
+sentence-transformers

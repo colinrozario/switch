@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 from typing import List
+from sentence_transformers import SentenceTransformer, util
+import torch
 
 class OptionInput(BaseModel):
     current_role: str
@@ -36,21 +38,38 @@ ROLES_DB = [
     {"title": "Mobile Developer", "skills": ["swift", "kotlin", "react native"], "category": "Tech"}
 ]
 
+# Initialize the embedding model
+# This runs once when the module is imported
+print("Loading Career Path Embedding Model...")
+embedder = SentenceTransformer("ElenaSenger/career-path-representation-mpnet-decorte")
+
+# Pre-compute embeddings for all roles in ROLES_DB
+print("Pre-computing embeddings for ROLES_DB...")
+roles_texts = [f"{role['title']} with skills: {', '.join(role['skills'])}" for role in ROLES_DB]
+roles_embeddings = embedder.encode(roles_texts, convert_to_tensor=True)
+
 def generate_options(data: OptionInput) -> OptionOutput:
-    options = []
-    user_skills = set(s.lower() for s in data.skills)
+    # 1. Format user input
+    user_text = f"{data.current_role} with skills: {', '.join(data.skills)}"
     
-    for role in ROLES_DB:
-        role_skills = set(role["skills"])
-        overlap = len(user_skills.intersection(role_skills))
-        score = int((overlap / len(role_skills)) * 100) if role_skills else 0
+    # 2. Generate embedding for user
+    user_embedding = embedder.encode(user_text, convert_to_tensor=True)
+    
+    # 3. Calculate cosine similarity against all target roles
+    cos_scores = util.cos_sim(user_embedding, roles_embeddings)[0]
+    
+    # 4. Map back to roles and create CareerRole objects
+    options = []
+    for i in range(len(cos_scores)):
+        score = cos_scores[i].item()
+        # Scale score to 0-100 (cosine sim is typically -1 to 1, but for semantic similarity it's mostly 0 to 1)
+        # We use max(0, score) to avoid negative percentages
+        match_score = int(max(0, score) * 100)
         
-        # Include if score > 0 or we need filler? 
-        # PRD says always >= 3.
         options.append(CareerRole(
-            title=role["title"],
-            category=role["category"],
-            match_score=score
+            title=ROLES_DB[i]["title"],
+            category=ROLES_DB[i]["category"],
+            match_score=match_score
         ))
         
     # Sort by score desc
@@ -58,3 +77,4 @@ def generate_options(data: OptionInput) -> OptionOutput:
     
     # Return top 5
     return OptionOutput(options=options[:5])
+
