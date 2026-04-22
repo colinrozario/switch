@@ -113,8 +113,6 @@ class PathAgent:
 
         return {"recommended_paths": recommended, "rejected_paths": rejected}
 
-        return {"recommended_paths": recommended, "rejected_paths": rejected}
-
     async def _assess_path(self, profile: dict, role: dict, index: int = 0) -> dict:
         """Generate a constrained LLM assessment for a single career path."""
         if not self._gemini_ready:
