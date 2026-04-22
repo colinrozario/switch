@@ -150,8 +150,21 @@ Generate a highly specific, honest assessment tailored ONLY to this user's state
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     response_mime_type="application/json",
-                temperature=0.3,
-            ),
+                    response_schema={
+                        "type": "object",
+                        "properties": {
+                            "feasibility_summary": {"type": "string", "description": "1-2 sentence high-level summary of the fit"},
+                            "feasibility_details": {"type": "string", "description": "Detailed 3-4 sentence explanation with specific skill and financial context"},
+                            "top_risk": {"type": "string", "description": "The #1 biggest risk for this specific user"},
+                            "skill_gaps": {"type": "array", "items": {"type": "string"}, "description": "List of 3-5 specific technical skills to learn"},
+                            "recommended_certifications": {"type": "array", "items": {"type": "string"}},
+                            "first_30_day_action": {"type": "string", "description": "One concrete thing to do today"},
+                        },
+                        "required": ["feasibility_summary", "feasibility_details", "top_risk", "skill_gaps"]
+                    },
+                    temperature=0.3,
+                ),
+            )
         )
         result = json.loads(response.text)
 
@@ -197,41 +210,45 @@ Generate a highly specific, honest assessment tailored ONLY to this user's state
         overlap_str = ", ".join(overlap_list) if overlap_list else "general problem-solving"
         gap_str = ", ".join(gap_list) if gap_list else "domain-specific tooling"
         
-        # Determine match strength
+        # Determine match strength and build role-specific strings
+        role_skills = role.get('skills', [])
+        primary_skill = role_skills[0] if role_skills else "advanced technical tooling"
+        
         if len(overlap) >= 4:
             match_tone = "strong"
             summary = (
-                f"{years_str}your background as a {c_role_clean} makes you a "
-                f"natural fit for {target_label}. You already possess {overlap_str}, "
-                f"which are critical foundations for this path."
+                f"Your background in {c_role_clean} is a powerful asset for {target_label}. "
+                f"You already have a head start with {overlap_str}, allowing you to skip the basics "
+                f"and focus on high-level {primary_skill} mastery."
             )
         elif len(overlap) >= 2:
             match_tone = "moderate"
             summary = (
-                f"{years_str}transitioning from {c_role_clean} to {target_label} is a logical step. "
-                f"Your experience with {overlap_str} provides a solid base, though you'll need to bridge some technical gaps."
+                f"The shift from {c_role_clean} to {target_label} is a logical step forward. "
+                f"While you'll need to master {gap_list[0] if gap_list else primary_skill}, your "
+                f"existing foundation in {overlap_str} provides the necessary context to ramp up quickly."
             )
         else:
             match_tone = "stretch"
             summary = (
-                f"A move into {target_label} from {c_role_clean} is a significant pivot. "
-                f"While your professional experience is valuable, this path requires building a new specialized toolkit from the ground up."
+                f"Transitioning to {target_label} represents a major professional evolution. "
+                f"Unlike your current work in {c_role_clean}, this path is centered on {primary_skill}. "
+                f"It's a challenging but high-reward pivot that leverages your general experience in a new way."
             )
 
-        # Build specific details
+        # Build specific details using the role's unique description
         role_desc = role.get('description', '')
         details = (
-            f"{role_desc} "
-            f"To succeed here in {t_months} months, you must master {gap_str}. "
-            f"Since you already understand {overlap_str}, your focus should be entirely on hands-on "
-            f"technical proficiency in these new areas."
+            f"{role_desc} This role specifically demands proficiency in {gap_str}. "
+            f"Because you've already demonstrated competence in {overlap_str}, your transition plan "
+            f"focuses heavily on bridging these technical gaps through project-based learning."
         )
 
         # Risk based on match strength and role specifics
         risk_map = {
             "strong": f"Market saturation at the senior level; you'll need to prove your {target_label} specific results quickly.",
-            "moderate": f"The '{gap_list[0] if gap_list else 'technical'}' learning curve might be steeper than the {t_months}-month estimate suggests.",
-            "stretch": f"Initial hiring friction as you'll be competing with candidates who have direct degrees or internships in {target_label}.",
+            "moderate": f"The '{gap_list[0] if gap_list else primary_skill}' learning curve might be steeper than the {t_months}-month estimate suggests.",
+            "stretch": f"Initial hiring friction; without a background in {target_label}, you'll need a stellar portfolio to beat candidates with degrees.",
         }
 
         return {
