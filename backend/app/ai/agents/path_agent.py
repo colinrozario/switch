@@ -7,6 +7,7 @@ It may not invent salary numbers, override timelines, or claim transitions are "
 """
 import json
 import logging
+import asyncio
 from typing import Optional
 import anyio
 from google import genai
@@ -50,46 +51,67 @@ class PathAgent:
         recommended = []
         rejected = []
 
-        for i, role in enumerate(candidate_roles):
+        # Run top 3 assessments in parallel
+        top_3_roles = candidate_roles[:3]
+        assessment_tasks = [
+            self._assess_path(profile, role, index=i) 
+            for i, role in enumerate(top_3_roles)
+        ]
+        
+        results = await asyncio.gather(*assessment_tasks, return_exceptions=True)
+
+        for i, result in enumerate(results):
+            role = top_3_roles[i]
             role_id = role.get("role_id", f"role_{i}")
-            if i < 3:
-                assessment = await self._assess_path(profile, role, index=i)
-                recommended.append({
-                    "target_role_id": role_id,
-                    "target_role_label": role.get("label", role_id),
-                    "feasibility_summary": assessment.get("feasibility_summary", ""),
-                    "feasibility_details": assessment.get("feasibility_details", ""),
-                    "top_risk": assessment.get("top_risk", ""),
-                    "skill_gaps": assessment.get("skill_gaps", []),
-                    "recommended_certifications": assessment.get("recommended_certifications", []),
-                    "first_30_day_action": assessment.get("first_30_day_action", ""),
-                    "match_level": assessment.get("match_level", "stretch"),
-                    "match_percentage": min(98, max(45, int(role.get("similarity_score", 0.5) * 100))),
-                    "key_risks": [assessment.get("top_risk", "Market competition for entry-level roles.")],
-                    "estimated_transition_months": role.get("avg_transition_months", 9),
-                    "similarity_score": role.get("similarity_score", 0),
-                    "target_role_match": role.get("target_role_match", False),
-                    "annual_salary_p25_inr": role.get("annual_salary_p25_inr"),
-                    "annual_salary_p50_inr": role.get("annual_salary_p50_inr"),
-                    "market_demand_score": role.get("market_demand_score"),
-                    "hiring_friction": role.get("hiring_friction"),
-                    "remote_friendly": role.get("remote_friendly"),
-                })
+            
+            # Handle potential exceptions in parallel tasks
+            if isinstance(result, Exception):
+                logger.error(f"[PathAgent] Error assessing {role_id}: {result}")
+                assessment = self._fallback_assessment(profile, role, index=i)
             else:
-                # Generate honest rejection reasons
-                runway = profile.get("runway_months", 12)
-                transition_months = role.get("avg_transition_months", 12)
-                reasons = [
-                    f"Requires ~{transition_months} months of retraining which may exceed your current savings runway.",
-                    f"Entry-level salary (₹{role.get('annual_salary_p25_inr', 0):,}/yr) may not meet your minimum income floor.",
-                    "Geographical requirements do not match your remote/hybrid preference.",
-                    "High hiring friction in this role makes time-to-hire unpredictable for your financial window.",
-                ]
-                rejected.append({
-                    "target_role_id": role_id,
-                    "target_role_label": role.get("label", role_id),
-                    "rejection_reason": reasons[i % len(reasons)],
-                })
+                assessment = result
+
+            recommended.append({
+                "target_role_id": role_id,
+                "target_role_label": role.get("label", role_id),
+                "feasibility_summary": assessment.get("feasibility_summary", ""),
+                "feasibility_details": assessment.get("feasibility_details", ""),
+                "top_risk": assessment.get("top_risk", ""),
+                "skill_gaps": assessment.get("skill_gaps", []),
+                "recommended_certifications": assessment.get("recommended_certifications", []),
+                "first_30_day_action": assessment.get("first_30_day_action", ""),
+                "match_level": assessment.get("match_level", "stretch"),
+                "match_percentage": min(98, max(45, int(role.get("similarity_score", 0.5) * 100))),
+                "key_risks": [assessment.get("top_risk", "Market competition for entry-level roles.")],
+                "estimated_transition_months": role.get("avg_transition_months", 9),
+                "similarity_score": role.get("similarity_score", 0),
+                "target_role_match": role.get("target_role_match", False),
+                "annual_salary_p25_inr": role.get("annual_salary_p25_inr"),
+                "annual_salary_p50_inr": role.get("annual_salary_p50_inr"),
+                "market_demand_score": role.get("market_demand_score"),
+                "hiring_friction": role.get("hiring_friction"),
+                "remote_friendly": role.get("remote_friendly"),
+            })
+
+        # Rejected paths
+        for i, role in enumerate(candidate_roles[3:]):
+            idx = i + 3
+            role_id = role.get("role_id", f"role_{idx}")
+            runway = profile.get("runway_months", 12)
+            transition_months = role.get("avg_transition_months", 12)
+            reasons = [
+                f"Requires ~{transition_months} months of retraining which may exceed your current savings runway.",
+                f"Entry-level salary (₹{role.get('annual_salary_p25_inr', 0):,}/yr) may not meet your minimum income floor.",
+                "Geographical requirements do not match your remote/hybrid preference.",
+                "High hiring friction in this role makes time-to-hire unpredictable for your financial window.",
+            ]
+            rejected.append({
+                "target_role_id": role_id,
+                "target_role_label": role.get("label", role_id),
+                "rejection_reason": reasons[i % len(reasons)],
+            })
+
+        return {"recommended_paths": recommended, "rejected_paths": rejected}
 
         return {"recommended_paths": recommended, "rejected_paths": rejected}
 
