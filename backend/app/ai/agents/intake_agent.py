@@ -12,6 +12,7 @@ prompt the user to fill them in before proceeding.
 import json
 import logging
 import re
+import anyio
 from typing import Optional
 from google import genai
 from google.genai import types
@@ -68,13 +69,16 @@ class IntakeAgent:
         return self._regex_fallback(raw_text)
 
     async def _gemini_extract(self, raw_text: str) -> dict:
-        response = self._client.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=f"{SYSTEM_PROMPT}\n\nExtract the structured profile from this user input:\n\n---\n{raw_text}\n---\n\nReturn JSON only.",
-            config=types.GenerateContentConfig(
-                response_mime_type="application/json",
-                temperature=0.1,
-            ),
+        # Wrap the blocking sync call in a thread pool to keep the event loop free
+        response = await anyio.to_thread.run_sync(
+            lambda: self._client.models.generate_content(
+                model="gemini-2.0-flash",
+                contents=f"{SYSTEM_PROMPT}\n\nExtract the structured profile from this user input:\n\n---\n{raw_text}\n---\n\nReturn JSON only.",
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    temperature=0.1,
+                ),
+            )
         )
         extracted = json.loads(response.text)
 

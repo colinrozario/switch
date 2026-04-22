@@ -8,6 +8,7 @@ It may not invent salary numbers, override timelines, or claim transitions are "
 import json
 import logging
 from typing import Optional
+import anyio
 from google import genai
 from google.genai import types
 from app.core.config import settings
@@ -143,11 +144,12 @@ TARGET ROLE:
 
 Generate a highly specific, honest assessment tailored ONLY to this user's stated skills. Name real tools and certifications."""
 
-        response = self._client.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                response_mime_type="application/json",
+        response = await anyio.to_thread.run_sync(
+            lambda: self._client.models.generate_content(
+                model="gemini-2.0-flash",
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
                 temperature=0.3,
             ),
         )
