@@ -53,7 +53,7 @@ class PathAgent:
         for i, role in enumerate(candidate_roles):
             role_id = role.get("role_id", f"role_{i}")
             if i < 3:
-                assessment = await self._assess_path(profile, role)
+                assessment = await self._assess_path(profile, role, index=i)
                 recommended.append({
                     "target_role_id": role_id,
                     "target_role_label": role.get("label", role_id),
@@ -92,10 +92,10 @@ class PathAgent:
 
         return {"recommended_paths": recommended, "rejected_paths": rejected}
 
-    async def _assess_path(self, profile: dict, role: dict) -> dict:
+    async def _assess_path(self, profile: dict, role: dict, index: int = 0) -> dict:
         """Generate a constrained LLM assessment for a single career path."""
         if not self._gemini_ready:
-            return self._fallback_assessment(profile, role)
+            return self._fallback_assessment(profile, role, index=index)
 
         try:
             return await self._gemini_assess(profile, role)
@@ -178,7 +178,7 @@ Generate a highly specific, honest assessment tailored ONLY to this user's state
             )
         return result
 
-    def _fallback_assessment(self, profile: dict, role: dict) -> dict:
+    def _fallback_assessment(self, profile: dict, role: dict, index: int = 0) -> dict:
         """Deeply personalized deterministic fallback when Gemini is unavailable."""
         t_months = role.get("avg_transition_months", 9)
         monthly_expenses = profile.get("monthly_expenses") or 45000
@@ -210,45 +210,52 @@ Generate a highly specific, honest assessment tailored ONLY to this user's state
         overlap_str = ", ".join(overlap_list) if overlap_list else "general problem-solving"
         gap_str = ", ".join(gap_list) if gap_list else "domain-specific tooling"
         
-        # Determine match strength and build role-specific strings
+        # Determine match strength and pick a unique template structure to avoid visual repetition
         role_skills = role.get('skills', [])
         primary_skill = role_skills[0] if role_skills else "advanced technical tooling"
-        
-        if len(overlap) >= 4:
-            match_tone = "strong"
-            summary = (
-                f"Your background in {c_role_clean} is a powerful asset for {target_label}. "
-                f"You already have a head start with {overlap_str}, allowing you to skip the basics "
-                f"and focus on high-level {primary_skill} mastery."
-            )
-        elif len(overlap) >= 2:
-            match_tone = "moderate"
-            summary = (
-                f"The shift from {c_role_clean} to {target_label} is a logical step forward. "
-                f"While you'll need to master {gap_list[0] if gap_list else primary_skill}, your "
-                f"existing foundation in {overlap_str} provides the necessary context to ramp up quickly."
-            )
-        else:
-            match_tone = "stretch"
-            summary = (
-                f"Transitioning to {target_label} represents a major professional evolution. "
-                f"Unlike your current work in {c_role_clean}, this path is centered on {primary_skill}. "
-                f"It's a challenging but high-reward pivot that leverages your general experience in a new way."
-            )
-
-        # Build specific details using the role's unique description
         role_desc = role.get('description', '')
+        
+        # Split description into sentences to pick a unique hook
+        desc_sentences = [s.strip() for s in role_desc.split('.') if len(s.strip()) > 10]
+        hook = desc_sentences[0] if desc_sentences else "This role bridges technical execution with strategic value."
+
+        if len(overlap) >= 4:
+            summaries = [
+                f"Your deep background as a {c_role_clean} makes you a standout candidate for {target_label}. You already master {overlap_str}, which means you can skip 70% of the standard learning curve and focus on {primary_skill}.",
+                f"The transition to {target_label} is a natural evolution for you. While others start from scratch, your {years_str}experience with {overlap_str} gives you the seniority to hit the ground running.",
+                f"High-fit match: {target_label} requires exactly the {overlap_str} foundation you've built as a {c_role_clean}. You are uniquely positioned to pivot into this role with minimal friction."
+            ]
+            summary = summaries[index % len(summaries)]
+            match_tone = "strong"
+        elif len(overlap) >= 2:
+            summaries = [
+                f"Moving from {c_role_clean} to {target_label} leverages your existing {overlap_str} while adding {primary_skill} to your toolkit. It's a calculated step that maximizes your {years_str}professional value.",
+                f"As a {c_role_clean}, you've already handled the core of {target_label} via {overlap_str}. This path focuses on specializing in {primary_skill} to bridge the remaining gap.",
+                f"This is a logical bridge: your background provides the {overlap_str} context, while the {target_label} path adds the specific {primary_skill} expertise needed for the next level."
+            ]
+            summary = summaries[index % len(summaries)]
+            match_tone = "moderate"
+        else:
+            summaries = [
+                f"{hook} For a {c_role_clean}, this is a major pivot into {primary_skill}. It’s a high-growth move that trades your current routine for a deeper focus on {role_skills[1] if len(role_skills)>1 else 'new standards'}.",
+                f"This path into {target_label} is a total reset centered on {primary_skill}. While your work in {c_role_clean} is a different world, the shift allows you to reinvent your career around {hook}.",
+                f"A pivot to {target_label} leverages your general professional maturity to master {primary_skill}. It's a significant change from {c_role_clean}, but one that offers a fresh start in {c_ind_str or 'tech'}."
+            ]
+            summary = summaries[index % len(summaries)]
+            match_tone = "stretch"
+
+        # Build specific details with a "Why it's a good switch" and "Diagnostic explanation"
         details = (
-            f"{role_desc} This role specifically demands proficiency in {gap_str}. "
-            f"Because you've already demonstrated competence in {overlap_str}, your transition plan "
-            f"focuses heavily on bridging these technical gaps through project-based learning."
+            f"DIAGNOSIS: You have a {len(overlap)}-skill overlap with this role ({overlap_str}). "
+            f"The primary challenge is mastering {gap_str}, which usually takes {t_months} months for someone with your profile. "
+            f"WHY IT WORKS: {hook} By combining your {c_role_clean} experience with these new {target_label} skills, you become a rare 'hybrid' candidate who understands both domains."
         )
 
         # Risk based on match strength and role specifics
         risk_map = {
-            "strong": f"Market saturation at the senior level; you'll need to prove your {target_label} specific results quickly.",
-            "moderate": f"The '{gap_list[0] if gap_list else primary_skill}' learning curve might be steeper than the {t_months}-month estimate suggests.",
-            "stretch": f"Initial hiring friction; without a background in {target_label}, you'll need a stellar portfolio to beat candidates with degrees.",
+            "strong": f"Market saturation; you'll need to prove your {target_label} results to justify a senior-level salary.",
+            "moderate": f"The '{primary_skill}' learning curve; don't underestimate the time needed to go from 'knowing' to 'doing'.",
+            "stretch": f"Credential friction; without a direct degree in {target_label}, your portfolio must be flawless to get past automated filters.",
         }
 
         return {
