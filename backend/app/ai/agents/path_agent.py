@@ -199,65 +199,49 @@ Generate a highly specific, honest assessment tailored ONLY to this user's state
         if len(overlap) >= 4:
             match_tone = "strong"
             summary = (
-                f"{years_str}your background as a {c_role_clean}{c_ind_str} gives you a "
-                f"significant head start for {target_label}. You already have {overlap_str} — "
-                f"the core foundation is there."
+                f"{years_str}your background as a {c_role_clean} makes you a "
+                f"natural fit for {target_label}. You already possess {overlap_str}, "
+                f"which are critical foundations for this path."
             )
         elif len(overlap) >= 2:
             match_tone = "moderate"
             summary = (
-                f"{years_str}your experience as a {c_role_clean}{c_ind_str} provides some "
-                f"transferable ground for {target_label} through {overlap_str}, but there are "
-                f"critical gaps that will require focused effort."
+                f"{years_str}transitioning from {c_role_clean} to {target_label} is a logical step. "
+                f"Your experience with {overlap_str} provides a solid base, though you'll need to bridge some technical gaps."
             )
         else:
             match_tone = "stretch"
             summary = (
-                f"This is a stretch transition. Your role as a {c_role_clean}{c_ind_str} has "
-                f"limited direct overlap with {target_label}. This will require serious commitment "
-                f"and structured upskilling across multiple areas."
+                f"A move into {target_label} from {c_role_clean} is a significant pivot. "
+                f"While your professional experience is valuable, this path requires building a new specialized toolkit from the ground up."
             )
 
         # Build specific details
-        if match_tone == "strong":
-            details = (
-                f"A transition to {target_label} typically takes {t_months} months. "
-                f"Your existing skills in {overlap_str} translate directly — the biggest lift is "
-                f"building proficiency in {gap_str}. "
-                f"Focus on hands-on projects that demonstrate these specific skills to hiring managers."
-            )
-        elif match_tone == "moderate":
-            details = (
-                f"The {t_months}-month timeline for {target_label} is realistic but tight. "
-                f"While {overlap_str} carry over from your current work, you're missing {gap_str} "
-                f"which are non-negotiable for this role. "
-                f"You'll need structured learning and at least one portfolio project proving competence."
-            )
-        else:
-            details = (
-                f"At {t_months} months, this is one of the longer transitions. "
-                f"The core skill set for {target_label} — {gap_str} — is substantially different "
-                f"from your current toolkit. Consider whether a stepping-stone role might be a safer "
-                f"intermediate step before making this leap."
-            )
+        role_desc = role.get('description', '')
+        details = (
+            f"{role_desc} "
+            f"To succeed here in {t_months} months, you must master {gap_str}. "
+            f"Since you already understand {overlap_str}, your focus should be entirely on hands-on "
+            f"technical proficiency in these new areas."
+        )
 
-        # Risk based on match strength
+        # Risk based on match strength and role specifics
         risk_map = {
-            "strong": f"Competition from candidates with direct {target_label} experience who won't need the same ramp-up time.",
-            "moderate": f"The {len(gaps)}-skill gap means you'll be competing against candidates who already have production experience with {gap_list[0] if gap_list else 'core tools'}.",
-            "stretch": f"High probability of extended job search — most hiring managers for {target_label} expect direct domain experience that your background doesn't demonstrate yet.",
+            "strong": f"Market saturation at the senior level; you'll need to prove your {target_label} specific results quickly.",
+            "moderate": f"The '{gap_list[0] if gap_list else 'technical'}' learning curve might be steeper than the {t_months}-month estimate suggests.",
+            "stretch": f"Initial hiring friction as you'll be competing with candidates who have direct degrees or internships in {target_label}.",
         }
 
         return {
             "feasibility_summary": summary,
             "feasibility_details": details,
             "top_risk": risk_map[match_tone],
-            "skill_gaps": gap_list,
+            "skill_gaps": gap_list if gap_list else ["Advanced Tooling", "Industry Standards"],
             "recommended_certifications": self._suggest_certs(role.get('role_id', ''), gap_list),
             "first_30_day_action": self._suggest_action(role.get('role_id', ''), target_label, gap_list),
             "financial_flag": (
                 f"⚠️ Your {runway_months}-month runway is shorter than the {t_months}-month estimated transition. "
-                f"Consider part-time freelancing or contract work to extend your runway before going all-in."
+                f"Consider part-time work to extend your runway while you master {gap_list[0] if gap_list else 'these new skills'}."
                 if runway_months < t_months else None
             ),
         }

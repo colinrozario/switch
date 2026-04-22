@@ -178,6 +178,17 @@ class IntakeAgent:
         target_role_raw = target_role_match.group(1).strip() if target_role_match else ""
         target_role = "" if target_role_raw.lower() in ["to be explored", "none", ""] else target_role_raw
         target_roles = [target_role] if target_role else []
+        
+        motivations_match = re.search(r"Motivations:\s*(.+)", text)
+        motivations_raw = motivations_match.group(1).strip() if motivations_match else ""
+        motivations = [m.strip() for m in motivations_raw.split(",") if m.strip()]
+
+        # Basic skill inference from role and motivations
+        inferred_skills = [current_role.lower().replace(" ", "_")]
+        for m in motivations:
+            skill = m.lower().replace(" ", "_")
+            if skill not in inferred_skills:
+                inferred_skills.append(skill)
 
         return {
             "current_role": current_role,
@@ -191,8 +202,8 @@ class IntakeAgent:
             "soft_constraints": [f"Location preference: {location}"],
             "target_industries": [industry] if industry != "Not Specified" else ["Tech"],
             "target_roles": target_roles,
-            "inferred_skills": [current_role.lower().replace(" ", "_")],
-            "stated_motivations": [],
+            "inferred_skills": inferred_skills,
+            "stated_motivations": motivations,
             "goal_type": goal_type,
             "confidence_scores": {
                 "extraction_method": "regex_fallback",
