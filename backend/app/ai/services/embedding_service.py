@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 # Module-level cache: populated once on first use
 _career_embeddings: Optional[np.ndarray] = None
 _careers_list: Optional[list] = None
+CACHE_FILE = os.path.join(os.path.dirname(__file__), "career_embeddings_cache.json")
 
 
 def _configure_gemini():
@@ -66,14 +67,40 @@ def _precompute_career_embeddings() -> np.ndarray:
         return _career_embeddings
 
     careers = _load_careers()
-    logger.info(f"[EmbeddingService] Precomputing embeddings for {len(careers)} roles...")
+    
+    # Try loading from cache first
+    if os.path.exists(CACHE_FILE):
+        try:
+            with open(CACHE_FILE, "r") as f:
+                cached_data = json.load(f)
+                if len(cached_data) == len(careers):
+                    logger.info(f"[EmbeddingService] Loading {len(careers)} embeddings from cache...")
+                    _career_embeddings = np.array(cached_data, dtype=np.float32)
+                    return _career_embeddings
+        except Exception as e:
+            logger.warning(f"[EmbeddingService] Failed to load cache ({e}), recomputing...")
+
+    logger.info(f"[EmbeddingService] Precomputing embeddings for {len(careers)} roles (this may take a minute)...")
     vectors = []
     for career in careers:
         text = _career_to_text(career)
-        vec = _get_embedding(text)
-        vectors.append(vec)
+        try:
+            vec = _get_embedding(text)
+            vectors.append(vec.tolist()) # Store as list for JSON serialization
+        except Exception as e:
+            logger.error(f"[EmbeddingService] Failed to embed '{career.get('label')}': {e}")
+            # Use zero vector as fallback to avoid crashing the whole service
+            vectors.append([0.0] * 768) # 768 is default Gemini embedding dim
     
-    _career_embeddings = np.stack(vectors, axis=0)  # shape: (N_roles, embedding_dim)
+    # Save to cache
+    try:
+        with open(CACHE_FILE, "w") as f:
+            json.dump(vectors, f)
+        logger.info(f"[EmbeddingService] Saved {len(vectors)} embeddings to cache.")
+    except Exception as e:
+        logger.warning(f"[EmbeddingService] Failed to save cache: {e}")
+
+    _career_embeddings = np.array(vectors, dtype=np.float32)
     logger.info(f"[EmbeddingService] Career embeddings ready. Shape: {_career_embeddings.shape}")
     return _career_embeddings
 
