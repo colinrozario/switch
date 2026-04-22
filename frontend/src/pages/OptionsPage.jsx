@@ -178,9 +178,24 @@ const PathCard = ({ path, onSelect }) => {
     return (
         <Card padding="32px" style={{ display: 'flex', flexDirection: 'column', background: '#FFFFFF', border: '1px solid var(--color-border)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
-                <h3 style={{ fontSize: '20px', letterSpacing: '-0.02em', fontWeight: '900', flex: 1, color: 'var(--color-text)' }}>
-                    {path.target_role_label || path.target_role_id.replace(/_/g, ' ')}
-                </h3>
+                <div style={{ flex: 1 }}>
+                    <h3 style={{ fontSize: '20px', letterSpacing: '-0.02em', fontWeight: '900', color: 'var(--color-text)', marginBottom: '8px' }}>
+                        {path.target_role_label || path.target_role_id.replace(/_/g, ' ')}
+                    </h3>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <MatchBadge level={path.match_level} />
+                        <div style={{ 
+                            fontSize: '13px', 
+                            fontWeight: '800', 
+                            color: 'var(--color-text-secondary)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px'
+                        }}>
+                            <Target size={14} /> {path.match_percentage}% Match
+                        </div>
+                    </div>
+                </div>
                 <div style={{ 
                     padding: '4px 10px', 
                     background: 'var(--color-surface)', 
@@ -198,7 +213,7 @@ const PathCard = ({ path, onSelect }) => {
             </div>
 
             <div style={{ marginBottom: '24px' }}>
-                <p style={{ fontSize: '16px', lineHeight: 1.5, color: 'var(--color-text)', fontWeight: '600' }}>
+                <p style={{ fontSize: '15px', lineHeight: 1.6, color: 'var(--color-text)', fontWeight: '600' }}>
                     {path.feasibility_summary}
                 </p>
             </div>
@@ -236,7 +251,7 @@ const PathCard = ({ path, onSelect }) => {
 
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '24px', paddingBottom: '24px' }}>
                             <div>
-                                <div style={labelStyle}><TriangleAlert size={14} /> Risk Factors</div>
+                                <div style={labelStyle}><TriangleAlert size={14} /> Risk Level: <span style={{ color: path.match_level === 'strong' ? '#059669' : path.match_level === 'moderate' ? '#D97706' : '#DC2626', marginLeft: '4px' }}>{path.match_level?.toUpperCase() || 'STRETCH'}</span></div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                     {path.key_risks?.map((risk, i) => (
                                         <div key={i} style={{ display: 'flex', gap: '8px', fontSize: '13px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>
@@ -272,6 +287,36 @@ const PathCard = ({ path, onSelect }) => {
                 </Button>
             </div>
         </Card>
+    );
+};
+
+const MatchBadge = ({ level }) => {
+    const config = {
+        strong: { label: 'High Fit', color: '#059669', bg: '#ECFDF5', border: '#10B98133' },
+        moderate: { label: 'Moderate', color: '#D97706', bg: '#FFFBEB', border: '#F59E0B33' },
+        stretch: { label: 'Stretch', color: '#DC2626', bg: '#FEF2F2', border: '#EF444433' }
+    };
+
+    const { label, color, bg, border } = config[level] || config.stretch;
+
+    return (
+        <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '2px 10px',
+            borderRadius: '99px',
+            background: bg,
+            color: color,
+            border: `1px solid ${border}`,
+            fontSize: '11px',
+            fontWeight: '900',
+            textTransform: 'uppercase',
+            letterSpacing: '0.02em'
+        }}>
+            <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: color }} />
+            {label}
+        </div>
     );
 };
 

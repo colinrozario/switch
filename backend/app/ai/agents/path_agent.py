@@ -63,7 +63,8 @@ class PathAgent:
                     "skill_gaps": assessment.get("skill_gaps", []),
                     "recommended_certifications": assessment.get("recommended_certifications", []),
                     "first_30_day_action": assessment.get("first_30_day_action", ""),
-                    "financial_flag": assessment.get("financial_flag"),
+                    "match_level": assessment.get("match_level", "stretch"),
+                    "match_percentage": min(98, max(45, int(role.get("similarity_score", 0.5) * 100))),
                     "key_risks": [assessment.get("top_risk", "Market competition for entry-level roles.")],
                     "estimated_transition_months": role.get("avg_transition_months", 9),
                     "similarity_score": role.get("similarity_score", 0),
@@ -168,14 +169,13 @@ Generate a highly specific, honest assessment tailored ONLY to this user's state
         )
         result = json.loads(response.text)
 
-        if "financial_flag" not in result:
-            result["financial_flag"] = None
-        if financial_pressure and not result.get("financial_flag"):
-            result["financial_flag"] = (
-                f"⚠️ Your {runway_months}-month runway is shorter than the {transition_months}-month "
-                f"estimated transition. Consider part-time freelancing or negotiating a notice period "
-                f"to extend your financial runway before starting intensive upskilling."
-            )
+        if "match_level" not in result:
+            # Infer match level from similarity score if not provided by Gemini
+            score = role.get("similarity_score", 0.5)
+            if score > 0.8: result["match_level"] = "strong"
+            elif score > 0.6: result["match_level"] = "moderate"
+            else: result["match_level"] = "stretch"
+
         return result
 
     def _fallback_assessment(self, profile: dict, role: dict, index: int = 0) -> dict:
@@ -259,6 +259,7 @@ Generate a highly specific, honest assessment tailored ONLY to this user's state
         }
 
         return {
+            "match_level": match_tone,
             "feasibility_summary": summary,
             "feasibility_details": details,
             "top_risk": risk_map[match_tone],
