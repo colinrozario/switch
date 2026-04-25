@@ -15,7 +15,7 @@ class SalaryBridgeEngine:
         if not role_data:
             raise ValueError(f"Unknown target_role_id: {inputs.target_role_id}")
             
-        p25_annual = role_data["annual_salary_p25"]
+        p25_annual = role_data["annual_salary_p25_inr"]
         entry_monthly = (p25_annual / 12) * 0.80
         
         transition_months = inputs.transition_months
