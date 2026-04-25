@@ -232,7 +232,7 @@ Generate a highly specific, honest assessment tailored ONLY to this user's state
         
         # Determine match strength and pick a unique template structure to avoid visual repetition
         role_skills = role.get('skills', [])
-        primary_skill = role_skills[0] if role_skills else "advanced technical tooling"
+        primary_skill = role_skills[0].replace("_", " ").title() if role_skills else "advanced technical tooling"
         role_desc = role.get('description', '')
         
         # Split description into sentences to pick a unique hook
@@ -240,28 +240,26 @@ Generate a highly specific, honest assessment tailored ONLY to this user's state
         hook = desc_sentences[0] if desc_sentences else "This role bridges technical execution with strategic value."
 
         if len(overlap) >= 4:
-            summaries = [
-                f"Your deep background as a {c_role_clean} makes you a standout candidate for {target_label}. You already master {overlap_str}, which means you can skip 70% of the standard learning curve and focus on {primary_skill}.",
-                f"The transition to {target_label} is a natural evolution for you. While others start from scratch, your {years_str}experience with {overlap_str} gives you the seniority to hit the ground running.",
-                f"High-fit match: {target_label} requires exactly the {overlap_str} foundation you've built as a {c_role_clean}. You are uniquely positioned to pivot into this role with minimal friction."
-            ]
-            summary = summaries[index % len(summaries)]
+            summary = (
+                f"With a strong foundation in {overlap_str}, your experience as a {c_role_clean} translates remarkably well to {target_label}. "
+                f"You already possess the core competencies required, allowing you to bypass the initial learning curve and immediately focus on mastering {primary_skill}. "
+                f"This transition is a natural upward trajectory that heavily leverages your existing {c_ind_str.replace(' in the ', '')} background."
+            )
             match_tone = "strong"
         elif len(overlap) >= 2:
-            summaries = [
-                f"Moving from {c_role_clean} to {target_label} leverages your existing {overlap_str} while adding {primary_skill} to your toolkit. It's a calculated step that maximizes your {years_str}professional value.",
-                f"As a {c_role_clean}, you've already handled the core of {target_label} via {overlap_str}. This path focuses on specializing in {primary_skill} to bridge the remaining gap.",
-                f"This is a logical bridge: your background provides the {overlap_str} context, while the {target_label} path adds the specific {primary_skill} expertise needed for the next level."
-            ]
-            summary = summaries[index % len(summaries)]
+            summary = (
+                f"Transitioning to {target_label} is a strategic pivot that effectively utilizes your background in {overlap_str}. "
+                f"While your work as a {c_role_clean} provides essential context, you will need to deliberately build expertise in {primary_skill}. "
+                f"It is a highly feasible path that bridges your current capabilities with {hook.lower()}"
+            )
             match_tone = "moderate"
         else:
-            summaries = [
-                f"{hook} For a {c_role_clean}, this is a major pivot into {primary_skill}. It’s a high-growth move that trades your current routine for a deeper focus on {role_skills[1] if len(role_skills)>1 else 'new standards'}.",
-                f"This path into {target_label} is a total reset centered on {primary_skill}. While your work in {c_role_clean} is a different world, the shift allows you to reinvent your career around {hook}.",
-                f"A pivot to {target_label} leverages your general professional maturity to master {primary_skill}. It's a significant change from {c_role_clean}, but one that offers a fresh start in {c_ind_str or 'tech'}."
-            ]
-            summary = summaries[index % len(summaries)]
+            secondary_skill = role_skills[1].replace('_', ' ').title() if len(role_skills) > 1 else 'modern industry standards'
+            summary = (
+                f"Pivoting to {target_label} represents a significant career shift from your role as a {c_role_clean}. "
+                f"This path demands a comprehensive reset, requiring you to immerse yourself in {primary_skill} and {secondary_skill}. "
+                f"While challenging, it is a high-reward move tailored for those ready to commit entirely to {hook.lower()}"
+            )
             match_tone = "stretch"
 
         # Build specific details with a "Why it's a good switch" and "Diagnostic explanation"
