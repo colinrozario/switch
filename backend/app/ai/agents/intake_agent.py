@@ -33,7 +33,7 @@ EXTRACTION_SCHEMA = {
         "has_dependents": {"type": "boolean", "description": "Whether the user has financial dependents"},
         "target_role": {"type": "string", "description": "Specific role the user wants to transition into. Empty string if exploring."},
         "stated_motivations": {"type": "array", "items": {"type": "string"}, "description": "User's stated motivations for switching"},
-        "inferred_skills": {"type": "array", "items": {"type": "string"}, "description": "Skills inferred from their role, resume text, and industry. Use lowercase snake_case."},
+        "inferred_skills": {"type": "array", "items": {"type": "string"}, "description": "Skills inferred from their role, resume text, and industry. Use Title Case (e.g. 'Financial Modeling')."},
         "confidence_notes": {"type": "string", "description": "Brief note on which fields were guessed vs explicitly stated"}
     },
     "required": ["current_role", "years_experience", "industry", "weekly_hours_available", "location_preference", "has_dependents", "stated_motivations", "inferred_skills"]
@@ -43,7 +43,7 @@ SYSTEM_PROMPT = """You are a professional career intake analyst. Your job is to 
 
 STRICT RULES:
 1. For financial fields (monthly_expenses, liquid_savings): ONLY extract these if they are EXPLICITLY stated as numbers. If they say "my expenses are 45000" → 45000. If not stated → return null. NEVER invent or estimate financial figures.
-2. For inferred_skills: extract real, specific skills from their job title, industry, resume text, and stated experience. Use lowercase with underscores (e.g., "financial_modeling", "team_management", "cold_outreach").
+2. For inferred_skills: extract real, specific skills from their job title, industry, resume text, and stated experience. Use Title Case with spaces (e.g., "Financial Modeling", "Team Management", "Cold Outreach").
 3. For target_role: extract only if they name a specific role. If they say "I want to explore" or "I'm not sure" → return empty string.
 4. Be specific and grounded. No hallucinations.
 5. Return ONLY valid JSON matching the schema. No markdown, no explanation."""
@@ -91,7 +91,7 @@ class IntakeAgent:
         target_role = extracted.get("target_role", "")
         target_roles = [target_role] if target_role else []
 
-        inferred_skills = extracted.get("inferred_skills", [])
+        inferred_skills = [s.replace("_", " ").title() for s in extracted.get("inferred_skills", [])]
         location_pref = extracted.get("location_preference", "Flexible")
         has_dependents = extracted.get("has_dependents", False)
 
@@ -188,9 +188,9 @@ class IntakeAgent:
         motivations = [m.strip() for m in motivations_raw.split(",") if m.strip()]
 
         # Basic skill inference from role and motivations
-        inferred_skills = [current_role.lower().replace(" ", "_")]
+        inferred_skills = [current_role.replace("_", " ").title()]
         for m in motivations:
-            skill = m.lower().replace(" ", "_")
+            skill = m.replace("_", " ").title()
             if skill not in inferred_skills:
                 inferred_skills.append(skill)
 

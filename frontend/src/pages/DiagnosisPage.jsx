@@ -25,6 +25,7 @@ const DiagnosisPage = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [localData, setLocalData] = useState(diagnosis);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [errorMsg, setErrorMsg] = useState(null);
 
     const nextStep = () => setCurrentStep(prev => prev + 1);
     const prevStep = () => setCurrentStep(prev => prev - 1);
@@ -42,6 +43,7 @@ const DiagnosisPage = () => {
 
     const handleAnalysis = async () => {
         setIsAnalyzing(true);
+        setErrorMsg(null);
         setCurrentStep(6); // Analysis screen
 
         const rawText = `
@@ -79,7 +81,11 @@ const DiagnosisPage = () => {
             console.error("Analysis Error:", error);
             setIsAnalyzing(false);
             setCurrentStep(5);
-            alert("Something went wrong with the analysis. Please try again.");
+            setErrorMsg(
+                error.message === 'Network Error' 
+                ? "We couldn't connect to the analysis engine. Please ensure your connection is stable and try again."
+                : "Something went wrong while generating your career paths. Please try again."
+            );
         }
     };
 
@@ -391,6 +397,13 @@ const DiagnosisPage = () => {
                                 <Button variant="outline" onClick={prevStep}>Edit</Button>
                                 <Button onClick={handleAnalysis} style={{ flex: 1 }}>Start the Analysis</Button>
                             </div>
+                            
+                            {errorMsg && (
+                                <div style={{ marginTop: '24px', padding: '16px', background: '#FEF2F2', border: '1px solid #FCA5A5', borderRadius: '12px', color: '#DC2626', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <div style={{ width: '4px', height: '24px', background: '#DC2626', borderRadius: '4px' }} />
+                                    {errorMsg}
+                                </div>
+                            )}
                         </motion.div>
                     )}
 
