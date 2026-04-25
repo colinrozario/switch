@@ -1,23 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-    ShieldAlert, 
-    CheckCircle2, 
-    Clock, 
-    AlertCircle, 
-    RefreshCcw, 
-    ArrowRight, 
-    AlertTriangle,
-    Flag,
-    Wind,
-    Loader2,
-    XCircle
+import { motion } from 'framer-motion';
+import {
+    ShieldAlert, AlertTriangle, Loader2, XCircle,
+    ArrowRight, IndianRupee, Calendar, Zap,
+    BookOpen, Code2, Map, ChevronRight,
 } from 'lucide-react';
 import useStore from '../store/useStore';
 import { endpoints } from '../api/endpoints';
-import Card from '../components/UI/Card';
 import Button from '../components/UI/Button';
+import RoadmapNode from '../components/UI/RoadmapNode';
+
+/* ─── Summary sidebar stat ─── */
+const SidebarStat = ({ label, value, sub, accent }) => (
+    <div style={{ padding: '16px 0', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ fontSize: '11px', fontWeight: '700', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '4px' }}>
+            {label}
+        </div>
+        <div style={{ fontSize: '20px', fontWeight: '900', color: accent || '#FFFFFF', lineHeight: 1.1 }}>{value}</div>
+        {sub && <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', fontWeight: '500', marginTop: '2px' }}>{sub}</div>}
+    </div>
+);
+
+/* ─── Phase progress dot in sidebar ─── */
+const PHASE_ACCENT = ['#60A5FA', '#A78BFA', '#34D399', '#FBBF24'];
 
 const RoadmapPage = () => {
     const navigate = useNavigate();
@@ -26,37 +32,54 @@ const RoadmapPage = () => {
     const [roadmap, setRoadmap] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [activePhase, setActivePhase] = useState(0);
+    const phaseRefs = useRef([]);
 
     const params = new URLSearchParams(location.search);
     const queryBridgeId = params.get('id') || bridgeId;
-    const horizon = params.get('horizon') || 9;
+    const horizon = parseInt(params.get('horizon') || '9', 10);
 
     useEffect(() => {
-        if (!queryBridgeId) {
-            navigate('/diagnosis');
-            return;
-        }
-
+        if (!queryBridgeId) { navigate('/diagnosis'); return; }
         const fetchRoadmap = async () => {
             try {
-                const roadmapData = await endpoints.getRoadmap(queryBridgeId, horizon);
-                setRoadmap(roadmapData);
+                const data = await endpoints.getRoadmap(queryBridgeId, horizon);
+                setRoadmap(data);
             } catch (err) {
-                console.error("Failed to fetch roadmap", err);
+                console.error('Failed to fetch roadmap', err);
                 setError("We couldn't build your roadmap. Please go back and try again.");
             } finally {
                 setLoading(false);
             }
         };
-
         fetchRoadmap();
     }, [queryBridgeId, horizon, navigate]);
 
+    // Scroll-spy for sidebar active phase
+    useEffect(() => {
+        const handler = () => {
+            let closest = 0;
+            phaseRefs.current.forEach((ref, i) => {
+                if (ref && ref.getBoundingClientRect().top <= 200) closest = i;
+            });
+            setActivePhase(closest);
+        };
+        window.addEventListener('scroll', handler, { passive: true });
+        return () => window.removeEventListener('scroll', handler);
+    }, [roadmap]);
+
     if (loading) {
         return (
-            <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#F8FAFC' }}>
-                <Loader2 size={40} className="animate-spin" style={{ color: 'var(--color-accent)', marginBottom: '16px' }} />
-                <h2 style={{ fontSize: '18px', fontWeight: '600' }}>Building your {horizon}-month plan...</h2>
+            <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#0F172A' }}>
+                <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}>
+                    <Loader2 size={40} style={{ color: '#2563EB' }} />
+                </motion.div>
+                <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#FFFFFF', marginTop: '24px' }}>
+                    Building your {horizon}-month roadmap...
+                </h2>
+                <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', marginTop: '8px' }}>
+                    Our AI is generating your personalised career plan.
+                </p>
             </div>
         );
     }
@@ -71,235 +94,216 @@ const RoadmapPage = () => {
         );
     }
 
-    // roadmap.phases is the full JSON blob stored by the backend
-    // It has shape: { phases: [...], opening_warning: "...", go_no_go_signal: "...", total_months, horizon_months }
-    const phasesBlob = roadmap?.phases || {};
-    const phases = phasesBlob.phases || [];
-    const opening_warning = phasesBlob.opening_warning;
-    const go_no_go_signal = phasesBlob.go_no_go_signal;
-    const totalMonths = phasesBlob.total_months || roadmap?.timeline_months || horizon;
+    const blob = roadmap?.phases || {};
+    const phases = blob.phases || [];
+    const openingWarning = blob.opening_warning;
+    const goNoGo = blob.go_no_go_signal;
+    const totalMonths = blob.total_months || roadmap?.timeline_months || horizon;
+
+    // Compute summary stats
+    const totalCoursesBudget = phases.reduce((acc, p) => acc + (p.estimated_cost_inr || 0), 0);
+    const totalWeeks = phases.reduce((acc, p) => acc + (p.duration_weeks || 0), 0);
+    const totalSkills = phases.reduce((acc, p) => acc + (p.skills?.length || 0), 0);
+    const totalProjects = phases.reduce((acc, p) => acc + (p.projects?.length || 0), 0);
+    const totalCourses = phases.reduce((acc, p) => acc + (p.courses?.length || 0), 0);
+    const isGoSignal = goNoGo && goNoGo.startsWith('✅');
 
     return (
-        <div style={{ background: '#F8FAFC', minHeight: '100vh', paddingTop: '120px', paddingBottom: '120px' }}>
-            <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '0 24px' }}>
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                >
-                    {/* Header */}
-                    <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-                        <div style={{ 
-                            display: 'inline-flex', 
-                            alignItems: 'center', 
-                            gap: '8px', 
-                            background: '#FFFFFF', 
-                            padding: '4px 12px', 
-                            borderRadius: '99px',
-                            border: '1px solid var(--color-border)',
-                            color: 'var(--color-text-secondary)',
-                            fontSize: '12px',
-                            fontWeight: '700',
-                            marginBottom: '24px'
-                        }}>
-                            YOUR ACTION PLAN
+        <div style={{ background: '#F8FAFC', minHeight: '100vh' }}>
+
+            {/* ── Top Hero Banner ── */}
+            <div style={{
+                background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
+                paddingTop: '100px', paddingBottom: '64px',
+                borderBottom: '1px solid rgba(255,255,255,0.05)',
+            }}>
+                <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 32px' }}>
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+                            <Map size={16} style={{ color: '#2563EB' }} />
+                            <span style={{ fontSize: '12px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#60A5FA' }}>
+                                Your Career Roadmap
+                            </span>
                         </div>
-                        <h1 style={{ fontSize: '48px', letterSpacing: '-0.03em', marginBottom: '16px' }}>Your Step-by-Step Guide</h1>
-                        <p style={{ color: 'var(--color-text-secondary)', fontSize: '18px', maxWidth: '700px', margin: '0 auto', lineHeight: 1.5 }}>
-                            A {totalMonths}-month plan built specifically around your savings, schedule, and target role.
+                        <h1 style={{ fontSize: '52px', fontWeight: '900', color: '#FFFFFF', letterSpacing: '-0.04em', lineHeight: 1.1, marginBottom: '16px' }}>
+                            {totalMonths}-Month Action Plan
+                        </h1>
+                        <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.6)', fontWeight: '500', maxWidth: '640px', lineHeight: 1.6, marginBottom: '40px' }}>
+                            A deterministic, week-by-week plan built from your exact profile, savings, and target role.
                         </p>
-                    </div>
 
-                    {/* 1. STACKED WARNINGS & CONSTRAINTS */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '80px' }}>
-                        {opening_warning && (
-                            <div style={{ 
-                                background: '#FFFBEB', 
-                                border: '1px solid #F59E0B', 
-                                borderRadius: '16px', 
-                                padding: '32px',
-                                display: 'flex',
-                                gap: '20px',
-                                alignItems: 'flex-start'
-                            }}>
-                                <AlertTriangle size={24} style={{ color: '#D97706', marginTop: '2px', flexShrink: 0 }} />
-                                <div>
-                                    <div style={{ fontSize: '13px', fontWeight: '900', color: '#B45309', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.05em' }}>RISK ASSESSMENT</div>
-                                    <div style={{ fontSize: '17px', color: '#92400E', lineHeight: 1.5, fontWeight: '600' }}>{opening_warning}</div>
+                        {/* Stat pills */}
+                        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                            {[
+                                { icon: Calendar, label: `${totalWeeks} Weeks` },
+                                { icon: Zap, label: `${totalSkills} Skills` },
+                                { icon: Code2, label: `${totalProjects} Projects` },
+                                { icon: BookOpen, label: `${totalCourses} Courses` },
+                                { icon: IndianRupee, label: `₹${totalCoursesBudget.toLocaleString('en-IN')} Budget` },
+                            ].map(({ icon: Icon, label }) => (
+                                <div key={label} style={{
+                                    display: 'flex', alignItems: 'center', gap: '8px',
+                                    background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)',
+                                    borderRadius: '99px', padding: '8px 16px',
+                                }}>
+                                    <Icon size={14} style={{ color: '#60A5FA' }} />
+                                    <span style={{ fontSize: '13px', fontWeight: '700', color: '#FFFFFF' }}>{label}</span>
                                 </div>
-                            </div>
-                        )}
-                        {go_no_go_signal && (
-                            <div style={{ 
-                                background: '#FFFFFF', 
-                                border: '2px solid #EF4444', 
-                                borderRadius: '16px', 
-                                padding: '32px',
-                                display: 'flex',
-                                gap: '20px',
-                                alignItems: 'flex-start'
-                            }}>
-                                <ShieldAlert size={24} style={{ color: '#DC2626', marginTop: '2px', flexShrink: 0 }} />
-                                <div>
-                                    <div style={{ fontSize: '13px', fontWeight: '900', color: '#B91C1C', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.05em' }}>GO / NO-GO SIGNAL</div>
-                                    <div style={{ fontSize: '17px', color: '#B91C1C', lineHeight: 1.5, fontWeight: '700' }}>{go_no_go_signal}</div>
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                            ))}
+                        </div>
+                    </motion.div>
+                </div>
+            </div>
 
-                    {/* Timeline */}
-                    <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: '48px' }}>
-                        <div style={{ position: 'absolute', left: '28px', top: '40px', bottom: '40px', width: '2px', background: 'var(--color-border)', zIndex: 0 }} />
-                        
-                        {phases.map((phase, index) => {
-                            // Milestones can be strings or {name, description} objects
-                            const milestoneList = (phase.milestones || []).map(m => 
-                                typeof m === 'string' ? m : m.name || m.description || String(m)
-                            );
+            <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '48px 32px', display: 'grid', gridTemplateColumns: '280px 1fr', gap: '48px', alignItems: 'start' }}>
 
-                            return (
-                                <div key={index} style={{ position: 'relative', zIndex: 1, paddingLeft: '80px' }}>
-                                    {/* Phase Connector Dot */}
-                                    <div style={{ 
-                                        position: 'absolute', 
-                                        left: '18px', 
-                                        top: '28px', 
-                                        width: '20px', 
-                                        height: '20px', 
-                                        borderRadius: '50%', 
-                                        background: '#FFFFFF', 
-                                        border: '4px solid var(--color-accent)',
-                                        boxShadow: 'var(--shadow-sm)'
-                                    }} />
-
-                                    <Card padding="40px" style={{ background: '#FFFFFF' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px', gap: '16px' }}>
-                                            <div>
-                                                <div style={{ fontSize: '12px', fontWeight: '800', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>
-                                                    Step {index + 1}
-                                                </div>
-                                                <h3 style={{ fontSize: '26px', fontWeight: '800', letterSpacing: '-0.02em', marginBottom: '12px' }}>{phase.name}</h3>
-                                                <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '700', color: 'var(--color-text-secondary)' }}>
-                                                        <Clock size={16} />
-                                                        {/* Support both duration_months (new) and duration_weeks (legacy) */}
-                                                        {phase.duration_months
-                                                            ? `${phase.duration_months} month${phase.duration_months > 1 ? 's' : ''}`
-                                                            : `${Math.ceil(phase.duration_weeks / 4.33)} months`}
-                                                    </div>
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '700', color: 'var(--color-text-secondary)' }}>
-                                                        <Wind size={16} />
-                                                        {phase.weekly_effort_hours || phase.weekly_hours_required || '—'}h / Week
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {phase.goal && (
-                                                <div style={{ textAlign: 'right', background: 'var(--color-surface)', padding: '12px 20px', borderRadius: '12px', border: '1px solid var(--color-border)', flexShrink: 0, maxWidth: '240px' }}>
-                                                    <div style={{ fontSize: '11px', fontWeight: '800', color: 'var(--color-text-secondary)', textTransform: 'uppercase', marginBottom: '4px' }}>PHASE GOAL</div>
-                                                    <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--color-text)' }}>{phase.goal || phase.objective}</div>
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        {/* Financial Context */}
-                                        <div style={{ marginBottom: '32px', display: 'flex', gap: '12px', padding: '16px 20px', background: '#F8FAFC', borderRadius: '12px', border: '1px solid var(--color-border)' }}>
-                                            <div style={{ fontSize: '14px', fontWeight: '700', color: 'var(--color-text-secondary)' }}>
-                                                Estimated capital required for this phase:
-                                                <span style={{ color: 'var(--color-text)', marginLeft: '8px' }}>
-                                                    ₹{Math.round((phase.duration_months || Math.ceil((phase.duration_weeks || 4) / 4.33)) * 45000).toLocaleString()}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '48px' }}>
-                                            {/* Milestones */}
-                                            <div>
-                                                <div style={sectionTagStyle}><Flag size={14} /> Execution Checklist</div>
-                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                                    {milestoneList.map((m, i) => (
-                                                        <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                                                            <div style={{ width: '20px', height: '20px', borderRadius: '6px', border: '2px solid #E2E8F0', background: '#F8FAFC', flexShrink: 0, marginTop: '2px' }} />
-                                                            <span style={{ fontSize: '15px', fontWeight: '600', color: 'var(--color-text)' }}>{m}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            {/* Failure & Fallback as first-class content */}
-                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                                                {phase.failure_trigger && (
-                                                    <div style={{ padding: '24px', background: '#FEF2F2', borderRadius: '16px', border: '1px solid #FEE2E2' }}>
-                                                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', color: '#B91C1C', marginBottom: '12px' }}>
-                                                            <AlertCircle size={18} />
-                                                            <div style={{ fontSize: '12px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Failure Trigger</div>
-                                                        </div>
-                                                        <div style={{ fontSize: '15px', fontWeight: '700', color: '#991B1B', lineHeight: 1.5 }}>
-                                                            {phase.failure_trigger}
-                                                        </div>
-                                                    </div>
-                                                )}
-                                                {phase.fallback_action && (
-                                                    <div style={{ padding: '24px', background: '#FFFBEB', borderRadius: '16px', border: '1px solid #FEF3C7' }}>
-                                                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', color: '#B45309', marginBottom: '12px' }}>
-                                                            <RefreshCcw size={18} />
-                                                            <div style={{ fontSize: '12px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Fallback Action</div>
-                                                        </div>
-                                                        <div style={{ fontSize: '15px', fontWeight: '700', color: '#92400E', lineHeight: 1.5 }}>
-                                                            {phase.fallback_action}
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </Card>
-                                </div>
-                            );
-                        })}
-                    </div>
-
-                    {/* Navigation to Simulator */}
-                    <Card padding="48px" style={{ 
-                        marginTop: '80px', 
-                        background: '#0F172A', 
-                        color: '#FFFFFF',
-                        textAlign: 'center'
+                {/* ── LEFT STICKY SIDEBAR ── */}
+                <div style={{ position: 'sticky', top: '100px' }}>
+                    {/* Go / No-Go signal */}
+                    <div style={{
+                        background: isGoSignal ? '#ECFDF5' : '#FEF2F2',
+                        border: `1px solid ${isGoSignal ? '#A7F3D0' : '#FEE2E2'}`,
+                        borderRadius: '16px', padding: '20px', marginBottom: '24px',
                     }}>
-                        <h3 style={{ fontSize: '32px', fontWeight: '800', letterSpacing: '-0.02em', marginBottom: '16px', color: '#FFFFFF' }}>Try a Scenario</h3>
-                        <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.7)', marginBottom: '40px', maxWidth: '600px', margin: '0 auto 40px', fontWeight: '500' }}>
-                            Change your savings or work hours to see how it affects your plan in real-time.
-                        </p>
-                        <Button 
-                            size="lg" 
-                            onClick={() => navigate(`/simulator?id=${roadmap.id}`)}
-                            style={{ width: '100%', maxWidth: '320px' }}
+                        <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                            <ShieldAlert size={20} style={{ color: isGoSignal ? '#059669' : '#DC2626', flexShrink: 0, marginTop: '2px' }} />
+                            <div>
+                                <div style={{ fontSize: '11px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.06em', color: isGoSignal ? '#065F46' : '#991B1B', marginBottom: '6px' }}>
+                                    Go / No-Go
+                                </div>
+                                <p style={{ fontSize: '13px', fontWeight: '600', color: isGoSignal ? '#065F46' : '#991B1B', lineHeight: 1.5, margin: 0 }}>
+                                    {goNoGo}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Dark stats sidebar */}
+                    <div style={{ background: '#0F172A', borderRadius: '20px', padding: '24px', marginBottom: '24px' }}>
+                        <div style={{ fontSize: '13px', fontWeight: '800', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '4px' }}>
+                            Plan Summary
+                        </div>
+                        <SidebarStat label="Total Duration" value={`${totalMonths} Months`} sub={`${totalWeeks} weeks`} />
+                        <SidebarStat label="Course Budget" value={`₹${totalCoursesBudget.toLocaleString('en-IN')}`} sub="courses & certifications" accent="#34D399" />
+                        <SidebarStat label="Skills to Master" value={totalSkills} sub={`across ${phases.length} phases`} />
+                        <SidebarStat label="Projects to Build" value={totalProjects} sub="portfolio-grade" accent="#A78BFA" />
+                    </div>
+
+                    {/* Phase navigator */}
+                    <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '20px' }}>
+                        <div style={{ fontSize: '11px', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px' }}>
+                            Phases
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            {phases.map((phase, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => phaseRefs.current[i]?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                                    style={{
+                                        display: 'flex', alignItems: 'center', gap: '12px',
+                                        padding: '10px 12px', borderRadius: '10px', border: 'none', cursor: 'pointer', textAlign: 'left',
+                                        background: activePhase === i ? '#EFF6FF' : 'transparent',
+                                        transition: 'all 0.15s ease',
+                                    }}
+                                >
+                                    <div style={{
+                                        width: '10px', height: '10px', borderRadius: '50%', flexShrink: 0,
+                                        background: PHASE_ACCENT[i % PHASE_ACCENT.length],
+                                    }} />
+                                    <div>
+                                        <div style={{ fontSize: '12px', fontWeight: '700', color: activePhase === i ? '#2563EB' : '#475569', lineHeight: 1.3 }}>
+                                            {phase.name}
+                                        </div>
+                                        <div style={{ fontSize: '11px', color: '#94A3B8', fontWeight: '500' }}>
+                                            {phase.duration_weeks}w · {phase.weekly_hours}h/wk
+                                        </div>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* ── MAIN CONTENT ── */}
+                <div>
+                    {/* Risk warning */}
+                    {openingWarning && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                            style={{
+                                background: '#FFFBEB', border: '1px solid #F59E0B',
+                                borderRadius: '16px', padding: '20px 24px',
+                                display: 'flex', gap: '16px', alignItems: 'flex-start',
+                                marginBottom: '40px',
+                            }}
                         >
-                            Practice Your Plan <ArrowRight size={18} style={{ marginLeft: '12px' }} />
+                            <AlertTriangle size={20} style={{ color: '#D97706', flexShrink: 0, marginTop: '2px' }} />
+                            <div>
+                                <div style={{ fontSize: '11px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#B45309', marginBottom: '6px' }}>
+                                    Risk Assessment
+                                </div>
+                                <p style={{ fontSize: '14px', fontWeight: '600', color: '#92400E', lineHeight: 1.5, margin: 0 }}>
+                                    {openingWarning}
+                                </p>
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {/* Phase nodes */}
+                    <div>
+                        {phases.length > 0 ? phases.map((phase, i) => (
+                            <div key={i} ref={el => phaseRefs.current[i] = el} style={{ scrollMarginTop: '100px' }}>
+                                <RoadmapNode
+                                    phase={phase}
+                                    phaseIndex={i}
+                                    isLast={i === phases.length - 1}
+                                />
+                            </div>
+                        )) : (
+                            <div style={{ textAlign: 'center', padding: '80px 0', color: '#94A3B8' }}>
+                                <Map size={40} style={{ marginBottom: '16px', opacity: 0.4 }} />
+                                <p style={{ fontWeight: '600' }}>No phase data found. Try regenerating your roadmap.</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* ── Try Simulator CTA ── */}
+                    <div style={{
+                        marginTop: '64px',
+                        background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
+                        borderRadius: '24px', padding: '48px',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
+                        border: '1px solid rgba(255,255,255,0.05)',
+                    }}>
+                        <div style={{ fontSize: '11px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#60A5FA', marginBottom: '16px' }}>
+                            What If Simulator
+                        </div>
+                        <h3 style={{ fontSize: '32px', fontWeight: '900', color: '#FFFFFF', letterSpacing: '-0.02em', marginBottom: '12px' }}>
+                            Change Your Variables
+                        </h3>
+                        <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.6)', fontWeight: '500', maxWidth: '480px', lineHeight: 1.6, marginBottom: '32px' }}>
+                            See how adjusting your savings, work hours, or timeline affects your plan in real time.
+                        </p>
+                        <Button
+                            size="lg"
+                            onClick={() => navigate(`/simulator?id=${roadmap.id}`)}
+                            style={{ background: '#2563EB', color: '#FFFFFF', height: '52px', padding: '0 32px', fontSize: '16px', fontWeight: '800', borderRadius: '14px' }}
+                        >
+                            Open Simulator <ArrowRight size={18} style={{ marginLeft: '10px' }} />
                         </Button>
-                    </Card>
+                    </div>
 
                     {/* Disclaimer */}
-                    <div style={{ marginTop: '80px', textAlign: 'center', padding: '24px', borderTop: '1px solid var(--color-border)' }}>
-                        <p style={{ color: 'var(--color-text-secondary)', fontSize: '12px', maxWidth: '800px', margin: '0 auto', lineHeight: 1.6, fontWeight: '500' }}>
-                            <strong>Just a heads up:</strong> These steps are targets to hit, but they don't guarantee a job. 
-                            Switch helps you decide what's best, but remember that every career change has some risk.
+                    <div style={{ marginTop: '48px', padding: '24px 0', borderTop: '1px solid #E2E8F0', textAlign: 'center' }}>
+                        <p style={{ color: '#94A3B8', fontSize: '12px', maxWidth: '700px', margin: '0 auto', lineHeight: 1.6, fontWeight: '500' }}>
+                            <strong style={{ color: '#64748B' }}>Disclaimer:</strong> This roadmap is a structured guide, not a guarantee. 
+                            Course prices may change. Timelines are estimates based on your stated hours. Always verify course availability and costs before committing.
                         </p>
                     </div>
-                </motion.div>
+                </div>
             </div>
         </div>
     );
-};
-
-const sectionTagStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    fontSize: '12px',
-    fontWeight: '800',
-    color: 'var(--color-text-secondary)',
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em',
-    marginBottom: '16px'
 };
 
 export default RoadmapPage;
