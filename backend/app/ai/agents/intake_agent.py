@@ -58,21 +58,23 @@ class IntakeAgent:
     async def run(self, raw_text: str, linkedin_url: Optional[str] = None) -> dict:
         """
         Extract a structured profile from freeform text.
-        Falls back to regex parsing if Gemini is unavailable.
+        Tries gemini-2.0-flash first, then gemini-2.0-flash-lite (separate quota),
+        then falls back to smart regex parsing if both are unavailable.
         """
         if self._gemini_ready:
-            try:
-                return await self._gemini_extract(raw_text)
-            except Exception as e:
-                logger.warning(f"[IntakeAgent] Gemini extraction failed ({e}), falling back to regex")
-        
+            for model in ["gemini-2.0-flash", "gemini-2.0-flash-lite"]:
+                try:
+                    return await self._gemini_extract(raw_text, model=model)
+                except Exception as e:
+                    logger.warning(f"[IntakeAgent] {model} failed ({type(e).__name__}: {str(e)[:80]}), trying next...")
+
         return self._regex_fallback(raw_text)
 
-    async def _gemini_extract(self, raw_text: str) -> dict:
+    async def _gemini_extract(self, raw_text: str, model: str = "gemini-2.0-flash") -> dict:
         # Wrap the blocking sync call in a thread pool to keep the event loop free
         response = await anyio.to_thread.run_sync(
             lambda: self._client.models.generate_content(
-                model="gemini-2.0-flash",
+                model=model,
                 contents=f"{SYSTEM_PROMPT}\n\nExtract the structured profile from this user input:\n\n---\n{raw_text}\n---\n\nReturn JSON only.",
                 config=types.GenerateContentConfig(
                     response_mime_type="application/json",
@@ -114,7 +116,7 @@ class IntakeAgent:
             "monthly_expenses": 0.95 if monthly_expenses else 0.0,
             "liquid_savings": 0.95 if liquid_savings else 0.0,
             "weekly_hours_available": 0.9,
-            "extraction_method": "gemini-2.0-flash",
+            "extraction_method": f"gemini:{model}",
         }
 
         return {
@@ -135,8 +137,99 @@ class IntakeAgent:
             "confidence_scores": confidence_scores,
         }
 
+    # ---------------------------------------------------------------------------
+    # Role → realistic skill set lookup for offline fallback
+    # ---------------------------------------------------------------------------
+    _ROLE_SKILLS: dict = {
+        "sales manager": ["Sales Strategy", "Team Leadership", "Pipeline Management", "Revenue Forecasting", "CRM", "Negotiation", "Cold Outreach", "Stakeholder Management", "Coaching", "Reporting"],
+        "sales": ["Prospecting", "Negotiation", "Cold Outreach", "CRM", "Pipeline Management", "Presentation", "B2B Sales", "Relationship Building"],
+        "account executive": ["Salesforce", "Negotiation", "B2B Sales", "Prospecting", "Pipeline Management", "Closing", "Cold Outreach", "Presentation"],
+        "software engineer": ["Python", "SQL", "System Design", "REST APIs", "Git", "Algorithms", "Debugging", "Cloud", "Testing", "Code Review"],
+        "software developer": ["Python", "JavaScript", "SQL", "Git", "REST APIs", "Debugging", "Agile", "Testing"],
+        "frontend engineer": ["JavaScript", "React", "HTML", "CSS", "Git", "TypeScript", "Web Performance", "UX", "Responsive Design"],
+        "backend engineer": ["Python", "SQL", "REST APIs", "System Design", "Databases", "Git", "Cloud", "Algorithms"],
+        "full stack engineer": ["JavaScript", "Python", "React", "SQL", "REST APIs", "Git", "HTML", "CSS", "Cloud"],
+        "data analyst": ["SQL", "Excel", "Tableau", "Python", "Data Visualization", "Reporting", "Statistics", "Communication"],
+        "data scientist": ["Python", "SQL", "Machine Learning", "Statistics", "Pandas", "Deep Learning", "Data Modeling", "Research"],
+        "data engineer": ["Python", "SQL", "Apache Spark", "Airflow", "ETL", "Data Warehousing", "Cloud", "Kafka"],
+        "product manager": ["Product Strategy", "User Research", "Agile", "Roadmapping", "Stakeholder Management", "JIRA", "Go-To-Market", "Data-Driven Decisions"],
+        "project manager": ["Agile", "JIRA", "Communication", "Budgeting", "Risk Management", "Stakeholder Management", "Planning", "Team Management"],
+        "ux designer": ["Figma", "User Research", "Wireframing", "Prototyping", "Design Thinking", "Usability Testing", "Visual Design"],
+        "graphic designer": ["Adobe Photoshop", "Adobe Illustrator", "Figma", "Typography", "Color Theory", "Brand Identity", "Layout Design"],
+        "video editor": ["Premiere Pro", "After Effects", "DaVinci Resolve", "Motion Graphics", "Color Grading", "Storytelling", "Sound Design"],
+        "marketing manager": ["SEO", "Google Analytics", "Content Strategy", "Social Media", "Copywriting", "Paid Ads", "Email Marketing", "Campaign Management"],
+        "digital marketing": ["SEO", "Google Analytics", "Content Strategy", "Social Media", "Copywriting", "Paid Ads", "Email Marketing"],
+        "content writer": ["Copywriting", "SEO", "Research", "Storytelling", "Content Strategy", "Editing", "Social Media"],
+        "hr manager": ["Employee Relations", "Recruiting", "Performance Management", "Compliance", "Communication", "Conflict Resolution", "Payroll"],
+        "recruiter": ["Sourcing", "Interviewing", "LinkedIn Recruiter", "ATS Tools", "Communication", "Negotiation", "Employer Branding"],
+        "operations manager": ["Process Improvement", "Team Management", "Budgeting", "Operations", "Vendor Management", "Planning", "Reporting"],
+        "business analyst": ["Requirements Gathering", "SQL", "Excel", "Communication", "Process Mapping", "Stakeholder Management", "JIRA", "Documentation"],
+        "financial analyst": ["Excel", "Financial Modeling", "Forecasting", "Valuation", "Accounting", "Budgeting", "Reporting", "Data Analysis"],
+        "accountant": ["Accounting", "Tally", "GST", "Taxation", "Excel", "Financial Reporting", "Compliance", "Auditing"],
+        "teacher": ["Curriculum Design", "Teaching", "Communication", "Assessment", "Classroom Management", "Presentation", "Mentoring"],
+        "engineer": ["Problem Solving", "Technical Analysis", "Project Management", "Documentation", "Teamwork", "Quality Control"],
+        "consultant": ["Strategy", "Problem Solving", "Communication", "Stakeholder Management", "Project Management", "Analytical Thinking", "PowerPoint"],
+        "manager": ["Team Management", "Communication", "Planning", "Budgeting", "Reporting", "Stakeholder Management", "Leadership"],
+        "developer": ["Programming", "Debugging", "Git", "Testing", "REST APIs", "Agile", "Documentation"],
+        "designer": ["Design Thinking", "Figma", "Visual Design", "User Research", "Prototyping", "Collaboration"],
+        "analyst": ["Data Analysis", "Excel", "Communication", "Reporting", "Problem Solving", "SQL", "Presentation"],
+        "doctor": ["Clinical Diagnosis", "Patient Care", "Medical Knowledge", "Communication", "Empathy", "Decision Making", "Pharmacology"],
+        "nurse": ["Patient Care", "Clinical Skills", "Medication Administration", "Communication", "Empathy", "Emergency Response"],
+        "lawyer": ["Legal Research", "Contract Drafting", "Litigation", "Compliance", "Negotiation", "Legal Writing", "Due Diligence"],
+        "journalist": ["Reporting", "Research", "Writing", "Storytelling", "Communication", "Interviewing", "Editing"],
+        "teacher": ["Curriculum Design", "Teaching", "Communication", "Assessment", "Mentoring", "Content Creation"],
+        "chef": ["Cooking", "Menu Planning", "Team Management", "Food Safety", "Cost Control", "Creativity", "Time Management"],
+    }
+
+    def _infer_skills_from_role(self, role: str, industry: str, motivations: list) -> list:
+        """Map a role title to realistic skills using the lookup table."""
+        role_lower = role.lower().strip()
+        skills = []
+
+        # Try progressively shorter matches
+        for key in self._ROLE_SKILLS:
+            if key in role_lower or role_lower in key:
+                skills = list(self._ROLE_SKILLS[key])
+                break
+
+        # Fallback: try individual words from the role title
+        if not skills:
+            for word in role_lower.split():
+                if len(word) > 4:
+                    for key in self._ROLE_SKILLS:
+                        if word in key:
+                            skills = list(self._ROLE_SKILLS[key])
+                            break
+                if skills:
+                    break
+
+        # Still nothing — use generic professional skills
+        if not skills:
+            skills = ["Communication", "Problem Solving", "Teamwork", "Planning", "Reporting", "Stakeholder Management"]
+
+        # Enrich with industry context
+        industry_skill_map = {
+            "tech": ["Agile", "JIRA", "Data-Driven Decisions"],
+            "finance": ["Excel", "Financial Modeling", "Compliance"],
+            "banking": ["Compliance", "Financial Modeling", "Risk Management"],
+            "healthcare": ["Compliance", "Patient Communication", "Documentation"],
+            "education": ["Curriculum Design", "Communication", "Assessment"],
+            "marketing": ["Content Strategy", "Analytics", "Copywriting"],
+            "consulting": ["Strategy", "PowerPoint", "Stakeholder Management"],
+            "sales": ["CRM", "Negotiation", "Pipeline Management"],
+        }
+        ind_lower = industry.lower() if industry else ""
+        for ind_key, ind_skills in industry_skill_map.items():
+            if ind_key in ind_lower:
+                for s in ind_skills:
+                    if s not in skills:
+                        skills.append(s)
+                break
+
+        return skills[:12]
+
     def _regex_fallback(self, text: str) -> dict:
-        """Regex-based extraction used when Gemini is unavailable."""
+        """Smart regex extraction with real skill inference from role title."""
         role_match = re.search(r"Role:\s*(.+)", text)
         current_role = role_match.group(1).strip() if role_match else "Professional"
 
@@ -182,17 +275,13 @@ class IntakeAgent:
         target_role_raw = target_role_match.group(1).strip() if target_role_match else ""
         target_role = "" if target_role_raw.lower() in ["to be explored", "none", ""] else target_role_raw
         target_roles = [target_role] if target_role else []
-        
+
         motivations_match = re.search(r"Motivations:\s*(.+)", text)
         motivations_raw = motivations_match.group(1).strip() if motivations_match else ""
         motivations = [m.strip() for m in motivations_raw.split(",") if m.strip()]
 
-        # Basic skill inference from role and motivations
-        inferred_skills = [current_role.replace("_", " ").title()]
-        for m in motivations:
-            skill = m.replace("_", " ").title()
-            if skill not in inferred_skills:
-                inferred_skills.append(skill)
+        # ✅ FIXED: Use role→skill dictionary instead of just storing the role name
+        inferred_skills = self._infer_skills_from_role(current_role, industry, motivations)
 
         return {
             "current_role": current_role,
@@ -215,3 +304,4 @@ class IntakeAgent:
                 "liquid_savings": 0.95 if savings_match else 0.0,
             },
         }
+
