@@ -26,6 +26,7 @@ const DiagnosisPage = () => {
     const [localData, setLocalData] = useState(diagnosis);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [errorMsg, setErrorMsg] = useState(null);
+    const [warmingUp, setWarmingUp] = useState(false);
 
     const nextStep = () => setCurrentStep(prev => prev + 1);
     const prevStep = () => setCurrentStep(prev => prev - 1);
@@ -43,6 +44,7 @@ const DiagnosisPage = () => {
 
     const handleAnalysis = async () => {
         setIsAnalyzing(true);
+        setWarmingUp(false);
         setErrorMsg(null);
         setCurrentStep(6); // Analysis screen
 
@@ -68,23 +70,35 @@ const DiagnosisPage = () => {
             Motivations: ${localData.goal.motivations.join(", ")}
         `;
 
+        // Show "warming up" hint after 2s if still waiting (backend TF startup)
+        const warmupTimer = setTimeout(() => setWarmingUp(true), 2000);
+
         try {
             const response = await endpoints.createIntake(rawText);
+            clearTimeout(warmupTimer);
+            setWarmingUp(false);
             setProfileId(response.result_ref);
             // Persist full localData snapshot so ProfileReviewPage can read it from store
             setDiagnosis(localData);
             
             setTimeout(() => {
                 navigate('/profile');
-            }, 3000);
+            }, 2000);
         } catch (error) {
+            clearTimeout(warmupTimer);
+            setWarmingUp(false);
             console.error("Analysis Error:", error);
             setIsAnalyzing(false);
             setCurrentStep(5);
+            const isNetwork = !error.response && (
+                error.code === 'ERR_NETWORK' ||
+                error.code === 'ECONNREFUSED' ||
+                error.message === 'Network Error'
+            );
             setErrorMsg(
-                error.message === 'Network Error' 
-                ? "We couldn't connect to the analysis engine. Please ensure your connection is stable and try again."
-                : "Something went wrong while generating your career paths. Please try again."
+                isNetwork
+                ? "Can't reach the analysis engine. Make sure the backend is running (uvicorn) and try again."
+                : `Something went wrong: ${error.response?.data?.detail || error.message || 'Unknown error'}. Please try again.`
             );
         }
     };
@@ -430,13 +444,40 @@ const DiagnosisPage = () => {
                             <p style={{ color: 'var(--color-text-secondary)', maxWidth: '450px', lineHeight: 1.6, fontSize: '15px' }}>
                                 We're checking thousands of possibilities to find your safest and fastest path forward. Just a second...
                             </p>
+
+                            {warmingUp && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 8 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    style={{
+                                        marginTop: '24px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '8px',
+                                        padding: '10px 18px',
+                                        background: '#FEF9C3',
+                                        border: '1px solid #FDE047',
+                                        borderRadius: '99px',
+                                        fontSize: '13px',
+                                        color: '#854D0E',
+                                        fontWeight: '600'
+                                    }}
+                                >
+                                    <motion.span
+                                        animate={{ opacity: [1, 0.3, 1] }}
+                                        transition={{ repeat: Infinity, duration: 1.2 }}
+                                        style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#CA8A04', display: 'inline-block' }}
+                                    />
+                                    Engine warming up — retrying connection...
+                                </motion.div>
+                            )}
                             
-                            <div style={{ marginTop: '48px', width: '240px' }}>
+                            <div style={{ marginTop: '32px', width: '240px' }}>
                                 <div style={{ height: '4px', background: 'var(--color-surface)', borderRadius: '2px', overflow: 'hidden' }}>
                                     <motion.div
                                         initial={{ width: 0 }}
                                         animate={{ width: '100%' }}
-                                        transition={{ duration: 3, ease: 'easeInOut' }}
+                                        transition={{ duration: 25, ease: 'easeInOut' }}
                                         style={{ height: '100%', background: 'var(--color-accent)' }}
                                     />
                                 </div>
