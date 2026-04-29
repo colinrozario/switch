@@ -95,19 +95,67 @@ const OptionsPage = () => {
                         Select Your Next Path
                     </h1>
                     <p style={{ color: 'var(--color-text-secondary)', fontSize: '18px', maxWidth: '600px', margin: '0 auto', lineHeight: 1.5 }}>
-                        We've found {pathSet?.paths?.length || 0} paths that match your skills and protect your savings.
+                        {pathSet?.paths?.some(p => p.target_role_match) 
+                            ? "Based on your goal, here is your primary recommendation."
+                            : `We've found ${pathSet?.paths?.length || 0} paths that match your skills and protect your savings.`}
                     </p>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '32px' }}>
-                    {pathSet?.paths?.slice(0, 3).map((path, index) => (
-                        <PathCard 
-                            key={index} 
-                            path={path} 
-                            onSelect={() => handleSelect(path.target_role_id)}
-                        />
-                    ))}
-                </div>
+                {(() => {
+                    const hasTargetRoleMatch = pathSet?.paths?.some(p => p.target_role_match);
+                    const primaryPaths = hasTargetRoleMatch 
+                        ? pathSet.paths.filter(p => p.target_role_match) 
+                        : (pathSet?.paths?.slice(0, 3) || []);
+                    const alternativePaths = hasTargetRoleMatch 
+                        ? pathSet.paths.filter(p => !p.target_role_match).slice(0, 2)
+                        : [];
+
+                    return (
+                        <>
+                            <div style={{ 
+                                display: 'grid', 
+                                gridTemplateColumns: primaryPaths.length === 1 ? 'minmax(0, 600px)' : 'repeat(3, 1fr)', 
+                                justifyContent: 'center',
+                                gap: '32px' 
+                            }}>
+                                {primaryPaths.map((path, index) => (
+                                    <PathCard 
+                                        key={index} 
+                                        path={path} 
+                                        onSelect={() => handleSelect(path.target_role_id)}
+                                    />
+                                ))}
+                            </div>
+
+                            {alternativePaths.length > 0 && (
+                                <div style={{ marginTop: '80px', paddingTop: '60px', borderTop: '1px dashed var(--color-border)' }}>
+                                    <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+                                        <h3 style={{ fontSize: '28px', letterSpacing: '-0.02em', marginBottom: '12px' }}>
+                                            Alternative Suggestions
+                                        </h3>
+                                        <p style={{ color: 'var(--color-text-secondary)', fontSize: '16px', maxWidth: '600px', margin: '0 auto', lineHeight: 1.5 }}>
+                                            Other highly relevant roles based on your background and skills.
+                                        </p>
+                                    </div>
+                                    <div style={{ 
+                                        display: 'grid', 
+                                        gridTemplateColumns: alternativePaths.length === 2 ? 'repeat(2, minmax(0, 500px))' : 'repeat(3, 1fr)', 
+                                        justifyContent: 'center',
+                                        gap: '32px' 
+                                    }}>
+                                        {alternativePaths.map((path, index) => (
+                                            <PathCard 
+                                                key={`alt-${index}`} 
+                                                path={path} 
+                                                onSelect={() => handleSelect(path.target_role_id)}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </>
+                    );
+                })()}
 
                 {pathSet?.rejected_paths?.length > 0 && (
                     <div style={{ marginTop: '100px' }}>
