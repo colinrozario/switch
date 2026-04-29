@@ -96,21 +96,37 @@ def scale_match_score(raw_cosine: float) -> int:
     return int(round(display))
 
 
-# Initialize the embedding model
-# This runs once when the module is imported
-print("Loading Career Path Embedding Model...")
-embedder = SentenceTransformer("ElenaSenger/career-path-representation-mpnet-decorte")
+# ---------------------------------------------------------------------------
+# Lazy singleton — model loads on first request, NOT at import time.
+# Loading at import time blocks uvicorn's event loop during hot-reload and
+# causes ERR_CONNECTION_REFUSED for ~30-60 s on every file change.
+# ---------------------------------------------------------------------------
+_embedder = None
+_roles_embeddings = None
 
-# Pre-compute embeddings for all roles in ROLES_DB
-print("Pre-computing embeddings for ROLES_DB...")
-roles_texts = [f"{role['title']} with skills: {', '.join(role['skills'])}" for role in ROLES_DB]
-roles_embeddings = embedder.encode(roles_texts, convert_to_tensor=True)
+
+def _get_embedder():
+    """Return the SentenceTransformer model, initialising it on first call."""
+    global _embedder, _roles_embeddings
+    if _embedder is None:
+        import logging
+        logging.getLogger(__name__).info("[options] Loading Career Path Embedding Model (first use)...")
+        _embedder = SentenceTransformer("ElenaSenger/career-path-representation-mpnet-decorte")
+        roles_texts = [
+            f"{role['title']} with skills: {', '.join(role['skills'])}"
+            for role in ROLES_DB
+        ]
+        _roles_embeddings = _embedder.encode(roles_texts, convert_to_tensor=True)
+        logging.getLogger(__name__).info("[options] Model ready.")
+    return _embedder, _roles_embeddings
+
 
 def generate_options(data: OptionInput) -> OptionOutput:
     # 1. Format user input
     user_text = f"{data.current_role} with skills: {', '.join(data.skills)}"
     
     # 2. Generate embedding for user
+    embedder, roles_embeddings = _get_embedder()
     user_embedding = embedder.encode(user_text, convert_to_tensor=True)
     
     # 3. Calculate cosine similarity against all target roles
