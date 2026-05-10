@@ -1,35 +1,56 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800;900&display=swap');
+/* ── Google Font ───────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 
 /* ── Design Tokens ─────────────────────────────────────── */
 :root {
-  /* Dark surface palette */
-  --dark-bg:          #020d1a;
-  --dark-surface:     #0a1929;
-  --dark-card:        #0d2035;
-  --dark-border:      rgba(255,255,255,0.09);
-  --dark-text:        #ffffff;
-  --dark-text-muted:  rgba(255,255,255,0.55);
+  /* Dark surfaces — warm charcoal, not cold navy */
+  --dark-bg:          #111111;
+  --dark-surface:     #1a1a1a;
+  --dark-card:        #212121;
+  --dark-border:      rgba(255,255,255,0.08);
+  --dark-text:        #f0ede8;
+  --dark-text-muted:  rgba(240,237,232,0.5);
 
-  /* Light surface palette */
-  --light-bg:         #ffffff;
-  --light-surface:    #f7f8fb;
+  /* Light surfaces — warm off-white */
+  --light-bg:         #faf9f7;
+  --light-surface:    #f3f1ee;
   --light-card:       #ffffff;
-  --light-border:     #e5e7ef;
-  --light-text:       #0a0f1e;
-  --light-text-muted: #6b7280;
+  --light-border:     #e8e3dc;
+  --light-text:       #1a1814;
+  --light-text-muted: #7a7168;
 
-  /* Brand */
-  --neon:             #d4ff4a;
-  --neon-dark:        #a8cc28;
-  --neon-glow:        rgba(212,255,74,0.28);
-  --accent-blue:      #3b82f6;
-  --accent-green:     #22c55e;
-  --accent-purple:    #8b5cf6;
-  --accent-amber:     #f59e0b;
+  /* Brand accent — warm coral/terracotta, not neon */
+  --accent:           #e8533a;
+  --accent-hover:     #d44329;
+  --accent-glow:      rgba(232,83,58,0.22);
+  --accent-light-bg:  #fff0ed;
+  --accent-light-border: #fbc8be;
 
-  /* Typography */
-  --font-serif:  'Instrument Serif', 'Georgia', serif;
-  --font-sans:   'Inter', system-ui, sans-serif;
+  /* Utility accents */
+  --green:   #2a9d6a;
+  --blue:    #3b6ef5;
+  --purple:  #7c5cfc;
+  --amber:   #d97706;
+
+  /* Typography — Lato only */
+  --font:  'Lato', system-ui, sans-serif;
+
+  /* Legacy compat vars */
+  --font-serif:  'Lato', sans-serif;
+  --font-sans:   'Lato', sans-serif;
+  --font-main:   'Lato', sans-serif;
+  --neon:        #e8533a;
+  --neon-dark:   #d44329;
+  --neon-glow:   rgba(232,83,58,0.22);
+  --color-bg:            #faf9f7;
+  --color-text:          #1a1814;
+  --color-text-secondary:#7a7168;
+  --color-primary:       #1a1814;
+  --color-accent:        #e8533a;
+  --color-surface:       #f3f1ee;
+  --color-surface-hover: #ede9e3;
+  --color-border:        #e8e3dc;
+  --color-border-strong: #d4cec6;
 
   /* Radii */
   --r-sm:   8px;
@@ -39,80 +60,54 @@
   --r-pill: 9999px;
 
   /* Shadows */
-  --shadow-sm:  0 1px 3px rgba(0,0,0,0.08);
-  --shadow-md:  0 4px 16px rgba(0,0,0,0.12);
-  --shadow-lg:  0 20px 60px rgba(0,0,0,0.18);
-  --shadow-neon: 0 0 40px rgba(212,255,74,0.22);
-
-  /* Legacy compat */
-  --color-bg:            #ffffff;
-  --color-text:          #0a0f1e;
-  --color-text-secondary:#6b7280;
-  --color-primary:       #0a0f1e;
-  --color-accent:        #2563eb;
-  --color-surface:       #f7f8fb;
-  --color-surface-hover: #f1f5f9;
-  --color-border:        #e5e7ef;
-  --color-border-strong: #cbd5e1;
-  --font-main:           'Inter', sans-serif;
-  --radius-lg:           20px;
-  --radius-md:           12px;
-  --radius-sm:           8px;
-  --radius-pill:         9999px;
-  --shadow-lg:           0 20px 60px rgba(0,0,0,0.18);
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.07);
+  --shadow-md:  0 4px 16px rgba(0,0,0,0.1);
+  --shadow-lg:  0 20px 60px rgba(0,0,0,0.15);
 }
 
 /* ── Reset ─────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: var(--font-sans);
+  font-family: var(--font);
   background: var(--light-bg);
   color: var(--light-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
-  letter-spacing: -0.025em;
+  font-family: var(--font);
+  font-weight: 900;
+  letter-spacing: -0.02em;
   line-height: 1.15;
 }
 
-button { cursor: pointer; border: none; background: none; font-family: inherit; }
+button { cursor: pointer; border: none; background: none; font-family: var(--font); }
 a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 
 /* ── Scrollbar ─────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+::-webkit-scrollbar-thumb { background: #c8c3bb; border-radius: 99px; }
 
-/* ── Utility Classes ───────────────────────────────────── */
-.serif { font-family: var(--font-serif); }
-.neon  { color: var(--neon); }
+/* ── Utilities ─────────────────────────────────────────── */
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-/* ── Dot Grid Pattern ──────────────────────────────────── */
+/* ── Dot Grid ──────────────────────────────────────────── */
 .dot-grid {
-  background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
-  background-size: 30px 30px;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
 
-/* ── Bento legacy ──────────────────────────────────────── */
+/* ── Legacy bento ──────────────────────────────────────── */
 .bento-grid { display: grid; grid-template-columns: repeat(12,1fr); gap: 1.5rem; }
 .bento-card {
-  background: var(--light-card);
-  border: 1px solid var(--light-border);
+  background: #ffffff;
+  border: 1px solid var(--color-border);
   border-radius: var(--r-lg);
   padding: 1.5rem;
   transition: transform 0.2s, box-shadow 0.2s;
@@ -121,27 +116,12 @@ img { display: block; max-width: 100%; }
 .bento-card:hover { box-shadow: var(--shadow-md); }
 
 /* ── Animations ────────────────────────────────────────── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
 @keyframes tickerScroll {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
 
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 30px rgba(212,255,74,0.2); }
-  50%       { box-shadow: 0 0 50px rgba(212,255,74,0.4); }
-}
-
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-8px); }
-}
-
-@keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  50%       { transform: translateY(-6px); }
 }
