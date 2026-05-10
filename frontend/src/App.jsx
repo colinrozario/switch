@@ -1,12 +1,12 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import MainContainer from './components/Layout/MainContainer';
 import Navbar from './components/UI/Navbar';
 
 // Pages
 import Home from './views/Home';
 import IntakePage from './pages/IntakePage';
-import DiagnosisPage from './pages/DiagnosisPage'; // New wizard
+import DiagnosisPage from './pages/DiagnosisPage';
 import ProfileReviewPage from './pages/ProfileReviewPage';
 import OptionsPage from './pages/OptionsPage';
 import BridgePage from './pages/BridgePage';
@@ -14,25 +14,37 @@ import RoadmapPage from './pages/RoadmapPage';
 import SimulatorPage from './pages/SimulatorPage';
 import SwitchPromptGuide from './views/PromptGuide';
 
+// Inner pages need a top padding offset for the fixed navbar.
+// Home is full-bleed so it renders the navbar overlaid on the dark hero.
+function InnerPageWrapper({ children }) {
+  return (
+    <div style={{ paddingTop: '68px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {children}
+    </div>
+  );
+}
+
+function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/diagnosis" element={<InnerPageWrapper><DiagnosisPage /></InnerPageWrapper>} />
+      <Route path="/profile"   element={<InnerPageWrapper><ProfileReviewPage /></InnerPageWrapper>} />
+      <Route path="/options"   element={<InnerPageWrapper><OptionsPage /></InnerPageWrapper>} />
+      <Route path="/bridge"    element={<InnerPageWrapper><BridgePage /></InnerPageWrapper>} />
+      <Route path="/roadmap"   element={<InnerPageWrapper><RoadmapPage /></InnerPageWrapper>} />
+      <Route path="/simulator" element={<InnerPageWrapper><SimulatorPage /></InnerPageWrapper>} />
+      <Route path="/guide"     element={<InnerPageWrapper><SwitchPromptGuide /></InnerPageWrapper>} />
+    </Routes>
+  );
+}
+
 function App() {
   return (
     <Router>
       <MainContainer>
         <Navbar />
-
-        {/* Main Content Area */}
-        <div style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/diagnosis" element={<DiagnosisPage />} />
-            <Route path="/profile" element={<ProfileReviewPage />} />
-            <Route path="/options" element={<OptionsPage />} />
-            <Route path="/bridge" element={<BridgePage />} />
-            <Route path="/roadmap" element={<RoadmapPage />} />
-            <Route path="/simulator" element={<SimulatorPage />} />
-            <Route path="/guide" element={<SwitchPromptGuide />} />
-          </Routes>
-        </div>
+        <AppRoutes />
       </MainContainer>
     </Router>
   );
