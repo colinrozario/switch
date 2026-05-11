@@ -61,13 +61,13 @@ export default function MiddleSections() {
               borderRadius: '99px', letterSpacing: '0.06em', textTransform: 'uppercase',
               marginBottom: '20px', border: '1px solid #bfdbfe',
             }}>How it works</div>
-            <h2 style={{
-              fontFamily: "'Instrument Serif', Georgia, serif",
-              fontSize: 'clamp(30px,3.8vw,52px)', fontWeight: '400',
-              color: '#0a0f1e', letterSpacing: '-0.025em',
+          <h2 style={{
+              fontFamily: "'Lato', sans-serif",
+              fontSize: 'clamp(30px,3.8vw,52px)', fontWeight: '900',
+              color: '#1a1814', letterSpacing: '-0.025em',
             }}>
               Four steps from{' '}
-              <span style={{ fontStyle: 'italic', color: '#6b7280' }}>stuck to switched.</span>
+              <span style={{ fontStyle: 'italic', fontWeight: '400', color: '#7a7168' }}>stuck to switched.</span>
             </h2>
           </div>
 
@@ -101,8 +101,8 @@ export default function MiddleSections() {
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '64px' }}>
             <h2 style={{
-              fontFamily: "'Instrument Serif', Georgia, serif",
-              fontSize: 'clamp(30px,3.8vw,50px)', fontWeight: '400',
+              fontFamily: "'Lato', sans-serif",
+              fontSize: 'clamp(30px,3.8vw,50px)', fontWeight: '900',
               color: '#ffffff', letterSpacing: '-0.025em',
             }}>
               Real outcomes for real career switchers.
@@ -148,9 +148,9 @@ export default function MiddleSections() {
             marginBottom: '20px', border: '1px solid #fde68a',
           }}>Integrations</div>
           <h2 style={{
-            fontFamily: "'Instrument Serif', Georgia, serif",
-            fontSize: 'clamp(28px,3.5vw,48px)', fontWeight: '400',
-            color: '#0a0f1e', letterSpacing: '-0.025em', marginBottom: '16px',
+            fontFamily: "'Lato', sans-serif",
+            fontSize: 'clamp(28px,3.5vw,48px)', fontWeight: '900',
+            color: '#1a1814', letterSpacing: '-0.025em', marginBottom: '16px',
           }}>
             Works with your existing career stack.
           </h2>

@@ -71,9 +71,9 @@ function IntelligenceSection() {
               marginBottom: '20px', border: '1px solid #e9d5ff',
             }}>AI Intelligence</div>
             <h2 style={{
-              fontFamily: "'Instrument Serif', Georgia, serif",
-              fontSize: 'clamp(28px,3.2vw,46px)', fontWeight: '400',
-              color: '#0a0f1e', letterSpacing: '-0.025em',
+              fontFamily: "'Lato', sans-serif",
+              fontSize: 'clamp(28px,3.2vw,46px)', fontWeight: '900',
+              color: '#1a1814', letterSpacing: '-0.025em',
               marginBottom: '20px', lineHeight: 1.2,
             }}>
               Ask it anything about your career switch.

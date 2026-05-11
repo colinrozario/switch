@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import ParticleGlobe from './ParticleGlobe';
 
 export default function HeroSection() {
   const navigate = useNavigate();
@@ -31,13 +30,7 @@ export default function HeroSection() {
         pointerEvents: 'none',
       }} />
 
-      {/* Globe — right side */}
-      <div style={{
-        position: 'absolute', right: '-80px', top: '50%',
-        transform: 'translateY(-50%)', opacity: 0.75, pointerEvents: 'none',
-      }}>
-        <ParticleGlobe size={520} />
-      </div>
+
 
       {/* Main content */}
       <motion.div
@@ -56,7 +49,7 @@ export default function HeroSection() {
           Handle everything that happens{' '}
           <span style={{
             fontStyle: 'italic', fontWeight: '700',
-            color: '#e8533a',
+            color: '#f0ede8',
           }}>
             before you switch.
           </span>

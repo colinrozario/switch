@@ -45,9 +45,9 @@ export default function PricingAndFooter() {
               marginBottom: '20px', border: '1px solid #ddd6fe',
             }}>Pricing</div>
             <h2 style={{
-              fontFamily: "'Instrument Serif', Georgia, serif",
-              fontSize: 'clamp(30px,3.8vw,52px)', fontWeight: '400',
-              color: '#0a0f1e', letterSpacing: '-0.025em', marginBottom: '16px',
+              fontFamily: "'Lato', sans-serif",
+              fontSize: 'clamp(30px,3.8vw,52px)', fontWeight: '900',
+              color: '#1a1814', letterSpacing: '-0.025em', marginBottom: '16px',
             }}>
               Simple pricing,{' '}
               <span style={{ fontStyle: 'italic', color: '#6b7280' }}>no surprises.</span>
@@ -146,15 +146,14 @@ export default function PricingAndFooter() {
         }} />
         <div style={{ maxWidth: '720px', margin: '0 auto', position: 'relative', zIndex: 2 }}>
           <h2 style={{
-            fontFamily: "'Instrument Serif', Georgia, serif",
-            fontSize: 'clamp(36px,5vw,68px)', fontWeight: '400',
+            fontFamily: "'Lato', sans-serif",
+            fontSize: 'clamp(36px,5vw,68px)', fontWeight: '900',
             color: '#ffffff', letterSpacing: '-0.025em', marginBottom: '22px', lineHeight: 1.1,
           }}>
             Start your career switch{' '}
             <span style={{
               fontStyle: 'italic',
-              background: 'linear-gradient(130deg,#d4ff4a 0%,#7eff85 100%)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+              color: '#f0ede8',
             }}>today.</span>
           </h2>
           <p style={{
