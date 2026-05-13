@@ -114,9 +114,10 @@ const OptionsPage = () => {
                         <>
                             <div style={{ 
                                 display: 'grid', 
-                                gridTemplateColumns: primaryPaths.length === 1 ? 'minmax(0, 600px)' : 'repeat(3, 1fr)', 
+                                gridTemplateColumns: primaryPaths.length === 1 ? '1fr' : 'repeat(3, 1fr)', 
                                 justifyContent: 'center',
-                                gap: '32px' 
+                                gap: '32px',
+                                ...(primaryPaths.length === 1 && { maxWidth: '600px', margin: '0 auto' })
                             }}>
                                 {primaryPaths.map((path, index) => (
                                     <PathCard 

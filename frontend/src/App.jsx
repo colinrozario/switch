@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import MainContainer from './components/Layout/MainContainer';
 import Navbar from './components/UI/Navbar';
@@ -13,6 +13,13 @@ import BridgePage from './pages/BridgePage';
 import RoadmapPage from './pages/RoadmapPage';
 import SimulatorPage from './pages/SimulatorPage';
 import SwitchPromptGuide from './views/PromptGuide';
+
+// Scrolls to the top of the page on every route change.
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+}
 
 // Inner pages need a top padding offset for the fixed navbar.
 // Home is full-bleed so it renders the navbar overlaid on the dark hero.
@@ -42,6 +49,7 @@ function AppRoutes() {
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <MainContainer>
         <Navbar />
         <AppRoutes />
